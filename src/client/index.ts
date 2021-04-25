@@ -1,12 +1,14 @@
 import 'alpinejs'
 
 import Peer from 'peerjs';
+
 // function getWindow() {return <any>window}
 
 class PeerClient {
   constructor() {
     this.hostID = window.location.hash?.substr(1);
     this.Init();
+    this.UpdateSpeechValue("");
   }
 
   private hostID!: string;
@@ -14,18 +16,35 @@ class PeerClient {
   private peerInstance?: Peer;
   private connInstance?: Peer.DataConnection;
 
-  private UpdateStatus = (text: string) => {
-    const ele = document.querySelector('#status');
+  private UpdateStatus      = (text: string) => {
+    const ele = document.querySelector('#stt-status');
     if (ele) ele.innerHTML = text;
   };
 
-  peers: {[id: string]: Peer.DataConnection} = {};
+  private uptime?: NodeJS.Timeout;
+  private UpdateSpeechValue      = (text: string) => {
+    const ele = document.querySelector('#stt-value');
+    if (!ele)
+      return;
+    ele.innerHTML = text;
+    this.uptime && clearTimeout(this.uptime);
+    this.uptime = setTimeout(() => ele.innerHTML = "", 3000);
+  };
+
+  peers: { [id: string]: Peer.DataConnection } = {};
+
 
   private Reset() {
-    this.peerInstance?.disconnected && this.peerInstance?.reconnect();
-    this.connInstance?.close();
     this.UpdateStatus("Disconnected");
+    this.peerInstance?.disconnected && this.peerInstance?.reconnect();
+    this.peerInstance = undefined;
+    this.connInstance?.close();
+    this.connInstance = undefined;
+    setTimeout(() => {
+      this.Init();
+    }, 1000);
   }
+
   private BindPeer() {
     this.peerInstance = new Peer();
     this.peerInstance?.on("open", _ => {
@@ -36,14 +55,14 @@ class PeerClient {
   }
 
   private ParseServerMessage(data: any) {
-    if (data?.type === 'stt')
-      this.UpdateStatus(data.value);
+    data?.type === 'stt' && this.UpdateSpeechValue(data.value);
   }
 
   private BindConnection() {
     this.connInstance = this.peerInstance?.connect(this.hostID);
     this.connInstance?.on("open", () => {
-      this.UpdateStatus(`Connected`);
+      this.UpdateStatus(``);
+      this.UpdateSpeechValue(`STT ready`);
       this.connInstance?.on("data", data => this.ParseServerMessage(data));
     });
     this.connInstance?.on("close", () => this.Reset());
@@ -55,4 +74,5 @@ class PeerClient {
     this.BindPeer();
   }
 }
+
 window.onload = () => new PeerClient();

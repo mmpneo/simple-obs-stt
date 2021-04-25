@@ -10,17 +10,24 @@ class PeerServer {
   constructor() {
     console.log("Create server instance");
     this.ShowView("connect");
+    this.hostId = localStorage.getItem('obs_key');
   }
 
+  hostId: string | null = "";
   peerInstance?: Peer;
   recognitionInstance!: SpeechRecognition;
   languageDialect?: string;
+
+  public ChangeHostId(value: string) {
+    console.log(value)
+    localStorage.setItem('obs_key', value);
+    this.hostId = value;
+  }
 
   private UpdateNetworkStatus = (text: string) => {
     const ele = document.querySelector('#status-network');
     if (ele) ele.innerHTML = text;
   };
-
 
   private ShowView(targetView: 'connect' | 'starting' | 'running') {
     const view = document.querySelector('#view');
@@ -58,7 +65,6 @@ class PeerServer {
     this.UpdateNetworkStatus('-');
     this.UpdateSTTStatus('-');
     this.UpdatLanguageStatus('-');
-
   }
 
   public CopyLink() {
@@ -69,7 +75,7 @@ class PeerServer {
 
   private BindPeer() {
     this.UpdateNetworkStatus('Connecting');
-    this.peerInstance = new Peer();
+    this.peerInstance = new Peer(this.hostId || "");
     this.peerInstance?.on("open", _id => {
       this.UpdateNetworkStatus(`Connected`);
       this.BindRecognition();
