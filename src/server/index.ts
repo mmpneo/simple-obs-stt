@@ -1,5 +1,6 @@
 import 'alpinejs'
 
+import UAParser from "ua-parser-js";
 import Peer from 'peerjs';
 
 function getWindow() {
@@ -10,8 +11,16 @@ function Log(message: string) {
   console.log(`[Server] ${message}`)
 }
 
+function IsUsable(): boolean {
+  return new UAParser().getBrowser().name === "Chrome"
+}
+
 class PeerServer {
   constructor() {
+    if (!IsUsable()) {
+      this.ShowOverlay();
+      return;
+    }
     Log('Create host instance');
     this.ShowView("connect");
     this.hostId = localStorage.getItem('obs_key');
@@ -32,6 +41,12 @@ class PeerServer {
     const ele = document.querySelector('#status-network');
     if (ele) ele.innerHTML = text;
   };
+
+  private ShowOverlay() {
+    const template: any = document.querySelector(`#block-overlay`);
+    const clone         = document.importNode(template.content, true);
+    document.body.appendChild(clone);
+  }
 
   private ShowView(targetView: 'connect' | 'starting' | 'running') {
     const view = document.querySelector('#view');

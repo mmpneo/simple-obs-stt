@@ -1700,6 +1700,15 @@ html{
 .right-0{
 	right: 0px;
 }
+.top-0{
+	top: 0px;
+}
+.bottom-0{
+	bottom: 0px;
+}
+.left-0{
+	left: 0px;
+}
 .mx-auto{
 	margin-left: auto;
 	margin-right: auto;
@@ -1716,6 +1725,9 @@ html{
 }
 .mb-8{
 	margin-bottom: 2rem;
+}
+.block{
+	display: block;
 }
 .flex{
 	display: flex;
@@ -1827,6 +1839,10 @@ html{
 	--tw-bg-opacity: 1;
 	background-color: hsla(var(--b2, 220 20% 98%) / var(--tw-bg-opacity));
 }
+.bg-base-300{
+	--tw-bg-opacity: 1;
+	background-color: hsla(var(--b3, 216 12% 84%) / var(--tw-bg-opacity));
+}
 .p-4{
 	padding: 1rem;
 }
@@ -1882,4 +1898,13 @@ html{
 }
 .underline{
 	text-decoration: underline;
+}
+.opacity-70{
+	opacity: 0.7;
+}
+.opacity-80{
+	opacity: 0.8;
+}
+.opacity-90{
+	opacity: 0.9;
 }
