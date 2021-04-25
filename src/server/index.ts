@@ -22,13 +22,13 @@ class PeerServer {
   };
 
 
-  private ShowView(targetView: 'connect' | 'starting' | 'running'){
+  private ShowView(targetView: 'connect' | 'starting' | 'running') {
     const view = document.querySelector('#view');
     if (!view)
       return;
     const template: any = document.querySelector(`#view-${targetView}`);
-    const clone = document.importNode(template.content, true);
-    view.innerHTML = '';
+    const clone         = document.importNode(template.content, true);
+    view.innerHTML      = '';
     view.appendChild(clone);
   }
 
@@ -51,7 +51,7 @@ class PeerServer {
     if (ele) ele.innerHTML = text;
   };
 
-  public Reset(){
+  public Reset() {
     this.peerInstance?.destroy();
     this.recognitionInstance?.stop();
     this.ShowView("connect");
@@ -62,7 +62,8 @@ class PeerServer {
   }
 
   public CopyLink() {
-    let url = location.href.split("/").slice(0, -2).join("/");
+    let url = "https://mmpneo.github.io/simple_obs_stt/assets/server/".split("/").slice(0, -2).join("/");
+    console.log(url)
     navigator.clipboard.writeText(`${url}/client#${this.peerInstance?.id}`)
   }
 
@@ -81,7 +82,8 @@ class PeerServer {
   }
 
   private BindClientConnection(peerConnection: Peer.DataConnection) {
-    peerConnection.on("open", () => {});
+    peerConnection.on("open", () => {
+    });
   }
 
   public SelectDialect(value: string) {
@@ -93,10 +95,10 @@ class PeerServer {
       return;
     this.UpdateSTTStatus("Connecting");
     this.recognitionInstance                = new (getWindow().webkitSpeechRecognition)
-    this.recognitionInstance.lang     = this.languageDialect;
+    this.recognitionInstance.lang           = this.languageDialect;
     this.recognitionInstance.continuous     = true;
     this.recognitionInstance.interimResults = true;
-    this.recognitionInstance.onerror = (error) => {
+    this.recognitionInstance.onerror        = (error) => {
       console.log(error)
       this.Reset();
     };
@@ -131,19 +133,15 @@ class PeerServer {
   }
 }
 
-getWindow().server         = new PeerServer();
 getWindow().dialectList    = [];
 getWindow().getDialectList = (index: number) => {
-  const lang                    = getWindow().langs[index];
+  const lang                     = getWindow().langs[index];
   const [_langName, ...dialects] = lang;
-  getWindow().dialectList       = lang[1]
+  getWindow().dialectList        = lang[1]
   return dialects;
 };
 
-window.onload = () => new PeerServer();
-
-
-
+window.onload = () => getWindow().server = new PeerServer();
 
 getWindow().langs = [
   ['Afrikaans', ['af-ZA']],

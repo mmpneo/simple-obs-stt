@@ -12,7 +12,8 @@
     "debug-js": "esbuild src/server/index.ts src/client/index.ts --bundle --sourcemap=inline --target=es2016 --outdir=assets/ --servedir=assets",
     "build-js": "esbuild src/server/index.ts src/client/index.ts --bundle --minify --target=es2016 --outdir=assets/",
     "start": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:watch-js\"",
-    "dev": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:debug-js\""
+    "dev": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:debug-js\"",
+    "build": "concurrently \"npm:build-html\" \"npm:build-css\" \"npm:build-js\""
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "autoprefixer": "^10.2.5",
     "concurrently": "^6.0.2",
     "cpx": "^1.5.0",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.11.14",
     "postcss": "^8.2.12",
     "postcss-cli": "^8.3.1",
