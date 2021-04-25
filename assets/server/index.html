@@ -46,7 +46,7 @@
         </div>
 
         <div class="flex space-x-2 mb-2">
-          <input type="password" x-model="sourceUrl" @change="server.ChangeHostId($event.target.value)" placeholder="OBS browser source*" class="w-full input input-bordered">
+          <input type="password" autocomplete="off" x-model="sourceUrl" @change="server.ChangeHostId($event.target.value)" placeholder="OBS browser source*" class="w-full input input-bordered">
           <button class="btn btn-primary" @click="server.Init()">Start</button>
         </div>
         <small class="text-base-content">* Use this field if you don't want to change OBS browser source URL everytime. <br> Please, for your own security, do not use stupid shit like "mystream-123".

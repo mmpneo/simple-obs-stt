@@ -6,20 +6,24 @@ function getWindow() {
   return <any>window
 }
 
+function Log(message: string) {
+  console.log(`[Server] ${message}`)
+}
+
 class PeerServer {
   constructor() {
-    console.log("Create server instance");
+    Log('Create host instance');
     this.ShowView("connect");
     this.hostId = localStorage.getItem('obs_key');
   }
 
-  hostId: string | null = "";
+  hostId: string | null   = "";
   peerInstance?: Peer;
   recognitionInstance!: SpeechRecognition;
   languageDialect?: string;
+  private isSpeechRunning = false;
 
   public ChangeHostId(value: string) {
-    console.log(value)
     localStorage.setItem('obs_key', value);
     this.hostId = value;
   }
@@ -59,6 +63,8 @@ class PeerServer {
   };
 
   public Reset() {
+    Log('Reset');
+    this.isSpeechRunning = false;
     this.peerInstance?.destroy();
     this.recognitionInstance?.stop();
     this.ShowView("connect");
@@ -74,6 +80,7 @@ class PeerServer {
   }
 
   private BindPeer() {
+    Log('Bind peer');
     this.UpdateNetworkStatus('Connecting');
     this.peerInstance = new Peer(this.hostId || "");
     this.peerInstance?.on("open", _id => {
@@ -81,7 +88,7 @@ class PeerServer {
       this.BindRecognition();
     })
     this.peerInstance?.on("error", _error => {
-      console.log(_error)
+      console.error(_error)
       this.Reset();
     })
     this.peerInstance?.on("connection", peerConnection => this.BindClientConnection(peerConnection))
@@ -89,6 +96,7 @@ class PeerServer {
 
   private BindClientConnection(peerConnection: Peer.DataConnection) {
     peerConnection.on("open", () => {
+      // do something with connected client
     });
   }
 
@@ -97,6 +105,7 @@ class PeerServer {
   }
 
   BindRecognition() {
+    Log("Initialize recognition");
     if (!this.languageDialect)
       return;
     this.UpdateSTTStatus("Connecting");
@@ -105,10 +114,23 @@ class PeerServer {
     this.recognitionInstance.continuous     = true;
     this.recognitionInstance.interimResults = true;
     this.recognitionInstance.onerror        = (error) => {
-      console.log(error)
-      this.Reset();
+      if (error.error === "no-speech"){Log("OnError Silence error");}
+      else {
+        this.Reset();
+        console.error(error)
+      }
     };
+    this.recognitionInstance.onend          = _event => {
+      if (!this.isSpeechRunning)
+        return;
+      Log("OnEnd Restart recognition");
+      this.recognitionInstance.start();
+    } // auto restart after silence
     this.recognitionInstance.onstart        = () => {
+      if (this.isSpeechRunning) // if restarting after silence
+        return;
+      Log("Start recognition");
+      this.isSpeechRunning = true;
       this.UpdateSTTStatus("Connected");
       this.languageDialect && this.UpdatLanguageStatus(this.languageDialect);
       this.ShowView("running");
