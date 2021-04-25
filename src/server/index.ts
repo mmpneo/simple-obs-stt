@@ -62,7 +62,7 @@ class PeerServer {
   }
 
   public CopyLink() {
-    let url = "https://mmpneo.github.io/simple_obs_stt/assets/server/".split("/").slice(0, -2).join("/");
+    let url = location.href.split("/").slice(0, -2).join("/");
     console.log(url)
     navigator.clipboard.writeText(`${url}/client#${this.peerInstance?.id}`)
   }
