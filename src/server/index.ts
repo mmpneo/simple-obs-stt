@@ -9,7 +9,7 @@ function getWindow() {
 class PeerServer {
   constructor() {
     console.log("Create server instance");
-    window.onload = () => this.ShowView("connect");
+    this.ShowView("connect");
   }
 
   peerInstance?: Peer;
@@ -138,6 +138,11 @@ getWindow().getDialectList = (index: number) => {
   getWindow().dialectList       = lang[1]
   return dialects;
 };
+
+window.onload = () => new PeerServer();
+
+
+
 
 getWindow().langs = [
   ['Afrikaans', ['af-ZA']],

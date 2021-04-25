@@ -26,7 +26,6 @@ class PeerClient {
     this.connInstance?.close();
     this.UpdateStatus("Disconnected");
   }
-
   private BindPeer() {
     this.peerInstance = new Peer();
     this.peerInstance?.on("open", _ => {
@@ -56,4 +55,4 @@ class PeerClient {
     this.BindPeer();
   }
 }
-(<any>window).server = new PeerClient();
+window.onload = () => new PeerClient();
