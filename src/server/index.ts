@@ -63,7 +63,6 @@ class PeerServer {
 
   public CopyLink() {
     let url = location.href.split("/").slice(0, -2).join("/");
-    console.log(`${url}/client#${this.peerInstance?.id}`)
     navigator.clipboard.writeText(`${url}/client#${this.peerInstance?.id}`)
   }
 
