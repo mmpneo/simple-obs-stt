@@ -13,7 +13,7 @@
     "build-js": "esbuild src/server/index.ts src/client/index.ts --bundle --minify --target=es2016 --outdir=assets/",
     "start": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:watch-js\"",
     "dev": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:debug-js\"",
-    "build": "concurrently \"npm:build-html\" \"npm:build-css\" \"npm:build-js\""
+    "build": "concurrently \"npm:build-html\" \"npm:build-js\""
   },
   "author": "",
   "license": "ISC",
