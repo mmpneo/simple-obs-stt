@@ -1,4 +1,4 @@
-<div class="w-screen bg-base-100 mx-auto px-4 flex flex-col flex-1 text-base-content justify-center items-center" *ngIf="speechQuery.state$ | async as speechState">
+<div class="relative w-screen bg-base-100 mx-auto px-4 flex flex-col flex-1 text-base-content justify-center items-center" *ngIf="speechQuery.state$ | async as speechState">
   <h1 class="font-bold text-5xl mb-8">OBS STT</h1>
   <div class="flex flex-col w-72">
 
@@ -33,5 +33,15 @@
         <button (click)="applicationService.CopyLink()" class="btn btn-outline">Copy link</button>
       </div>
     </ng-container>
+  </div>
+  <div *ngIf="!usable" class="p-8 flex justify-center items-center absolute top-0 bottom-0 left-0 right-0 bg-base-300 opacity-90">
+    <div class="flex items-center">
+      <img width="35" class="mr-4" src="assets/pepehands.gif">
+      <span>
+        STT only works in <b>Chrome</b>. <br>
+        It won't work in Firefox, Edge, Opera, Brave, Vivaldi or any other browser, because google vendor-locked their api to chrome.
+        <img width="24" class="inline ml-2" src="assets/hahaa.png">
+      </span>
+    </div>
   </div>
 </div>

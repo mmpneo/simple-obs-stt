@@ -5,6 +5,7 @@ import {SpeechService}                              from "@store/speech/speech.s
 import {ApplicationQuery}                           from "@store/application/application.query";
 import {ApplicationService}                         from "@store/application/application.service";
 import {languages}                                  from "@store/speech/speech.store";
+import UAParser                                     from "ua-parser-js";
 
 @Component({
   selector:        'app-server',
@@ -22,8 +23,9 @@ export class ServerComponent implements OnInit {
   }
 
   langs = languages;
-
+  usable = false;
   ngOnInit(): void {
+    this.usable = new UAParser().getBrowser().name === "Chrome";
   }
 
 }
