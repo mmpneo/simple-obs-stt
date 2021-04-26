@@ -1,14 +1,13 @@
-import {Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {SpeechQuery}                                                   from "@store/speech/speech.query";
-import {ActivatedRoute}                               from "@angular/router";
-import {NetworkService}                               from "@store/network/network.service";
-import {NetworkQuery}                                 from "@store/network/network.query";
+import {ActivatedRoute}                                                from "@angular/router";
+import {NetworkService}                                                from "@store/network/network.service";
+import {NetworkQuery}                                                  from "@store/network/network.query";
 
 @Component({
-  selector: 'app-client',
-  templateUrl: './client.component.html',
-  styles: [
-  ],
+  selector:        'app-client',
+  templateUrl:     './client.component.html',
+  styles:          [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientComponent implements OnInit {
@@ -16,17 +15,10 @@ export class ClientComponent implements OnInit {
     private networkService: NetworkService,
     public networkQuery: NetworkQuery,
     public speechQuery: SpeechQuery,
-    private activatedRoute: ActivatedRoute,
-    private detector: ChangeDetectorRef) { }
-
-
-  textValue = "";
+    private activatedRoute: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
-    this.speechQuery.value$.subscribe(value => {
-      this.textValue = value;
-      this.detector.detectChanges();
-    })
     this.networkService.InitClient(this.activatedRoute.snapshot.params.id)
   }
 

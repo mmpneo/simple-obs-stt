@@ -10,10 +10,7 @@ export class SpeechService {
     private speechStore: SpeechStore,
     private speechQuery: SpeechQuery,
     private networkService: NetworkService) {
-    networkService.messages$.subscribe(m => {
-      if (m.type === 'stt')
-        speechStore.update({speechValue: m.data})
-    });
+    networkService.messages$.subscribe(m => m.type === 'stt' && this.ShowUpdatedSpeech(m.data)); // listen for network messages
     this.BindSpeechParse();
   }
 
@@ -29,8 +26,15 @@ export class SpeechService {
   }
 
   private UpdateSttValue(data: string) {
-    this.speechStore.update({speechValue: data});
+    this.ShowUpdatedSpeech(data);
     this.networkService.SendMessage({type: 'stt', data});
+  }
+
+  private tm: any;
+  private ShowUpdatedSpeech(data: string) {
+    this.speechStore.update({speechValue: data});
+    this.tm && clearTimeout(this.tm);
+    this.tm = setTimeout(() => this.speechStore.update({speechValue: ""}), 3000);
   }
 
   private BindSpeechParse() {

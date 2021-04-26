@@ -36,21 +36,20 @@ export class NetworkService {
     this.connInstance?.close();
     this.connInstance = undefined;
     setTimeout(() => {
-      console.log("Reconnect")
+      console.log("[Client] Reconnect")
       this.InitClient(hostId);
     }, 1000);
   }
 
   Stop() {
     this.UpdateNetworkStatus(ConnectionState.Disconnected);
-    !this.peerInstance?.disconnected && this.peerInstance?.disconnect()
+    !this.peerInstance?.destroyed && this.peerInstance?.destroy();
   }
 
   public InitClient(hostId: string) {
     this.UpdateNetworkStatus(ConnectionState.Connecting);
     this.peerInstance = new Peer();
     this.peerInstance?.on("open", _id => {
-      this.peerInstance?.connect(hostId)
       this.connInstance = this.peerInstance?.connect(hostId);
       this.connInstance?.on("open", () => {
         this.connInstance?.on("data", data => this.messages$.next(data));
@@ -62,6 +61,7 @@ export class NetworkService {
         this.ResetClient(hostId);
       });
     });
+    this.peerInstance.on("disconnected", () => this.ResetClient(hostId))
     this.peerInstance.on("error", error => this.ResetClient(hostId));
   }
 

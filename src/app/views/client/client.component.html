@@ -1,2 +1,2 @@
 <div *ngIf="(networkQuery.state$ | async)?.peerConnectionState === 1">Connecting</div>
-<div>{{textValue}}</div>
+<div style="color: #fff; text-shadow: 2px 2px 1px black;" class="text-2xl text-s drop-shadow-md">{{speechQuery.value$ | async}}</div>
