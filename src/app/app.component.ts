@@ -14,7 +14,7 @@ export class AppComponent {
     let path = localStorage.getItem('path');
     if(path) {
       localStorage.removeItem('path');
-      this.router.navigate([path]);
+      this.router.navigate([path.replace("simple_obs_stt", "")]);
     }
   }
 }
