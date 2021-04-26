@@ -29,6 +29,7 @@
     "@angular/compiler-cli": "~11.2.11",
     "@datorama/akita-ngdevtools": "^6.0.0",
     "@types/node": "^12.11.1",
+    "angular-cli-ghpages": "^1.0.0-rc.1",
     "tailwindcss": "^2.1.2",
     "typescript": "~4.1.2"
   }

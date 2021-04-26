@@ -107,6 +107,10 @@
           "options": {
             "browserTarget": "simple-obs-stt:build"
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }
