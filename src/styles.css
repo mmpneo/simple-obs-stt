@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {}
+body > *:not(router-outlet) {
+    @apply flex;
+    @apply flex-col;
+    @apply w-screen;
+    @apply h-screen;
+}

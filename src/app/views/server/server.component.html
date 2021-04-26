@@ -1,0 +1,37 @@
+<div class="w-screen bg-base-100 mx-auto px-4 flex flex-col flex-1 text-base-content justify-center items-center" *ngIf="speechQuery.state$ | async as speechState">
+  <div class="flex flex-col w-72">
+    <h1 class="font-bold text-5xl mb-8">OBS STT</h1>
+
+    <ng-container [ngSwitch]="applicationQuery.connectionState$ | async">
+      <ng-container *ngSwitchCase="0">
+        <select class="select select-bordered w-full max-w-xs mb-2" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
+          <option [disabled]="true">Choose your language</option>
+          <option [value]="index" *ngFor="let lang of speechState.languages; let index = index">{{lang[0]}}</option>
+        </select>
+        <select *ngIf="speechState.languages[speechState.selectedLanguage[0]].length > 2" class="select select-bordered w-full max-w-xs mb-2" [ngModel]="speechState.selectedLanguage[1]" (ngModelChange)="speechService.SelectDialect($event)">
+          <option [disabled]="true">Choose your Dialect</option>
+          <option [value]="index" *ngFor="let lang of speechState.languages[speechState.selectedLanguage[0]] | slice:1; let index = index">{{lang[1]}}</option>
+        </select>
+        <div class="flex space-x-2 my-2" *ngIf="networkQuery.state$ | async as networkState">
+          <input type="password" autocomplete="off" [ngModel]="networkState.hostID" (ngModelChange)="applicationService.ChangeHostId($event)" placeholder="* OBS browser source" class="w-full input input-bordered">
+          <button class="btn btn-primary" (click)="applicationService.StartHost()">Start</button>
+        </div>
+        <small class="text-base-content">* Use this field if you don't want to change OBS browser source URL everytime. <br> Please, for your own security, do not use stupid shit like "mystream-123".
+          <a class="underline" href="https://www.uuidgenerator.net/version4/" target="_blank">Use Generators</a>. <br> Leave field empty for one-time session.
+        </small>
+      </ng-container>
+      <ng-container *ngSwitchCase="1">
+        Connecting
+      </ng-container>
+      <div class="flex flex-col justify-center" *ngSwitchCase="2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="text-error self-center h-24 w-24 mb-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        </svg>
+        <div id="stt-value" class="h-48 self-center w-96 bg-base-200 mb-8 p-4 rounded-md border-2 border-base-300">{{speechState.speechValue}}</div>
+
+        <button (click)="applicationService.StopHost()" class="btn mb-4">Stop server</button>
+        <button (click)="applicationService.CopyLink()" class="btn btn-outline">Copy link</button>
+      </div>
+    </ng-container>
+  </div>
+</div>

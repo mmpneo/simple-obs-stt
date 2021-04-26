@@ -1,40 +1,35 @@
 {
-  "name": "simple_obs_stt",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "simple-obs-stt",
+  "version": "0.0.0",
   "scripts": {
-    "watch-html": "cpx \"src/**/*.html\" assets --watch",
-    "build-html": "cpx \"src/**/*.html\" assets",
-    "watch-css": "postcss src/css/style.css -o assets/css/style.css -w",
-    "build-css": "cross-env ENV_BUILD=prod postcss src/css/style.css -o assets/css/style.css",
-    "watch-js": "esbuild src/server/index.ts src/client/index.ts --bundle --sourcemap=inline --target=es2016 --outdir=assets/ --watch",
-    "debug-js": "esbuild src/server/index.ts src/client/index.ts --bundle --sourcemap=inline --target=es2016 --outdir=assets/ --servedir=assets",
-    "build-js": "esbuild src/server/index.ts src/client/index.ts --bundle --minify --target=es2016 --outdir=assets/",
-    "start": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:watch-js\"",
-    "dev": "concurrently \"npm:watch-html\" \"npm:watch-css\" \"npm:debug-js\"",
-    "build": "concurrently \"npm:build-html\" \"npm:build-js\""
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build --prod"
   },
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "dependencies": {
-    "alpinejs": "^2.8.2",
+    "@angular/animations": "~11.2.11",
+    "@angular/common": "~11.2.11",
+    "@angular/compiler": "~11.2.11",
+    "@angular/core": "~11.2.11",
+    "@angular/forms": "~11.2.11",
+    "@angular/platform-browser": "~11.2.11",
+    "@angular/platform-browser-dynamic": "~11.2.11",
+    "@angular/router": "~11.2.11",
+    "@datorama/akita": "^6.1.3",
     "daisyui": "^0.20.1",
     "peerjs": "^1.3.2",
-    "tailwindcss": "^2.1.2",
-    "ua-parser-js": "^0.7.28"
+    "rxjs": "~6.6.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.11.3"
   },
   "devDependencies": {
-    "@types/ua-parser-js": "^0.7.35",
-    "autoprefixer": "^10.2.5",
-    "concurrently": "^6.0.2",
-    "cpx": "^1.5.0",
-    "cross-env": "^7.0.3",
-    "esbuild": "^0.11.14",
-    "postcss": "^8.2.12",
-    "postcss-cli": "^8.3.1",
-    "postcss-copy": "^7.1.0",
-    "postcss-import": "^14.0.1",
-    "typescript": "^4.2.4"
+    "@angular-devkit/build-angular": "~0.1102.10",
+    "@angular/cli": "~11.2.10",
+    "@angular/compiler-cli": "~11.2.11",
+    "@datorama/akita-ngdevtools": "^6.0.0",
+    "@types/node": "^12.11.1",
+    "tailwindcss": "^2.1.2",
+    "typescript": "~4.1.2"
   }
 }
