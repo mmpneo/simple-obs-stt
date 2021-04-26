@@ -1,6 +1,6 @@
-import {Injectable}      from '@angular/core';
-import {SpeechStore}     from './speech.store';
-import {SpeechQuery}     from "@store/speech/speech.query";
+import {Injectable}             from '@angular/core';
+import {languages, SpeechStore} from './speech.store';
+import {SpeechQuery}            from "@store/speech/speech.query";
 import {NetworkService}  from "@store/network/network.service";
 import {ConnectionState} from "../../utils/types";
 
@@ -53,7 +53,7 @@ export class SpeechService {
 
   async InitHostSpeech() {
     const selected        = this.speechQuery.getValue().selectedLanguage;
-    const langs           = this.speechQuery.languages();
+    const langs           = languages;
     const selectedDialect = langs[selected[0]][selected[1] + 1][0];
 
     this.UpdateNetworkStatus(ConnectionState.Connecting);

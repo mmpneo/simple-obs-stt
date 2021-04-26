@@ -4,6 +4,7 @@ import {SpeechQuery}                                from "@store/speech/speech.q
 import {SpeechService}                              from "@store/speech/speech.service";
 import {ApplicationQuery}                           from "@store/application/application.query";
 import {ApplicationService}                         from "@store/application/application.service";
+import {languages}                                  from "@store/speech/speech.store";
 
 @Component({
   selector:        'app-server',
@@ -19,6 +20,8 @@ export class ServerComponent implements OnInit {
     public applicationService: ApplicationService,
     public speechService: SpeechService) {
   }
+
+  langs = languages;
 
   ngOnInit(): void {
   }

@@ -10,8 +10,5 @@ export class SpeechQuery extends Query<SpeechState> {
 
   value$ = this.select("speechValue");
   state$ = this.select();
-  languages$ = this.select("languages");
-  languages = () => this.getValue().languages;
   selectedLanguage$ = this.select("selectedLanguage");
-
 }

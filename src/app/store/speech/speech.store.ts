@@ -3,7 +3,6 @@ import {Store, StoreConfig} from '@datorama/akita';
 import {ConnectionState}    from "../../utils/types";
 
 export interface SpeechState {
-  languages: (string | string[])[][];
   selectedLanguage: [number, number],
   speechServiceState: ConnectionState,
   speechValue: string
@@ -11,7 +10,6 @@ export interface SpeechState {
 
 export function createInitialState(): SpeechState {
   return {
-    languages,
     selectedLanguage: [0, 0],
     speechServiceState: ConnectionState.Disconnected,
     speechValue: ""
@@ -28,7 +26,7 @@ export class SpeechStore extends Store<SpeechState> {
 
 }
 
-const languages = [
+export const languages = [
   ['Afrikaans', ['af-ZA']],
   ['አማርኛ', ['am-ET']],
   ['Azərbaycanca', ['az-AZ']],
