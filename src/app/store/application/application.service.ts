@@ -3,14 +3,20 @@ import {ApplicationStore} from './application.store';
 import {NetworkService}   from "@store/network/network.service";
 import {SpeechService}    from "@store/speech/speech.service";
 import {NetworkStore}     from "@store/network/network.store";
+import {NetworkQuery}     from "@store/network/network.query";
+import {SpeechQuery}      from "@store/speech/speech.query";
+import {combineQueries}   from "@datorama/akita";
+import {ConnectionState}  from "../../utils/types";
 
 @Injectable({providedIn: 'root'})
 export class ApplicationService {
   constructor(
     private applicationStore: ApplicationStore,
     private networkService: NetworkService,
+    private networkQuery: NetworkQuery,
     private speechService: SpeechService,
-    private networkStore: NetworkStore
+    private speechQuery: SpeechQuery,
+    private networkStore: NetworkStore,
   ) {
   }
 
@@ -24,11 +30,15 @@ export class ApplicationService {
   public async StartHost() {
     try {
       await this.speechService.InitHostSpeech();
-    } catch (error) {throw new Error(error);}
-    try {
       await this.networkService.InitServer();
-    } catch (error) {throw new Error(error);}
-  }
+
+      combineQueries([this.speechQuery.connectionState$, this.networkQuery.connectionState$]).subscribe(([s,n]) => {
+        if (s === ConnectionState.Disconnected || n === ConnectionState.Disconnected) {
+          this.StopHost();
+        }
+      });
+
+    } catch (error) {throw new Error(error);}}
   public StopHost() {
     this.speechService.Stop()
     this.networkService.Stop()

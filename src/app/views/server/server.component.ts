@@ -6,6 +6,9 @@ import {ApplicationQuery}                           from "@store/application/app
 import {ApplicationService}                         from "@store/application/application.service";
 import {languages}                                  from "@store/speech/speech.store";
 import UAParser                                     from "ua-parser-js";
+import {StyleService}                               from "@store/style/style.service";
+import {StyleQuery}                                 from "@store/style/style.query";
+import {RGBA}                                       from "ngx-color";
 
 @Component({
   selector:        'app-server',
@@ -19,13 +22,22 @@ export class ServerComponent implements OnInit {
     public speechQuery: SpeechQuery,
     public applicationQuery: ApplicationQuery,
     public applicationService: ApplicationService,
-    public speechService: SpeechService) {
+    public speechService: SpeechService,
+    public styleService: StyleService,
+    public styleQuery: StyleQuery
+  ) {
   }
 
-  langs = languages;
+  langs  = languages;
   usable = false;
+
+  RgbaToString(rgba: RGBA) {
+    return `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
+  }
+
   ngOnInit(): void {
-    this.usable = new UAParser().getBrowser().name === "Chrome";
+    const parser = new UAParser().getBrowser();
+    this.usable = parser.name === "Chrome" || (parser.name === "Edge" && parseInt(parser?.major || "0") >= 92);
   }
 
 }

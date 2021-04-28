@@ -1,0 +1,9 @@
+
+
+<div class="stt-container overflow-hidden">
+  <div #boxElement class="stt-box flex flex-col w-96 h-24 bg-secondary text-secondary-content overflow-y-scroll" style="scroll-behavior: smooth;">
+    <div #textElement class="p-4 stt-box-text w-full min-h-full" style="flex: 0 0 auto">
+      <span *ngFor="let sentence of speechQuery.sentences$ | async; trackBy: track" class="mr-2" [class.opacity-60]="!sentence.finalized">{{sentence.value}}</span>
+    </div>
+  </div>
+</div>

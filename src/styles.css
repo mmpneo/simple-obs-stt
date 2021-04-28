@@ -1,11 +1,61 @@
+@import '~tippy.js/dist/tippy.css';
+@import '~tippy.js/animations/scale.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {}
-body > *:not(router-outlet) {
+* {
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+app-root > *:not(router-outlet) {
     @apply flex;
     @apply flex-col;
     @apply w-screen;
     @apply h-screen;
+}
+
+[data-tippy-root] {
+    @apply shadow-xl;
+}
+
+.tippy-content {
+    @apply bg-base-300;
+    @apply text-base-content;
+    @apply rounded-md;
+}
+
+.tippy-box[role="popper"] {
+    @apply bg-transparent;
+}
+
+/*#TIPPY*/
+[role="popper"] .tippy-content {
+    @apply p-4;
+}
+
+[role="popper"][data-theme="raw"] .tippy-content {
+    @apply p-0;
+}
+
+.tippy-arrow:before {
+    @apply text-base-200;
+}
+
+.stt-container {}
+.stt-box {
+    scrollbar-width: none;
+}
+.stt-box::-webkit-scrollbar {
+    display: none;
+}
+
+
+input[type=range].range::-webkit-slider-thumb {
+    pointer-events: all;
+    width: 24px;
+    height: 24px;
+    -webkit-appearance: none;
+    /* @apply w-6 h-6 appearance-none pointer-events-auto; */
 }

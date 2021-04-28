@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {SpeechService}                      from "@store/speech/speech.service";
 import {NetworkService}                     from "@store/network/network.service";
 import {Router}                             from "@angular/router";
+import {StyleService}                       from "./store/style/style.service";
 
 @Component({
   selector:        'app-root',
@@ -10,7 +11,11 @@ import {Router}                             from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  constructor(private s: SpeechService, private n: NetworkService, private router: Router) {
+  constructor(
+    private _speechService: SpeechService,
+    private _networkService: NetworkService,
+    private _styleService: StyleService,
+    private router: Router) {
     let path = localStorage.getItem('path');
     if(path) {
       localStorage.removeItem('path');

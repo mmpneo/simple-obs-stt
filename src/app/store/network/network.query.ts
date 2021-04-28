@@ -8,6 +8,7 @@ export class NetworkQuery extends Query<NetworkState> {
     super(store);
   }
 
+  connectionState$ = this.select("peerConnectionState")
   state$ = this.select();
 
 }

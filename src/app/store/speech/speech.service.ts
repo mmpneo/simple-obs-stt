@@ -1,8 +1,9 @@
-import {Injectable}             from '@angular/core';
-import {languages, SpeechStore} from './speech.store';
-import {SpeechQuery}            from "@store/speech/speech.query";
-import {NetworkService}  from "@store/network/network.service";
-import {ConnectionState} from "../../utils/types";
+import {Injectable}                             from '@angular/core';
+import {languages, SpeechSentence, SpeechStore} from './speech.store';
+import {SpeechQuery}                            from "@store/speech/speech.query";
+import {NetworkService}         from "@store/network/network.service";
+import {ConnectionState}                                           from "../../utils/types";
+import {arrayAdd, arrayUpdate, arrayUpsert, guid, ID, transaction} from "@datorama/akita";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -10,7 +11,15 @@ export class SpeechService {
     private speechStore: SpeechStore,
     private speechQuery: SpeechQuery,
     private networkService: NetworkService) {
-    networkService.messages$.subscribe(m => m.type === 'stt' && this.ShowUpdatedSpeech(m.data)); // listen for network messages
+    networkService.messages$.subscribe(m => {
+      if (m.type === 'stt:updatesentence') {
+        this.speechStore.update(e => {
+          if (e.sentences.length > 20) e.sentences.splice(0,1); // limit number of sentences
+          e.sentences = arrayUpsert(e.sentences, m.data.id, m.data);
+        })
+      }
+      // m.type === 'stt' && this.ShowUpdatedSpeech(m.data);
+    }); // listen for network messages
     this.BindSpeechParse();
   }
 
@@ -25,16 +34,25 @@ export class SpeechService {
     this.recognitionInstance?.stop();
   }
 
-  private UpdateSttValue(data: string) {
-    this.ShowUpdatedSpeech(data);
-    this.networkService.SendMessage({type: 'stt', data});
-  }
-
-  private tm: any;
-  private ShowUpdatedSpeech(data: string) {
-    this.speechStore.update({speechValue: data});
-    this.tm && clearTimeout(this.tm);
-    this.tm = setTimeout(() => this.speechStore.update({speechValue: ""}), 3000);
+  private DeleteSentence(id: ID) {}
+  @transaction()
+  private UpdateLastSentence(text: string, finalized = false) {
+    const sentences = this.speechQuery.getValue().sentences;
+    if (sentences.length === 0 || sentences[sentences.length - 1].finalized) {
+      // create new
+      const newSentence: SpeechSentence = {finalized, value: text, id: guid()};
+      this.speechStore.update(e =>{
+        if (e.sentences.length > 20) e.sentences.splice(0,1); // limit number of sentences
+        e.sentences = arrayAdd(e.sentences, newSentence);
+      });
+      this.networkService.SendMessage({type: 'stt:updatesentence', data: newSentence})
+    }
+    else {
+      const lastSentence = sentences[this.speechQuery.getValue().sentences.length - 1];
+      const updated = {...lastSentence, finalized, value: text}
+      this.speechStore.update(({sentences: arrayUpdate(sentences, lastSentence.id, updated)}))
+      this.networkService.SendMessage({type: 'stt:updatesentence', data: updated})
+    }
   }
 
   private BindSpeechParse() {
@@ -44,12 +62,13 @@ export class SpeechService {
       for (var i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           final_transcript += event.results[i][0].transcript;
-          this.UpdateSttValue(final_transcript);
-
+          this.UpdateLastSentence(final_transcript, true)
+          console.log("final", final_transcript);
         }
         else {
           interim_transcript += event.results[i][0].transcript;
-          this.UpdateSttValue(interim_transcript);
+          this.UpdateLastSentence(interim_transcript);
+          console.log("interim", interim_transcript);
         }
       }
     };
@@ -66,6 +85,7 @@ export class SpeechService {
     this.recognitionInstance.interimResults = true;
 
     try {
+      this.recognitionInstance.abort();
       await new Promise((res, rej) => {
         this.recognitionInstance.onerror = rej;
         this.recognitionInstance.onstart = res;
@@ -75,16 +95,18 @@ export class SpeechService {
       this.UpdateNetworkStatus(ConnectionState.Connected);
       this.recognitionInstance.onerror = (error) => {
         if (error.error === "no-speech") {}
+        else if (error.error === "network") {
+          this.Stop();
+        }
         else {
           this.Stop();
           console.error(error)
         }
+        console.error(error)
       };
     } catch (error) {
+      console.error(error)
       //todo handle startup error
-    }
-    try {
-    } catch (error) {
       this.Stop();
     }
 

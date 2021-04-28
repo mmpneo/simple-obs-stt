@@ -15,6 +15,7 @@ export class NetworkService {
   constructor(private networkStore: NetworkStore, private networkQuery: NetworkQuery) {}
 
   public messages$ = new Subject<Message>();
+  public onClientConnected$ = new Subject();
 
   private peerInstance?: Peer;
   public getPeerId = () => this.peerInstance?.id;
@@ -50,7 +51,7 @@ export class NetworkService {
     this.UpdateNetworkStatus(ConnectionState.Connecting);
     this.peerInstance = new Peer();
     this.peerInstance?.on("open", _id => {
-      this.connInstance = this.peerInstance?.connect(hostId);
+      this.connInstance = this.peerInstance?.connect(hostId, {reliable: true});
       this.connInstance?.on("open", () => {
         this.connInstance?.on("data", data => this.messages$.next(data));
         this.UpdateNetworkStatus(ConnectionState.Connected);
@@ -77,6 +78,8 @@ export class NetworkService {
     } catch (error) {
       throw new Error(error);
     }
-    // this.peerInstance?.on("connection", peerConnection => this.BindClientConnection(peerConnection))
+    this.peerInstance?.on("connection", _peerConnection => {
+      _peerConnection.on("open", () => this.onClientConnected$.next())
+    })
   }
 }

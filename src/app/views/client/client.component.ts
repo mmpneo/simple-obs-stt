@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {SpeechQuery}                                                   from "@store/speech/speech.query";
-import {ActivatedRoute}                                                from "@angular/router";
-import {NetworkService}                                                from "@store/network/network.service";
-import {NetworkQuery}                                                  from "@store/network/network.query";
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ActivatedRoute}                             from "@angular/router";
+import {NetworkService}                             from "@store/network/network.service";
+import {NetworkQuery}                               from "@store/network/network.query";
 
 @Component({
   selector:        'app-client',
@@ -14,7 +13,6 @@ export class ClientComponent implements OnInit {
   constructor(
     private networkService: NetworkService,
     public networkQuery: NetworkQuery,
-    public speechQuery: SpeechQuery,
     private activatedRoute: ActivatedRoute) {
   }
 
