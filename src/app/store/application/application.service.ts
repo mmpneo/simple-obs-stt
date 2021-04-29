@@ -20,7 +20,10 @@ export class ApplicationService {
   ) {
   }
 
-  public ChangeHostId = (hostID: string) => this.networkStore.update({hostID});
+  public ChangeHostId = (hostID: string) => {
+    console.log(hostID);
+    return this.networkStore.update({hostID});
+  };
 
   public CopyLink() {
     let url = location.href.split("/").slice(0, -1).join("/");

@@ -43,7 +43,6 @@ app-root > *:not(router-outlet) {
     @apply text-base-200;
 }
 
-.stt-container {}
 .stt-box {
     scrollbar-width: none;
 }
@@ -58,4 +57,20 @@ input[type=range].range::-webkit-slider-thumb {
     height: 24px;
     -webkit-appearance: none;
     /* @apply w-6 h-6 appearance-none pointer-events-auto; */
+}
+
+@keyframes avatar-floating {
+    0%{transform: translateY(0);}
+    50%{transform: translateY(10px);}
+    0%{transform: translateY(0);}
+}
+
+.stt-container{
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
+}
+.stt-container.show{
+    opacity: 1;
+    transform: translateY(0);
 }

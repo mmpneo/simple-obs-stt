@@ -1,38 +1,51 @@
+
 <div class="relative w-screen bg-base-100 mx-auto px-4 flex flex-col flex-1 text-base-content justify-center items-center" *ngIf="speechQuery.state$ | async as speechState">
+<!--  <button class="absolute right-4 top-4 btn btn-accent btn-circle btn-sm" [tippy]="help" variation="popper" placement="bottom">-->
+<!--    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />-->
+<!--    </svg>-->
+<!--  </button>-->
   <h1 class="font-bold text-5xl mb-8">OBS STT</h1>
-  <div class="flex flex-col w-72">
+  <div class="flex flex-col space-y-2 w-72">
 
     <ng-container [ngSwitch]="applicationQuery.connectionState$ | async">
       <ng-container *ngSwitchCase="0">
-        <select class="select select-bordered w-full max-w-xs mb-2" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
+        <select class="select select-bordered w-full max-w-xs" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
           <option [disabled]="true">Choose your language</option>
           <option [value]="index" *ngFor="let lang of langs; let index = index">{{lang[0]}}</option>
         </select>
-        <select *ngIf="langs[speechState.selectedLanguage[0]].length > 2" class="select select-bordered w-full max-w-xs mb-2" [ngModel]="speechState.selectedLanguage[1]" (ngModelChange)="speechService.SelectDialect($event)">
+        <select *ngIf="langs[speechState.selectedLanguage[0]].length > 2" class="select select-bordered w-full max-w-xs" [ngModel]="speechState.selectedLanguage[1]" (ngModelChange)="speechService.SelectDialect($event)">
           <option [disabled]="true">Choose your Dialect</option>
           <option [value]="index" *ngFor="let lang of langs[speechState.selectedLanguage[0]] | slice:1; let index = index">{{lang[1]}}</option>
         </select>
-        <div class="flex space-x-2 my-2" *ngIf="networkQuery.state$ | async as networkState">
-          <input type="password" autocomplete="off" [ngModel]="networkState.hostID" (ngModelChange)="applicationService.ChangeHostId($event)" placeholder="* OBS browser source" class="w-full input input-bordered">
-          <button class="btn btn-primary" (click)="applicationService.StartHost()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Start</button>
+        <div class="form-control" *ngIf="networkQuery.state$ | async as networkState">
+          <label class="cursor-pointer label">
+            <span class="label-text">Remember me</span>
+            <div>
+              <input type="checkbox" checked="checked" class="toggle" [ngModel]="networkState.saveHost" (ngModelChange)="networkService.SwitchSaveHost()">
+              <span class="toggle-mark"></span>
+            </div>
+          </label>
+<!--          <label class="cursor-pointer label">-->
+<!--            <span class="label-text">Remember generated link</span>-->
+<!--            <div>-->
+<!--              <input type="checkbox" checked="checked" class="checkbox checkbox-primary" [ngModel]="networkState.saveHost" (ngModelChange)="networkService.SwitchSaveHost()">-->
+<!--              <span class="checkbox-mark"></span>-->
+<!--            </div>-->
+<!--          </label>-->
         </div>
-        <small class="text-base-content">* Use this field if you don't want to change OBS browser source URL everytime. <br> Please, for your own security, do not use stupid shit like "mystream-123".
-          <a class="underline" href="https://www.uuidgenerator.net/version4/" target="_blank">Use Generators</a>. <br> Leave field empty for one-time session.
-        </small>
+        <button class="btn btn-primary" (click)="applicationService.StartHost()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Start</button>
       </ng-container>
       <ng-container *ngSwitchCase="1">
         Connecting
       </ng-container>
       <div class="flex flex-col justify-center" *ngSwitchCase="2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="text-error self-center h-24 w-24 mb-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-        </svg>
-        <div id="stt-value" class="self-center mb-8">
+        <div class="border-dotted border-2  border-base-300 self-center mb-8 rounded-md">
           <app-stt-renderer></app-stt-renderer>
         </div>
 
@@ -67,63 +80,128 @@
 </div>
 
 <ng-template #customization>
-  <div class="w-64 flex flex-col space-y-4" *ngIf="styleQuery.current$ | async as currentStyle">
-<!--    <div class="text-xl font-semibold opacity-80">Style</div>-->
-    <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Text style</div>
-    <div class="flex justify-between items-center">
-      <div>Text color</div>
-      <button class="btn btn-sm btn-circle" [tippy]="text_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyle.color.value"></button>
+  <div class="w-72 flex flex-col space-y-4" *ngIf="styleQuery.current$ | async as currentStyle">
+    <div class="tabs self-center">
+      <a class="tab tab-bordered" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+        </svg>
+        Text</a>
+      <a class="tab tab-bordered" [class.tab-active]="activeTab === 'box'" (click)="ChangeTab('box')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+        Box</a>
+      <a class="tab tab-bordered" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        Avatar</a>
+<!--      <a class="tab tab-bordered" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">-->
+<!--        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />-->
+<!--        </svg>-->
+<!--      </a>-->
     </div>
 
-    <div class="flex justify-between items-center">
-      <div>Font weight</div>
-      <div class="btn-group">
-        <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'normal'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'normal'">Aa</button>
-        <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'bold'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'bold'"><span style="font-weight: bold">Aa</span></button>
-      </div>
-    </div>
+    <ng-container [ngSwitch]="activeTab">
+      <ng-container *ngSwitchCase="'text'">
+        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Text style</div>
+        <div class="flex justify-between items-center">
+          <div>Text color</div>
+          <button class="btn btn-sm btn-circle" [tippy]="text_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyle.color.value"></button>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Font size</div>
+          <input type="number" min="0" max="48" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyle.fontSize.value" (ngModelChange)="styleService.UpdateTextStyle({fontSize: $event})">
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Font weight</div>
+          <div class="btn-group">
+            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'normal'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'normal'">Aa</button>
+            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'bold'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'bold'"><span style="font-weight: bold">Aa</span></button>
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Letter case</div>
+          <div class="btn-group">
+            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'none'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'none'">-</button>
+            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'capitalize'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'capitalize'">Aa</button>
+            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'uppercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'uppercase'">AA</button>
+            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'lowercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'lowercase'">aa</button>
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Text shadow</div>
+          <button class="btn btn-sm btn-circle" [tippy]="text_shadow_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyleComposite.textShadow.color.value"></button>
+        </div>
+        <div class="pl-4 space-y-2 flex flex-col">
+          <div class="flex justify-between items-center">
+            <div>Shadow x</div>
+            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.x.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {x: $event})">
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Shadow y</div>
+            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.y.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {y: $event})">
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Shadow Blur</div>
+            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.b.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {b: $event})">
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'box'">
+        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Box style</div>
+        <div class="flex justify-between items-center">
+          <div>Background color</div>
+          <button class="btn btn-sm btn-circle" [tippy]="background_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.backgroundColor.value"></button>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Border size</div>
+          <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.borderWidth.value" (ngModelChange)="styleService.UpdateBoxStyle({borderWidth: $event})">
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Border color</div>
+          <button class="btn btn-sm btn-circle" [tippy]="box_border_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.borderColor.value"></button>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Corner radius</div>
+          <input type="range" min="0" max="20" class="range" [ngModel]="currentStyle.boxStyle.borderRadius.value" (ngModelChange)="styleService.UpdateBoxStyle({borderRadius: $event})">
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'avatar'">
+        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Avatar style</div>
+        <div class="flex justify-between items-center">
+          <div>Image url</div>
+          <input class="w-44 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.backgroundImage.value" (ngModelChange)="styleService.UpdateAvatarStyle({backgroundImage: $event})">
+        </div>
 
+        <div class="pl-4 space-y-2 flex flex-col">
+          <div class="flex justify-between items-center">
+            <div>Position x</div>
+            <input type="number" min="-100" max="100" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.marginRight.value" (ngModelChange)="styleService.UpdateAvatarStyle({marginRight: $event})">
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Position y</div>
+            <input type="number" min="-100" max="100" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.marginBottom.value" (ngModelChange)="styleService.UpdateAvatarStyle({marginBottom: $event})">
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Animation</div>
+          <select class="w-44 select select-bordered select-sm" [ngModel]="currentStyle.avatarStyle.animationName.value" (ngModelChange)="styleService.UpdateAvatarStyle({animationName: $event})">
+            <option value="none">None</option>
+            <option value="avatar-floating">Floating</option>
+          </select>
+        </div>
 
-    <div class="flex justify-between items-center">
-      <div>Letter case</div>
-      <div class="btn-group">
-        <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'none'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'none'">-</button>
-        <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'capitalize'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'capitalize'">Aa</button>
-        <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'uppercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'uppercase'">AA</button>
-        <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'lowercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'lowercase'">aa</button>
-      </div>
-    </div>
-    <div class="flex justify-between items-center">
-      <div>Text shadow</div>
-      <button class="btn btn-sm btn-circle" [tippy]="text_shadow_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyleComposite.textShadow.color.value"></button>
-    </div>
-    <div class="pl-4 space-y-2 flex flex-col">
-      <div class="flex justify-between items-center">
-        <div>Shadow x</div>
-        <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.x.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {x: $event})">
-      </div>
-      <div class="flex justify-between items-center">
-        <div>Shadow y</div>
-        <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.y.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {y: $event})">
-      </div>
-      <div class="flex justify-between items-center">
-        <div>Shadow Blur</div>
-        <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.b.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {b: $event})">
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="text-xl font-bold opacity-80 text-base-content">Background style</div>
-    <div class="flex justify-between items-center">
-      <div>Background color</div>
-      <button class="btn btn-sm btn-circle" [tippy]="background_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.backgroundColor.value"></button>
-    </div>
-    <div class="flex justify-between items-center">
-      <div>Roundness</div>
-      <input type="range" min="0" max="20" [class.range]>
-    </div>
-
+        <div class="pl-4 flex justify-between items-center">
+          <div>Animation length</div>
+          <input type="number" min="0" max="1000" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.animationDuration.value" (ngModelChange)="styleService.UpdateAvatarStyle({animationDuration: $event})">
+        </div>
+<!--        https://i.pinimg.com/originals/69/65/36/6965368d7620ec21e63dcad0e408c172.png-->
+      </ng-container>
+    </ng-container>
   </div>
 </ng-template>
 
@@ -142,5 +220,20 @@
 <ng-template #background_color>
   <div class="w-44" *ngIf="styleQuery.current$ | async as currentStyle">
     <color-sketch [color]="currentStyle.boxStyle.backgroundColor.value" (onChange)="styleService.UpdateBoxStyle({backgroundColor: RgbaToString($event.color.rgb)})"></color-sketch>
+  </div>
+</ng-template>
+
+<ng-template #box_border_color>
+  <div class="w-44" *ngIf="styleQuery.current$ | async as currentStyle">
+    <color-sketch [color]="currentStyle.boxStyle.borderColor.value" (onChange)="styleService.UpdateBoxStyle({borderColor: RgbaToString($event.color.rgb)})"></color-sketch>
+  </div>
+</ng-template>
+
+
+<ng-template #help>
+  <div class="flex flex-col space-y-4">
+    <div class="text-xl font-bold">Elp</div>
+    <div>1. Choose language</div>
+    <div>2. Type password</div>
   </div>
 </ng-template>

@@ -30,22 +30,34 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 
   sentences: SpeechSentence[] = [];
 
+  @ViewChild("avatarElement") avatarElement!: ElementRef;
   @ViewChild("boxElement") boxElement!: ElementRef;
   @ViewChild("textElement") textElement!: ElementRef;
 
   track = (index: number, obj: SpeechSentence) => obj.id && obj.value;
 
+  private BuildTypedValue(value: StyleValue): string {
+    console.log(value)
+    switch (value.type){
+      case StyleValueType.pixels: return value.value+'px';
+      case StyleValueType.ms: return value.value+'ms';
+      case StyleValueType.url: return `url(${value.value})`;
+      default: return value.value;
+    }
+  }
+
   private ApplyElementStyleDAta(element: any, styles: { [key: string]: StyleValue }) {
     for (const cssKey in styles)
-      element.style[cssKey] = styles[cssKey].value + (styles[cssKey].type === StyleValueType.string ? '' : 'px');
+      element.style[cssKey] = this.BuildTypedValue(styles[cssKey]);
   }
 
   private ApplyCompositeElementStyleData(element: any, styles: { [styleKey: string]: { [partialKey: string]: StyleValue } }) {
     for (const stylesKey in styles)
-      element.style[stylesKey] = Object.values(styles[stylesKey]).map(p => p.value + (p.type === StyleValueType.string ? '' : 'px')).join(' ')
+      element.style[stylesKey] = Object.values(styles[stylesKey]).map(p => this.BuildTypedValue(p)).join(' ')
   }
 
   private ApplyStyles(style: STTStyle) {
+    this.ApplyElementStyleDAta(this.avatarElement.nativeElement, style.avatarStyle);
     this.ApplyElementStyleDAta(this.boxElement.nativeElement, style.boxStyle);
     this.ApplyElementStyleDAta(this.textElement.nativeElement, style.textStyle);
     this.ApplyCompositeElementStyleData(this.textElement.nativeElement, style.textStyleComposite);

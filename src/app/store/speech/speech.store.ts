@@ -12,14 +12,16 @@ export interface SpeechSentence {
 export interface SpeechState {
   selectedLanguage: [number, number],
   speechServiceState: ConnectionState,
-  sentences: SpeechSentence[]
+  sentences: SpeechSentence[],
+  show: boolean
 }
 
 export function createInitialState(): SpeechState {
   return {
     selectedLanguage:   [0, 0],
     speechServiceState: ConnectionState.Disconnected,
-    sentences: []
+    sentences: [],
+    show: false
   };
 }
 

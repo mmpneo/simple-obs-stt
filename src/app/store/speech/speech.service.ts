@@ -17,8 +17,8 @@ export class SpeechService {
           if (e.sentences.length > 20) e.sentences.splice(0,1); // limit number of sentences
           e.sentences = arrayUpsert(e.sentences, m.data.id, m.data);
         })
+        this.TriggerShowTimer();
       }
-      // m.type === 'stt' && this.ShowUpdatedSpeech(m.data);
     }); // listen for network messages
     this.BindSpeechParse();
   }
@@ -32,6 +32,13 @@ export class SpeechService {
   public Stop() {
     this.UpdateNetworkStatus(ConnectionState.Disconnected);
     this.recognitionInstance?.stop();
+  }
+
+  private timeout: any;
+  TriggerShowTimer() {
+    this.speechStore.update({show: true});
+    this.timeout && clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => this.speechStore.update({show: false}), 5000);
   }
 
   private DeleteSentence(id: ID) {}
@@ -53,6 +60,7 @@ export class SpeechService {
       this.speechStore.update(({sentences: arrayUpdate(sentences, lastSentence.id, updated)}))
       this.networkService.SendMessage({type: 'stt:updatesentence', data: updated})
     }
+    this.TriggerShowTimer();
   }
 
   private BindSpeechParse() {

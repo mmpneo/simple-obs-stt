@@ -68,7 +68,7 @@ export class NetworkService {
 
   public async InitServer() {
     this.UpdateNetworkStatus(ConnectionState.Connecting);
-    this.peerInstance = new Peer(this.networkQuery.getValue().hostID || undefined);
+    this.peerInstance = new Peer(this.networkQuery.getValue().saveHost ? (this.networkQuery.getValue().hostID || undefined) : undefined);
     try {
       await new Promise((res, rej) => {
         this.peerInstance?.on("open", res);
@@ -78,8 +78,13 @@ export class NetworkService {
     } catch (error) {
       throw new Error(error);
     }
+    this.networkStore.update({hostID: this.peerInstance.id});
     this.peerInstance?.on("connection", _peerConnection => {
       _peerConnection.on("open", () => this.onClientConnected$.next())
     })
+  }
+
+  SwitchSaveHost() {
+    this.networkStore.update(e => ({saveHost: !e.saveHost}))
   }
 }

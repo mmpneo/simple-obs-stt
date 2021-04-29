@@ -9,6 +9,8 @@ export class StyleService {
     private networkService: NetworkService) {
     networkService.messages$.subscribe(m => m.type === 'style' && this.UpdateStyle(m.data))
     networkService.onClientConnected$.subscribe(_ => this.SendUpdatedStyle());
+
+
   }
 
   private SendUpdatedStyle() {
@@ -21,32 +23,26 @@ export class StyleService {
     });
   }
 
-  UpdateBoxStyle(style: Partial<{[key in keyof STTStyle["boxStyle"]]: string | number}>) {
+
+  private UpdateNormalStyles(style: any, stylePathKey: keyof STTStyle) {
     this.styleStore.update(state => {
-      for (let styleKey in style)
-        state.currentStyle.boxStyle[styleKey].value = style[styleKey]
+      for (let styleKey in style) { // @ts-ignore
+        state.currentStyle[stylePathKey][styleKey].value = style[styleKey]
+      }
     });
     this.SendUpdatedStyle();
   }
+
+  UpdateBoxStyle    = (style: Partial<{ [key in keyof STTStyle["boxStyle"]]: string | number }>) => this.UpdateNormalStyles(style, "boxStyle");
+  UpdateAvatarStyle = (style: Partial<{ [key in keyof STTStyle["avatarStyle"]]: string | number }>) => this.UpdateNormalStyles(style, "avatarStyle");
+  UpdateTextStyle   = (style: Partial<{ [key in keyof STTStyle["textStyle"]]: string }>) => this.UpdateNormalStyles(style, "textStyle");
 
   UpdateTextComposite(compositeKey: keyof STTStyle["textStyleComposite"], value: object) {
     this.styleStore.update(state => {
-      for (let styleKey in value)
-        { // @ts-ignore
-          state.currentStyle.textStyleComposite[compositeKey][styleKey].value = value[styleKey];
-        }
+      for (let styleKey in value) { // @ts-ignore
+        state.currentStyle.textStyleComposite[compositeKey][styleKey].value = value[styleKey];
+      }
     })
-    this.SendUpdatedStyle();
-  }
-
-
-  UpdateTextStyle(style: Partial<{[key in keyof STTStyle["textStyle"]]: string}>) {
-    this.styleStore.update(state => {
-      for (let styleKey in style)
-        { // @ts-ignore
-          state.currentStyle.textStyle[styleKey].value = style[styleKey];
-        }
-    });
     this.SendUpdatedStyle();
   }
 }
