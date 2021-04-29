@@ -21,7 +21,7 @@ export function createInitialState(): SpeechState {
     selectedLanguage:   [0, 0],
     speechServiceState: ConnectionState.Disconnected,
     sentences: [],
-    show: false
+    show: false,
   };
 }
 

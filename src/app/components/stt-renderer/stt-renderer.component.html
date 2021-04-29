@@ -1,5 +1,5 @@
 <ng-container *ngIf="speechQuery.state$ | async as speechState">
-  <div [class.show]="speechState.show" class="stt-container flex items-end relative" *ngIf="styleQuery.current$ | async as currentStyle">
+  <div [class.show]="speechState.speechServiceState === 2 || speechState.show" class="stt-container flex items-end relative" *ngIf="styleQuery.current$ | async as currentStyle">
     <div [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value" class="z-50 -mr-4 w-36 h-36 bg-contain bg-center bg-no-repeat" #avatarElement style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
     <div #boxElement class="stt-box flex flex-col w-96 h-24 bg-secondary text-secondary-content overflow-y-scroll" style="scroll-behavior: smooth;">
       <div #textElement class="p-4 stt-box-text w-full min-h-full" style="flex: 0 0 auto">
