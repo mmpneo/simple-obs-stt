@@ -1,14 +1,16 @@
-import {Injectable}                             from '@angular/core';
-import {languages, SpeechSentence, SpeechStore} from './speech.store';
-import {SpeechQuery}                            from "@store/speech/speech.query";
-import {NetworkService}         from "@store/network/network.service";
+import {Injectable}                                                from '@angular/core';
+import {languages, SpeechSentence, SpeechStore}                    from './speech.store';
+import {SpeechQuery}                                               from "@store/speech/speech.query";
+import {NetworkService}                                            from "@store/network/network.service";
 import {ConnectionState}                                           from "../../utils/types";
 import {arrayAdd, arrayUpdate, arrayUpsert, guid, ID, transaction} from "@datorama/akita";
+import {StyleQuery}                                                from "@store/style/style.query";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
   constructor(
     private speechStore: SpeechStore,
+    private styleQuery: StyleQuery,
     private speechQuery: SpeechQuery,
     private networkService: NetworkService) {
     networkService.messages$.subscribe(m => {
@@ -36,9 +38,11 @@ export class SpeechService {
 
   private timeout: any;
   TriggerShowTimer() {
+    const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
     this.speechStore.update({show: true});
     this.timeout && clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => this.speechStore.update({show: false}), 5000);
+    if (!globalConfig.alwaysShow.value)
+      this.timeout = setTimeout(() => this.speechStore.update({show: false}), parseInt(globalConfig.hideAfter?.value || '1000'));
   }
 
   private DeleteSentence(id: ID) {}
@@ -71,12 +75,12 @@ export class SpeechService {
         if (event.results[i].isFinal) {
           final_transcript += event.results[i][0].transcript;
           this.UpdateLastSentence(final_transcript, true)
-          console.log("final", final_transcript);
+          // console.log("final", final_transcript);
         }
         else {
           interim_transcript += event.results[i][0].transcript;
           this.UpdateLastSentence(interim_transcript);
-          console.log("interim", interim_transcript);
+          // console.log("interim", interim_transcript);
         }
       }
     };

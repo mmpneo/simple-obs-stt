@@ -8,6 +8,7 @@ export enum StyleValueType {
   pixels,
   ms,
   url,
+  bool
 }
 
 export type StyleValue<T = StyleValueType.string | StyleValueType.pixels | StyleValueType.url | StyleValueType.ms> = {
@@ -15,8 +16,11 @@ export type StyleValue<T = StyleValueType.string | StyleValueType.pixels | Style
   value: string
 }
 
+
 export interface STTStyle {
   boxStyle: {
+    width: StyleValue<StyleValueType.pixels>;
+    height: StyleValue<StyleValueType.pixels>;
     backgroundColor: StyleValue<StyleValueType.string>;
     borderWidth: StyleValue<StyleValueType.pixels>;
     borderColor: StyleValue<StyleValueType.string>;
@@ -40,11 +44,18 @@ export interface STTStyle {
 
   }
   avatarStyle: {
+    width: StyleValue<StyleValueType.pixels>;
+    height: StyleValue<StyleValueType.pixels>;
     backgroundImage: StyleValue<StyleValueType.url>;
     marginBottom: StyleValue<StyleValueType.pixels>;
     marginRight: StyleValue<StyleValueType.pixels>;
     animationName: StyleValue<StyleValueType.string>;
     animationDuration: StyleValue<StyleValueType.ms>;
+  },
+  globalStyle: {
+    alwaysShow: StyleValue<StyleValueType.bool>;
+    clearOnHide: StyleValue<StyleValueType.bool>;
+    hideAfter: StyleValue<StyleValueType.string>;
   }
 }
 
@@ -54,14 +65,16 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  boxStyle:  {
+  boxStyle:           {
+    width:           {type: StyleValueType.pixels, value: '300'},
+    height:          {type: StyleValueType.pixels, value: '100'},
     backgroundColor: {type: StyleValueType.string, value: 'transparent'},
-    borderRadius: {type: StyleValueType.pixels, value: '0'},
-    borderWidth: {type: StyleValueType.pixels, value: '0'},
-    borderColor: {type: StyleValueType.string, value: 'transparent'},
-    transform: {type: StyleValueType.string, value: 'scale(1)'}
+    borderRadius:    {type: StyleValueType.pixels, value: '0'},
+    borderWidth:     {type: StyleValueType.pixels, value: '0'},
+    borderColor:     {type: StyleValueType.string, value: 'transparent'},
+    transform:       {type: StyleValueType.string, value: 'scale(1)'}
   },
-  textStyle: {
+  textStyle:          {
     color:         {type: StyleValueType.string, value: 'white'},
     fontSize:      {type: StyleValueType.pixels, value: '18'},
     fontWeight:    {type: StyleValueType.string, value: 'normal'},
@@ -75,12 +88,19 @@ export const STYLE_TEMPLATE: STTStyle = {
       color: {type: StyleValueType.string, value: 'black'}
     }
   },
-  avatarStyle: {
-    backgroundImage: {type: StyleValueType.url, value: ''},
-    marginBottom:    {type: StyleValueType.pixels, value: '0'},
-    marginRight:     {type: StyleValueType.pixels, value: '0'},
-    animationName:   {type: StyleValueType.string, value: 'none'},
-    animationDuration:   {type: StyleValueType.ms, value: '2000'},
+  avatarStyle:        {
+    width:             {type: StyleValueType.pixels, value: '120'},
+    height:            {type: StyleValueType.pixels, value: '120'},
+    backgroundImage:   {type: StyleValueType.url, value: ''},
+    marginBottom:      {type: StyleValueType.pixels, value: '0'},
+    marginRight:       {type: StyleValueType.pixels, value: '0'},
+    animationName:     {type: StyleValueType.string, value: 'none'},
+    animationDuration: {type: StyleValueType.ms, value: '2000'},
+  },
+  globalStyle:        {
+    alwaysShow:  {type: StyleValueType.bool, value: '1'},
+    clearOnHide: {type: StyleValueType.bool, value: ''},
+    hideAfter:   {type: StyleValueType.string, value: '5000'},
   }
 }
 
@@ -97,7 +117,7 @@ export class StyleStore extends Store<StyleState> {
     selectPersistStateInit().subscribe(value => {
       this.update({
         currentStyle: deepmerge(STYLE_TEMPLATE, this.getValue().currentStyle),
-        templates: this.getValue().templates.map(template => deepmerge(STYLE_TEMPLATE, template))
+        templates:    this.getValue().templates.map(template => deepmerge(STYLE_TEMPLATE, template))
       });
     })
   }

@@ -37,12 +37,15 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   track = (index: number, obj: SpeechSentence) => obj.id && obj.value;
 
   private BuildTypedValue(value: StyleValue): string {
-    console.log(value)
-    switch (value.type){
-      case StyleValueType.pixels: return value.value+'px';
-      case StyleValueType.ms: return value.value+'ms';
-      case StyleValueType.url: return `url(${value.value})`;
-      default: return value.value;
+    switch (value.type) {
+      case StyleValueType.pixels:
+        return value.value + 'px';
+      case StyleValueType.ms:
+        return value.value + 'ms';
+      case StyleValueType.url:
+        return `url(${value.value})`;
+      default:
+        return value.value;
     }
   }
 

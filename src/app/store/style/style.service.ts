@@ -36,6 +36,7 @@ export class StyleService {
   UpdateBoxStyle    = (style: Partial<{ [key in keyof STTStyle["boxStyle"]]: string | number }>) => this.UpdateNormalStyles(style, "boxStyle");
   UpdateAvatarStyle = (style: Partial<{ [key in keyof STTStyle["avatarStyle"]]: string | number }>) => this.UpdateNormalStyles(style, "avatarStyle");
   UpdateTextStyle   = (style: Partial<{ [key in keyof STTStyle["textStyle"]]: string }>) => this.UpdateNormalStyles(style, "textStyle");
+  UpdateGlobalStyle   = (style: Partial<{ [key in keyof STTStyle["globalStyle"]]: string }>) => this.UpdateNormalStyles(style, "globalStyle");
 
   UpdateTextComposite(compositeKey: keyof STTStyle["textStyleComposite"], value: object) {
     this.styleStore.update(state => {

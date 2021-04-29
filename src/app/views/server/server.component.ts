@@ -31,7 +31,7 @@ export class ServerComponent implements OnInit {
   ) {
   }
 
-  activeTab: 'text' | 'box' | 'avatar' = 'text';
+  activeTab: 'text' | 'box' | 'avatar' | 'global' = 'text';
 
   ChangeTab(value: ServerComponent["activeTab"]) {
     this.activeTab = value;
