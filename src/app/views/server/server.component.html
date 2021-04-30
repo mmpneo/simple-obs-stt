@@ -85,173 +85,175 @@
 </div>
 
 <ng-template #customization>
-  <div class="w-72 flex flex-col space-y-4" *ngIf="styleQuery.current$ | async as currentStyle">
-    <div class="tabs self-center">
-      <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-        </svg>
-        Text</a>
-      <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'box'" (click)="ChangeTab('box')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-        </svg>
-        Box</a>
-      <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-        Avatar</a>
-      <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        Global
-      </a>
+  <ngx-simplebar class="w-80 flex flex-col max-h-full">
+    <div class="flex flex-col space-y-4" *ngIf="styleQuery.current$ | async as currentStyle">
+      <div class="tabs self-center">
+        <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+          Text</a>
+        <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'box'" (click)="ChangeTab('box')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          </svg>
+          Box</a>
+        <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          Avatar</a>
+        <a class="tab px-2 tab-bordered" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Global
+        </a>
+      </div>
+
+      <ng-container [ngSwitch]="activeTab">
+        <ng-container *ngSwitchCase="'text'">
+          <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Text style</div>
+          <div class="flex justify-between items-center">
+            <div>Text color</div>
+            <button class="btn btn-sm btn-circle" [tippy]="text_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyle.color.value"></button>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Font size</div>
+            <input type="number" min="0" max="48" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyle.fontSize.value" (ngModelChange)="styleService.UpdateTextStyle({fontSize: $event})">
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Font weight</div>
+            <div class="btn-group">
+              <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'normal'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'normal'">Aa</button>
+              <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'bold'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'bold'"><span style="font-weight: bold">Aa</span></button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Letter case</div>
+            <div class="btn-group">
+              <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'none'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'none'">-</button>
+              <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'capitalize'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'capitalize'">Aa</button>
+              <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'uppercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'uppercase'">AA</button>
+              <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'lowercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'lowercase'">aa</button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Text shadow</div>
+            <button class="btn btn-sm btn-circle" [tippy]="text_shadow_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyleComposite.textShadow.color.value"></button>
+          </div>
+          <div class="pl-4 space-y-2 flex flex-col">
+            <div class="flex justify-between items-center">
+              <div>Shadow x</div>
+              <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.x.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {x: $event})">
+            </div>
+            <div class="flex justify-between items-center">
+              <div>Shadow y</div>
+              <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.y.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {y: $event})">
+            </div>
+            <div class="flex justify-between items-center">
+              <div>Shadow Blur</div>
+              <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.b.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {b: $event})">
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'box'">
+          <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Box style</div>
+          <div class="flex justify-between items-center">
+            <div>Background color</div>
+            <button class="btn btn-sm btn-circle" [tippy]="background_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.backgroundColor.value"></button>
+          </div>
+          <div class="pl-4 space-y-2 flex flex-col">
+            <div class="flex justify-between items-center">
+              <div>Width</div>
+              <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.width.value" (ngModelChange)="styleService.UpdateBoxStyle({width: $event})">
+            </div>
+            <div class="flex justify-between items-center">
+              <div>Height</div>
+              <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.height.value" (ngModelChange)="styleService.UpdateBoxStyle({height: $event})">
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <div>Border size</div>
+            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.borderWidth.value" (ngModelChange)="styleService.UpdateBoxStyle({borderWidth: $event})">
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Border color</div>
+            <button class="btn btn-sm btn-circle" [tippy]="box_border_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.borderColor.value"></button>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Corner radius</div>
+            <input type="range" min="0" max="20" class="range" [ngModel]="currentStyle.boxStyle.borderRadius.value" (ngModelChange)="styleService.UpdateBoxStyle({borderRadius: $event})">
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'avatar'">
+          <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Avatar style</div>
+          <div class="flex justify-between items-center">
+            <div>Image url</div>
+            <input class="w-44 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.backgroundImage.value" (ngModelChange)="styleService.UpdateAvatarStyle({backgroundImage: $event})">
+          </div>
+
+          <div class="pl-4 space-y-2 flex flex-col">
+            <div class="flex justify-between items-center">
+              <div>Width</div>
+              <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.width.value" (ngModelChange)="styleService.UpdateAvatarStyle({width: $event})">
+            </div>
+            <div class="flex justify-between items-center">
+              <div>Height</div>
+              <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.height.value" (ngModelChange)="styleService.UpdateAvatarStyle({height: $event})">
+            </div>
+            <div class="flex justify-between items-center">
+              <div>Position X</div>
+              <input type="number" min="-100" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.marginRight.value" (ngModelChange)="styleService.UpdateAvatarStyle({marginRight: $event})">
+            </div>
+            <div class="flex justify-between items-center">
+              <div>Position Y</div>
+              <input type="number" min="-100" max="100" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.marginBottom.value" (ngModelChange)="styleService.UpdateAvatarStyle({marginBottom: $event})">
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Animation</div>
+            <select class="w-44 select select-bordered select-sm" [ngModel]="currentStyle.avatarStyle.animationName.value" (ngModelChange)="styleService.UpdateAvatarStyle({animationName: $event})">
+              <option value="none">None</option>
+              <option value="avatar-floating">Floating</option>
+            </select>
+          </div>
+
+          <div class="pl-4 flex justify-between items-center">
+            <div>Animation length</div>
+            <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.animationDuration.value" (ngModelChange)="styleService.UpdateAvatarStyle({animationDuration: $event})">
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'global'">
+          <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Global settings</div>
+          <div class="form-control">
+            <label class="cursor-pointer p-0 label">
+              <span class="label-text">Always show</span>
+              <div>
+                <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!currentStyle.globalStyle.alwaysShow.value" (ngModelChange)="styleService.UpdateGlobalStyle({alwaysShow: $event ? '1' : ''})">
+                <span class="toggle-mark"></span>
+              </div>
+            </label>
+          </div>
+          <div class="form-control">
+            <label class="cursor-pointer p-0 label">
+              <span class="label-text">Clear when hidden</span>
+              <div>
+                <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!currentStyle.globalStyle.clearOnHide.value" (ngModelChange)="styleService.UpdateGlobalStyle({clearOnHide: $event ? '1' : ''})">
+                <span class="toggle-mark"></span>
+              </div>
+            </label>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>Hide after (ms)</div>
+            <input type="number" min="100" max="20000" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.globalStyle.hideAfter.value" (ngModelChange)="styleService.UpdateGlobalStyle({hideAfter: $event})">
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
-
-    <ng-container [ngSwitch]="activeTab">
-      <ng-container *ngSwitchCase="'text'">
-        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Text style</div>
-        <div class="flex justify-between items-center">
-          <div>Text color</div>
-          <button class="btn btn-sm btn-circle" [tippy]="text_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyle.color.value"></button>
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Font size</div>
-          <input type="number" min="0" max="48" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyle.fontSize.value" (ngModelChange)="styleService.UpdateTextStyle({fontSize: $event})">
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Font weight</div>
-          <div class="btn-group">
-            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'normal'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'normal'">Aa</button>
-            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({fontWeight: 'bold'})" [class.btn-active]="currentStyle.textStyle.fontWeight.value === 'bold'"><span style="font-weight: bold">Aa</span></button>
-          </div>
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Letter case</div>
-          <div class="btn-group">
-            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'none'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'none'">-</button>
-            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'capitalize'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'capitalize'">Aa</button>
-            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'uppercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'uppercase'">AA</button>
-            <button class="btn btn-sm normal-case" (click)="styleService.UpdateTextStyle({textTransform: 'lowercase'})" [class.btn-active]="currentStyle.textStyle.textTransform.value === 'lowercase'">aa</button>
-          </div>
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Text shadow</div>
-          <button class="btn btn-sm btn-circle" [tippy]="text_shadow_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.textStyleComposite.textShadow.color.value"></button>
-        </div>
-        <div class="pl-4 space-y-2 flex flex-col">
-          <div class="flex justify-between items-center">
-            <div>Shadow x</div>
-            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.x.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {x: $event})">
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Shadow y</div>
-            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.y.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {y: $event})">
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Shadow Blur</div>
-            <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.textStyleComposite.textShadow.b.value" (ngModelChange)="styleService.UpdateTextComposite('textShadow', {b: $event})">
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'box'">
-        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Box style</div>
-        <div class="flex justify-between items-center">
-          <div>Background color</div>
-          <button class="btn btn-sm btn-circle" [tippy]="background_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.backgroundColor.value"></button>
-        </div>
-        <div class="pl-4 space-y-2 flex flex-col">
-          <div class="flex justify-between items-center">
-            <div>Width</div>
-            <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.width.value" (ngModelChange)="styleService.UpdateBoxStyle({width: $event})">
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Height</div>
-            <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.height.value" (ngModelChange)="styleService.UpdateBoxStyle({height: $event})">
-          </div>
-        </div>
-
-        <div class="flex justify-between items-center">
-          <div>Border size</div>
-          <input type="number" min="0" max="20" class="w-16 input input-bordered input-sm" [ngModel]="currentStyle.boxStyle.borderWidth.value" (ngModelChange)="styleService.UpdateBoxStyle({borderWidth: $event})">
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Border color</div>
-          <button class="btn btn-sm btn-circle" [tippy]="box_border_color" variation="color_menu" placement="right" [style.background-color]="currentStyle.boxStyle.borderColor.value"></button>
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Corner radius</div>
-          <input type="range" min="0" max="20" class="range" [ngModel]="currentStyle.boxStyle.borderRadius.value" (ngModelChange)="styleService.UpdateBoxStyle({borderRadius: $event})">
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'avatar'">
-        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Avatar style</div>
-        <div class="flex justify-between items-center">
-          <div>Image url</div>
-          <input class="w-44 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.backgroundImage.value" (ngModelChange)="styleService.UpdateAvatarStyle({backgroundImage: $event})">
-        </div>
-
-        <div class="pl-4 space-y-2 flex flex-col">
-          <div class="flex justify-between items-center">
-            <div>Width</div>
-            <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.width.value" (ngModelChange)="styleService.UpdateAvatarStyle({width: $event})">
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Height</div>
-            <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.height.value" (ngModelChange)="styleService.UpdateAvatarStyle({height: $event})">
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Position X</div>
-            <input type="number" min="-100" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.marginRight.value" (ngModelChange)="styleService.UpdateAvatarStyle({marginRight: $event})">
-          </div>
-          <div class="flex justify-between items-center">
-            <div>Position Y</div>
-            <input type="number" min="-100" max="100" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.marginBottom.value" (ngModelChange)="styleService.UpdateAvatarStyle({marginBottom: $event})">
-          </div>
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Animation</div>
-          <select class="w-44 select select-bordered select-sm" [ngModel]="currentStyle.avatarStyle.animationName.value" (ngModelChange)="styleService.UpdateAvatarStyle({animationName: $event})">
-            <option value="none">None</option>
-            <option value="avatar-floating">Floating</option>
-          </select>
-        </div>
-
-        <div class="pl-4 flex justify-between items-center">
-          <div>Animation length</div>
-          <input type="number" min="0" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.avatarStyle.animationDuration.value" (ngModelChange)="styleService.UpdateAvatarStyle({animationDuration: $event})">
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="'global'">
-        <div class="text-xl font-bold mb-2 opacity-80 text-base-content">Global settings</div>
-        <div class="form-control">
-          <label class="cursor-pointer p-0 label">
-            <span class="label-text">Always show</span>
-            <div>
-              <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!currentStyle.globalStyle.alwaysShow.value" (ngModelChange)="styleService.UpdateGlobalStyle({alwaysShow: $event ? '1' : ''})">
-              <span class="toggle-mark"></span>
-            </div>
-          </label>
-        </div>
-        <div class="form-control">
-          <label class="cursor-pointer p-0 label">
-            <span class="label-text">Clear when hidden</span>
-            <div>
-              <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!currentStyle.globalStyle.clearOnHide.value" (ngModelChange)="styleService.UpdateGlobalStyle({clearOnHide: $event ? '1' : ''})">
-              <span class="toggle-mark"></span>
-            </div>
-          </label>
-        </div>
-        <div class="flex justify-between items-center">
-          <div>Hide after (ms)</div>
-          <input type="number" min="100" max="20000" class="w-24 input input-bordered input-sm" [ngModel]="currentStyle.globalStyle.hideAfter.value" (ngModelChange)="styleService.UpdateGlobalStyle({hideAfter: $event})">
-        </div>
-      </ng-container>
-    </ng-container>
-  </div>
+  </ngx-simplebar>
 </ng-template>
 
 <ng-template #text_color>

@@ -17,6 +17,7 @@ app-root > *:not(router-outlet) {
 }
 
 [data-tippy-root] {
+    @apply flex;
     @apply shadow-xl;
 }
 
@@ -25,8 +26,20 @@ app-root > *:not(router-outlet) {
     @apply text-base-content;
     @apply rounded-md;
 }
+.tippy-content > div {
+    @apply flex;
+    @apply max-h-full;
+}
+
+.tippy-content ngx-simplebar {
+    @apply -m-4;
+}
+.tippy-content ngx-simplebar .simplebar-content {
+    @apply p-4 !important;
+}
 
 .tippy-box[role="popper"] {
+    @apply flex;
     @apply bg-transparent;
 }
 
