@@ -9,7 +9,7 @@ if (environment.production) {
   enableProdMode();
   enableAkitaProdMode()
 }
-if (location.pathname === '/') { //add persistent for host
+if (location.pathname === '/' || location.pathname === '/simple_obs_stt/') { //add persistent for host
   const storage_main = persistState({
     include: ['network', 'speech', 'style'],
     preStorageUpdate(storeName: string, state: any): any {
