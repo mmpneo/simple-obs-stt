@@ -98,7 +98,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     animationDuration: {type: StyleValueType.ms, value: '2000'},
   },
   globalStyle:        {
-    alwaysShow:  {type: StyleValueType.bool, value: '0'},
+    alwaysShow:  {type: StyleValueType.bool, value: ''},
     clearOnHide: {type: StyleValueType.bool, value: ''},
     hideAfter:   {type: StyleValueType.string, value: '5000'},
   }
