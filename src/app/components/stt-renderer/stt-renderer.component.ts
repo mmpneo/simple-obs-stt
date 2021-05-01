@@ -28,8 +28,6 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   ) {
   }
 
-  sentences: SpeechSentence[] = [];
-
   @ViewChild("avatarElement") avatarElement!: ElementRef;
   @ViewChild("boxElement") boxElement!: ElementRef;
   @ViewChild("textElement") textElement!: ElementRef;
@@ -72,8 +70,7 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.speechQuery.sentences$.subscribe(value => { // hotfix of pipe change detection
-      this.sentences = value;
-      this.detector.markForCheck();
+      this.detector.detectChanges();
       this.boxElement?.nativeElement?.scrollTo?.({top: this.boxElement.nativeElement?.scrollHeight, behavior: 'smooth'})
     });
   }

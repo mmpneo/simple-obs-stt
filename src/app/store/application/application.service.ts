@@ -5,8 +5,7 @@ import {SpeechService}    from "@store/speech/speech.service";
 import {NetworkStore}     from "@store/network/network.store";
 import {NetworkQuery}     from "@store/network/network.query";
 import {SpeechQuery}      from "@store/speech/speech.query";
-import {combineQueries}   from "@datorama/akita";
-import {ConnectionState}  from "../../utils/types";
+import {HotToastService}  from "@ngneat/hot-toast";
 
 @Injectable({providedIn: 'root'})
 export class ApplicationService {
@@ -17,13 +16,9 @@ export class ApplicationService {
     private speechService: SpeechService,
     private speechQuery: SpeechQuery,
     private networkStore: NetworkStore,
+    private toast: HotToastService
   ) {
   }
-
-  public ChangeHostId = (hostID: string) => {
-    console.log(hostID);
-    return this.networkStore.update({hostID});
-  };
 
   public CopyLink() {
     let url = location.href.split("/").slice(0, -1).join("/");
@@ -32,16 +27,19 @@ export class ApplicationService {
 
   public async StartHost() {
     try {
-      await this.speechService.InitHostSpeech();
-      await this.networkService.InitServer();
+      await this.speechService.StartHost();
+      try {
+        await this.networkService.StartHost();
+      } catch (error) {
+        this.speechService.Stop();
+        throw new Error(error);
+      }
+    } catch (error) {
+      this.toast.error(error.message, {position: "bottom-right"})
+      console.log(error);
+    }
+  }
 
-      combineQueries([this.speechQuery.connectionState$, this.networkQuery.connectionState$]).subscribe(([s,n]) => {
-        if (s === ConnectionState.Disconnected || n === ConnectionState.Disconnected) {
-          this.StopHost();
-        }
-      });
-
-    } catch (error) {throw new Error(error);}}
   public StopHost() {
     this.speechService.Stop()
     this.networkService.Stop()

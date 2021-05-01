@@ -1,15 +1,21 @@
 
 <div class="relative w-screen bg-base-100 mx-auto px-4 flex flex-col flex-1 text-base-content justify-center items-center" *ngIf="speechQuery.state$ | async as speechState">
-<!--  <button class="absolute right-4 top-4 btn btn-accent btn-circle btn-sm" [tippy]="help" variation="popper" placement="bottom">-->
-<!--    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />-->
-<!--    </svg>-->
-<!--  </button>-->
   <h1 class="font-bold text-5xl mb-8">OBS STT</h1>
   <div class="flex flex-col space-y-2 w-72">
 
     <ng-container [ngSwitch]="applicationQuery.connectionState$ | async">
       <ng-container *ngSwitchCase="0">
+        <select class="select select-bordered w-full max-w-xs" [ngModel]="speechState.selectedPlugin[0]" (ngModelChange)="speechService.SelectPlugin($event)">
+          <option [value]="lang.key" *ngFor="let lang of plugins| keyvalue; let index = index">{{lang.value.name}}</option>
+        </select>
+
+        <ng-container *ngFor="let pluginField of plugins[speechState.selectedPlugin[0]].pluginDataFields; let index = index">
+          <div class="flex justify-between items-center mb-2">
+            <div>{{pluginField}}</div>
+            <input type="password" class="w-44 input input-bordered input-sm" [ngModel]="speechState.selectedPluginData[index]" (ngModelChange)="speechService.UpdatePluginData(index, $event)">
+          </div>
+        </ng-container>
+
         <select class="select select-bordered w-full max-w-xs" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
           <option [disabled]="true">Choose your language</option>
           <option [value]="index" *ngFor="let lang of langs; let index = index">{{lang[0]}}</option>
@@ -31,13 +37,6 @@
               <span class="toggle-mark"></span>
             </div>
           </label>
-<!--          <label class="cursor-pointer label">-->
-<!--            <span class="label-text">Remember generated link</span>-->
-<!--            <div>-->
-<!--              <input type="checkbox" checked="checked" class="checkbox checkbox-primary" [ngModel]="networkState.saveHost" (ngModelChange)="networkService.SwitchSaveHost()">-->
-<!--              <span class="checkbox-mark"></span>-->
-<!--            </div>-->
-<!--          </label>-->
         </div>
         <button class="btn btn-primary" (click)="applicationService.StartHost()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,17 +53,26 @@
           <app-stt-renderer></app-stt-renderer>
         </div>
 
+        <textarea class="mb-4 textarea h-24 textarea textarea-bordered" placeholder="Type something and press [Enter]" [ngModel]="speechState.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();"></textarea>
+
+        <button (click)="speechService.ClearSentences()" class="btn mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Clear text</button>
+
         <button (click)="applicationService.StopHost()" class="btn mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
           </svg>
           Stop server</button>
+
         <button (click)="applicationService.CopyLink()" class="btn btn-ghost mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
           </svg>
-          Copy link</button>
+          Copy client link</button>
         <button [tippy]="customization" variation="popper" placement="bottom" class="fixed top-10 left-10 btn btn-outline">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />

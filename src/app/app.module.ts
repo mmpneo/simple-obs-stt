@@ -8,6 +8,7 @@ import {environment}                                    from '../environments/en
 import {popperVariation, TippyModule, tooltipVariation} from '@ngneat/helipopper';
 import {popper_max_size}                                from "./utils/popper_max_size";
 import maxSize                                          from "popper-max-size-modifier";
+import { HotToastModule } from '@ngneat/hot-toast';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import maxSize                                          from "popper-max-size-mo
           popperOptions: {modifiers: [{name: 'preventOverflow', options: {padding: 20}}]}
         },
       }
-    })
+    }),
+    HotToastModule.forRoot()
   ],
   providers:    [],
   bootstrap:    [AppComponent]

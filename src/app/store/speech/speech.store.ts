@@ -3,25 +3,37 @@ import {ID, Store, StoreConfig} from '@datorama/akita';
 import {ConnectionState}        from "../../utils/types";
 import produce                  from "immer";
 
+export enum SpeechSentenceType {
+  voice,
+  text
+}
+
 export interface SpeechSentence {
   id: ID;
+  type: SpeechSentenceType;
   finalized: boolean;
   value: string;
 }
 
 export interface SpeechState {
+  selectedPlugin: [string, any],
+  selectedPluginData: string[],
   selectedLanguage: [number, number],
   speechServiceState: ConnectionState,
   sentences: SpeechSentence[],
+  textInput: string;
   show: boolean
 }
 
 export function createInitialState(): SpeechState {
   return {
+    selectedPlugin:     ["native", null],
+    selectedPluginData: [],
     selectedLanguage:   [0, 0],
     speechServiceState: ConnectionState.Disconnected,
-    sentences: [],
-    show: false,
+    sentences:          [],
+    textInput:          "",
+    show:               false,
   };
 }
 
@@ -94,8 +106,8 @@ export const languages = [
   // ['IsiZulu', ['zu-ZA']],
   // ['Íslenska', ['is-IS']],
   ['Italiano', ['it-IT']],
-    // ['it-IT', 'Italia'],
-    // ['it-CH', 'Svizzera']],
+  // ['it-IT', 'Italia'],
+  // ['it-CH', 'Svizzera']],
   // ['ಕನ್ನಡ', ['kn-IN']],
   // ['ភាសាខ្មែរ', ['km-KH']],
   // ['Latviešu', ['lv-LV']],

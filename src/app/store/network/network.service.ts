@@ -66,7 +66,7 @@ export class NetworkService {
     this.peerInstance.on("error", error => this.ResetClient(hostId));
   }
 
-  public async InitServer() {
+  public async StartHost() {
     this.UpdateNetworkStatus(ConnectionState.Connecting);
     this.peerInstance = new Peer(this.networkQuery.getValue().saveHost ? (this.networkQuery.getValue().hostID || undefined) : undefined);
     try {

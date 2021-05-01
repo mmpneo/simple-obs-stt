@@ -2,13 +2,11 @@
   <ng-container *ngIf="speechQuery.state$ | async as speechState">
     <div [class.show]="currentStyle.globalStyle.alwaysShow.value || speechState.show || speechState.speechServiceState === 2" class="stt-container flex items-end relative">
       <div [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value" class="z-50 -mr-4 w-36 h-36 bg-contain bg-center bg-no-repeat" #avatarElement style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
-      <div #boxElement class="stt-box flex flex-col w-96 h-24 bg-secondary text-secondary-content overflow-y-scroll" style="scroll-behavior: smooth;">
+      <div #boxElement class="stt-box flex flex-col w-96 h-24 bg-secondary text-secondary-content overflow-y-scroll overflow-x-hidden" style="scroll-behavior: smooth;">
         <div #textElement class="p-4 stt-box-text w-full min-h-full" style="flex: 0 0 auto">
-          <span *ngFor="let sentence of speechState.sentences; trackBy: track" class="mr-2" [class.opacity-70]="!sentence.finalized">{{sentence.value}}</span>
+          <span class="break-words" *ngFor="let sentence of speechState.sentences; trackBy: track" [class.opacity-70]="!sentence.finalized">{{sentence.value}} </span>
         </div>
       </div>
     </div>
   </ng-container>
 </ng-container>
-
-<!--https://pa1.narvii.com/6484/37088ace77bd30a6888b662d99c7b40f63f5a940_hq.gif-->

@@ -18,11 +18,13 @@
     "@angular/router": "~11.2.11",
     "@datorama/akita": "^6.1.3",
     "@ngneat/helipopper": "^3.1.1",
+    "@ngneat/hot-toast": "^2.0.1",
     "@ngneat/overview": "^1.0.0",
     "@types/ua-parser-js": "^0.7.35",
     "daisyui": "^0.20.1",
     "deepmerge": "^4.2.2",
     "immer": "^9.0.2",
+    "microsoft-cognitiveservices-speech-sdk": "^1.16.0",
     "ngx-color": "^6.2.0",
     "peerjs": "^1.3.2",
     "popper-max-size-modifier": "^0.2.0",
@@ -38,7 +40,6 @@
     "@angular/compiler-cli": "~11.2.11",
     "@datorama/akita-ngdevtools": "^6.0.0",
     "@types/node": "^12.11.1",
-    "angular-cli-ghpages": "^1.0.0-rc.1",
     "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4"
   }
