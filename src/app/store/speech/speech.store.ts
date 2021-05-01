@@ -22,7 +22,8 @@ export interface SpeechState {
   speechServiceState: ConnectionState,
   sentences: SpeechSentence[],
   textInput: string;
-  show: boolean
+  show: boolean,
+  showTimer: number
 }
 
 export function createInitialState(): SpeechState {
@@ -34,6 +35,7 @@ export function createInitialState(): SpeechState {
     sentences:          [],
     textInput:          "",
     show:               false,
+    showTimer: 0
   };
 }
 

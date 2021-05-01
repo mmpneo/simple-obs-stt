@@ -47,5 +47,4 @@ export class ApplicationService {
 
   public StartClient() {
   }
-
 }

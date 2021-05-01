@@ -76,7 +76,8 @@ export class NetworkService {
       });
       this.UpdateNetworkStatus(ConnectionState.Connected)
     } catch (error) {
-      throw new Error(error);
+      this.UpdateNetworkStatus(ConnectionState.Disconnected)
+      throw new Error(error.message);
     }
     this.networkStore.update({hostID: this.peerInstance.id});
     this.peerInstance?.on("connection", _peerConnection => {

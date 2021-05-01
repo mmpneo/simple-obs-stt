@@ -4,12 +4,14 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {AppModule}                         from './app/app.module';
 import {environment}                       from './environments/environment';
 import {enableAkitaProdMode, persistState} from "@datorama/akita";
+import {ClientType, GetClientType}         from "./app/utils/client_type";
+import {ClearSWCache}                      from "./app/utils/clear_sw_cache";
 
 if (environment.production) {
   enableProdMode();
   enableAkitaProdMode()
 }
-if (location.pathname === '/' || location.pathname === '/simple_obs_stt/') { //add persistent for host
+if (GetClientType() === ClientType.host) { //add persistent for host
   const storage_main = persistState({
     include: ['network', 'speech', 'style'],
     preStorageUpdate(storeName: string, state: any): any {
@@ -23,5 +25,7 @@ if (location.pathname === '/' || location.pathname === '/simple_obs_stt/') { //a
   const providers = [{provide: 'persistStorage', useValue: storage_main, multi: true}];
   platformBrowserDynamic(providers).bootstrapModule(AppModule).catch(err => console.error(err));
 }
-else platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err));
+else { // there should be no SW cache on client
+  ClearSWCache().then(_ => platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err)));
+}
 

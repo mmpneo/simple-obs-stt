@@ -8,8 +8,9 @@ import {environment}                                    from '../environments/en
 import {popperVariation, TippyModule, tooltipVariation} from '@ngneat/helipopper';
 import {popper_max_size}                                from "./utils/popper_max_size";
 import maxSize                                          from "popper-max-size-modifier";
-import { HotToastModule } from '@ngneat/hot-toast';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import {HotToastModule}                                 from '@ngneat/hot-toast';
+import {ServiceWorkerModule}       from '@angular/service-worker';
+import {ClientType, GetClientType} from "./utils/client_type";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,10 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BrowserModule,
     AppRoutingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled:              GetClientType() === ClientType.host && environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     TippyModule.forRoot({
       defaultVariation: 'tooltip',
       variations:       {
@@ -50,11 +55,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
         },
       }
     }),
-    HotToastModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+    HotToastModule.forRoot()
   ],
   providers:    [],
   bootstrap:    [AppComponent]

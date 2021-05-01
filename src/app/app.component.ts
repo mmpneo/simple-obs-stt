@@ -2,7 +2,8 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {SpeechService}                      from "@store/speech/speech.service";
 import {NetworkService}                     from "@store/network/network.service";
 import {Router}                             from "@angular/router";
-import {StyleService}                       from "./store/style/style.service";
+import {StyleService}                       from "@store/style/style.service";
+import {ApplicationService}                 from "@store/application/application.service";
 
 @Component({
   selector:        'app-root',
@@ -14,10 +15,11 @@ export class AppComponent {
   constructor(
     private _speechService: SpeechService,
     private _networkService: NetworkService,
+    private applicationService: ApplicationService,
     private _styleService: StyleService,
     private router: Router) {
     let path = localStorage.getItem('path');
-    if(path) {
+    if (path) {
       localStorage.removeItem('path');
       this.router.navigate([path.replace("simple_obs_stt", "")]);
     }

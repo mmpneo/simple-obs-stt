@@ -6,6 +6,8 @@ import {arrayAdd, arrayUpdate, arrayUpsert, guid, transaction}      from "@dator
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
 import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
+import {Subscription, timer}                                        from "rxjs";
+import {map, takeWhile, tap}                                        from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -45,14 +47,19 @@ export class SpeechService {
     this.activePlugin = undefined;
   }
 
-  private timeout: any;
+  private timeout?: Subscription;
 
+  // Show text and start or restart countdown to hide it
   TriggerShowTimer() {
     const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
+    const targetTime   = parseInt(globalConfig.hideAfter?.value || '1000');
     this.speechStore.update({show: true});
-    this.timeout && clearTimeout(this.timeout);
-    if (!globalConfig.alwaysShow.value)
-      this.timeout = setTimeout(() => this.speechStore.update({show: false}), parseInt(globalConfig.hideAfter?.value || '1000'));
+    this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
+    this.timeout = timer(200, 200).pipe(
+      map(timerVal => ((timerVal * 200) / targetTime) * 100), // convert to % | >= 100% - time to stop
+      tap(timerVal => this.speechStore.update({showTimer: timerVal <= 100 ? timerVal : 0, show: timerVal < 100})),
+      takeWhile(val => val < 100)
+    ).subscribe();
   }
 
   @transaction()

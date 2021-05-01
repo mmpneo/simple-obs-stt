@@ -87,3 +87,9 @@ input[type=range].range::-webkit-slider-thumb {
     opacity: 1;
     transform: translateY(0);
 }
+
+.progress-ring__circle {
+    transition: stroke-dasharray 0.05s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
