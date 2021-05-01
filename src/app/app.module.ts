@@ -9,6 +9,7 @@ import {popperVariation, TippyModule, tooltipVariation} from '@ngneat/helipopper
 import {popper_max_size}                                from "./utils/popper_max_size";
 import maxSize                                          from "popper-max-size-modifier";
 import { HotToastModule } from '@ngneat/hot-toast';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,11 @@ import { HotToastModule } from '@ngneat/hot-toast';
         },
       }
     }),
-    HotToastModule.forRoot()
+    HotToastModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers:    [],
   bootstrap:    [AppComponent]
