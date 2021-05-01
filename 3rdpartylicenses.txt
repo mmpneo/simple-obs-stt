@@ -13,6 +13,9 @@ MIT
 @angular/router
 MIT
 
+@angular/service-worker
+MIT
+
 @ctrl/tinycolor
 MIT
 Copyright (c) Scott Cooper <scttcper@gmail.com>
