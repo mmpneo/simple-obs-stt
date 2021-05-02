@@ -4,15 +4,10 @@
       <div [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value"
            class="z-50 -mr-4 w-36 h-36 bg-contain bg-center bg-no-repeat" #avatarElement
            style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
-      <div #boxElement
-           class="relative stt-box flex flex-col w-96 h-24 bg-secondary text-secondary-content overflow-y-scroll overflow-x-hidden"
-           style="scroll-behavior: smooth;">
+      <div #boxElement class="relative stt-box flex flex-col w-96 h-24 overflow-y-scroll overflow-x-hidden bg-cover bg-center" style="scroll-behavior: smooth;">
         <div #textElement class="p-4 stt-box-text w-full min-h-full" style="flex: 0 0 auto">
           <span class="break-words" *ngFor="let sentence of speechState.sentences; trackBy: track" [class.opacity-70]="!sentence.finalized">{{sentence.value}} </span>
         </div>
-
-<!--        <app-radial-progress  *ngIf="!currentStyle.globalStyle.alwaysShow.value" class="flex absolute right-1 bottom-1" [progress]="speechState.showTimer"></app-radial-progress>-->
-
       </div>
     </div>
   </ng-container>

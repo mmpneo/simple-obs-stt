@@ -100,6 +100,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
+      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.boxStyle.backgroundImage.value, fn: GetFn('box', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.backgroundColor.value, fn: GetFn('box', 'backgroundColor')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.boxStyle.width.value, fn: GetFn('box', 'width'), min: 100, max: 600}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.boxStyle.height.value, fn: GetFn('box', 'height'), min: 50, max: 600}"></ng-container>
@@ -122,9 +123,10 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Duration', $implicit: currentStyle.avatarStyle.animationDuration.value, fn: GetFn('avatar', 'animationDuration'), min: 0, max: 20000}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping.value, fn: GetFn('global', 'realtimeTyping')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Box always visible', $implicit: currentStyle.globalStyle.alwaysShow.value, fn: GetFn('global', 'alwaysShow')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on hide', $implicit: currentStyle.globalStyle.clearOnHide.value, fn: GetFn('global', 'clearOnHide')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Hide after', $implicit: currentStyle.globalStyle.hideAfter.value, fn: GetFn('global', 'hideAfter'), min: 100, max: 30000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.hideAfter.value, fn: GetFn('global', 'hideAfter'), min: 100, max: 30000}"></ng-container>
     </ng-container>
   </ng-container>
 </div>

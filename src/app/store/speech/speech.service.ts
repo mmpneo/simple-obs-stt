@@ -102,8 +102,8 @@ export class SpeechService {
   }
 
   public InterimTextInput(event: any) {
-    this.speechStore.update({textInput: event})
-    this.UpdateLastVoiceSentence(event, false, SpeechSentenceType.text);
+    this.speechStore.update({textInput: event});
+    !!this.styleQuery.getValue().currentStyle.globalStyle.realtimeTyping.value && this.UpdateLastVoiceSentence(event, false, SpeechSentenceType.text);
   }
 
   public SendTextInput(event: any) {

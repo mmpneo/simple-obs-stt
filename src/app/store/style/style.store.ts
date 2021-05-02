@@ -21,6 +21,7 @@ export interface STTStyle {
   boxStyle: {
     width: StyleValue<StyleValueType.pixels>;
     height: StyleValue<StyleValueType.pixels>;
+    backgroundImage: StyleValue<StyleValueType.url>;
     backgroundColor: StyleValue<StyleValueType.string>;
     borderWidth: StyleValue<StyleValueType.pixels>;
     borderColor: StyleValue<StyleValueType.string>;
@@ -53,6 +54,7 @@ export interface STTStyle {
   globalStyle: {
     alwaysShow: StyleValue<StyleValueType.bool>;
     clearOnHide: StyleValue<StyleValueType.bool>;
+    realtimeTyping: StyleValue<StyleValueType.bool>;
     hideAfter: StyleValue<StyleValueType.string>;
   }
 }
@@ -64,6 +66,7 @@ export interface StyleState {
 
 export const STYLE_TEMPLATE: STTStyle = {
   boxStyle:           {
+    backgroundImage: {type: StyleValueType.url, value: ''},
     width:           {type: StyleValueType.pixels, value: '300'},
     height:          {type: StyleValueType.pixels, value: '100'},
     backgroundColor: {type: StyleValueType.string, value: 'transparent'},
@@ -95,9 +98,10 @@ export const STYLE_TEMPLATE: STTStyle = {
     animationDuration: {type: StyleValueType.ms, value: '2000'},
   },
   globalStyle:        {
-    alwaysShow:  {type: StyleValueType.bool, value: ''},
-    clearOnHide: {type: StyleValueType.bool, value: ''},
-    hideAfter:   {type: StyleValueType.string, value: '5000'},
+    alwaysShow:     {type: StyleValueType.bool, value: ''},
+    clearOnHide:    {type: StyleValueType.bool, value: ''},
+    realtimeTyping: {type: StyleValueType.bool, value: '1'},
+    hideAfter:      {type: StyleValueType.string, value: '5000'},
   }
 }
 
