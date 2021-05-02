@@ -47,9 +47,6 @@ export class ServerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // const parser = new UAParser().getBrowser();
-    // this.usable = parser.name === "Firefox" || parser.name === "Chrome" || parser.name === "Edge"
-    // || (parser.name === "Edge" && parseInt(parser?.major || "0") >= 92);
   }
 
 }

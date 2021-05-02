@@ -13,7 +13,6 @@ import {SpeechQuery}                          from "@store/speech/speech.query";
 import {StyleQuery}                           from "@store/style/style.query";
 import {STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
 import {SpeechSentence}                       from "@store/speech/speech.store";
-import {RadialProgressModule}                 from "../radial-progress/radial-progress.component";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -81,7 +80,7 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 @NgModule({
   declarations: [SttRendererComponent],
   exports:      [SttRendererComponent],
-  imports: [CommonModule, RadialProgressModule]
+  imports:      [CommonModule]
 })
 export class SttRendererModule {
 }

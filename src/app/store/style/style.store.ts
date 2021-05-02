@@ -25,7 +25,6 @@ export interface STTStyle {
     borderWidth: StyleValue<StyleValueType.pixels>;
     borderColor: StyleValue<StyleValueType.string>;
     borderRadius: StyleValue<StyleValueType.pixels>;
-    transform: StyleValue<StyleValueType.string>;
     [key: string]: any
   };
   textStyle: {
@@ -41,8 +40,7 @@ export interface STTStyle {
       b: StyleValue<StyleValueType.pixels>;
       color: StyleValue<StyleValueType.string>;
     }
-
-  }
+  };
   avatarStyle: {
     width: StyleValue<StyleValueType.pixels>;
     height: StyleValue<StyleValueType.pixels>;
@@ -72,7 +70,6 @@ export const STYLE_TEMPLATE: STTStyle = {
     borderRadius:    {type: StyleValueType.pixels, value: '0'},
     borderWidth:     {type: StyleValueType.pixels, value: '0'},
     borderColor:     {type: StyleValueType.string, value: 'transparent'},
-    transform:       {type: StyleValueType.string, value: 'scale(1)'}
   },
   textStyle:          {
     color:         {type: StyleValueType.string, value: 'white'},

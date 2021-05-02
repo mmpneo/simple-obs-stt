@@ -11,7 +11,7 @@
           <span class="break-words" *ngFor="let sentence of speechState.sentences; trackBy: track" [class.opacity-70]="!sentence.finalized">{{sentence.value}} </span>
         </div>
 
-        <app-radial-progress  *ngIf="!currentStyle.globalStyle.alwaysShow.value" class="flex absolute right-1 bottom-1" [progress]="speechState.showTimer"></app-radial-progress>
+<!--        <app-radial-progress  *ngIf="!currentStyle.globalStyle.alwaysShow.value" class="flex absolute right-1 bottom-1" [progress]="speechState.showTimer"></app-radial-progress>-->
 
       </div>
     </div>

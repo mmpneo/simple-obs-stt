@@ -18,23 +18,23 @@ app-root > *:not(router-outlet) {
 
 [data-tippy-root] {
     @apply flex;
-    @apply shadow-xl;
+    /*@apply shadow-xl;*/
 }
 
-.tippy-content {
-    @apply bg-base-300;
+[role="popper"] .tippy-content {
+    @apply bg-base-100;
     @apply text-base-content;
     @apply rounded-md;
 }
-.tippy-content > div {
+[role="popper"] .tippy-content > div {
     @apply flex;
     @apply max-h-full;
 }
 
-.tippy-content ngx-simplebar {
+[role="popper"] .tippy-content ngx-simplebar {
     @apply -m-4;
 }
-.tippy-content ngx-simplebar .simplebar-content {
+[role="popper"] .tippy-content ngx-simplebar .simplebar-content {
     @apply p-4 !important;
 }
 
@@ -52,8 +52,8 @@ app-root > *:not(router-outlet) {
     @apply p-0;
 }
 
-.tippy-arrow:before {
-    @apply text-base-200;
+[role="popper"] .tippy-arrow:before {
+    @apply text-base-100;
 }
 
 .stt-box {

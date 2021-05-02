@@ -32,7 +32,6 @@ export class StyleService {
     });
     this.SendUpdatedStyle();
   }
-
   UpdateBoxStyle    = (style: Partial<{ [key in keyof STTStyle["boxStyle"]]: string | number }>) => this.UpdateNormalStyles(style, "boxStyle");
   UpdateAvatarStyle = (style: Partial<{ [key in keyof STTStyle["avatarStyle"]]: string | number }>) => this.UpdateNormalStyles(style, "avatarStyle");
   UpdateTextStyle   = (style: Partial<{ [key in keyof STTStyle["textStyle"]]: string }>) => this.UpdateNormalStyles(style, "textStyle");

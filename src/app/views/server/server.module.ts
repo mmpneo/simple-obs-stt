@@ -5,22 +5,22 @@ import {RouterModule}           from "@angular/router";
 import {FormsModule}            from "@angular/forms";
 import {SttRendererModule}      from "../../components/stt-renderer/stt-renderer.component";
 import {TippyModule}            from "@ngneat/helipopper";
-import {ColorSketchModule}      from "ngx-color/sketch";
 import {SimplebarAngularModule} from "simplebar-angular";
+import {EditorModule}           from "../../components/editor/editor.component";
 
 
 @NgModule({
   declarations: [
     ServerComponent
   ],
-  imports: [
+  imports:      [
     CommonModule,
     RouterModule.forChild([{path: '', component: ServerComponent}]),
     FormsModule,
     SttRendererModule,
     TippyModule,
-    ColorSketchModule,
-    SimplebarAngularModule
+    SimplebarAngularModule,
+    EditorModule
   ]
 })
 export class ServerModule {
