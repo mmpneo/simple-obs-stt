@@ -2,7 +2,7 @@
   <ng-container [ngSwitch]="applicationQuery.connectionState$ | async">
     <div class="flex flex-col w-96 space-y-2" *ngSwitchCase="0">
       <div class="flex">
-        <label class="font-semibold w-24 flex-shrink-0 label"><span class="label-text">Engine</span></label>
+        <label class="font-semibold w-24 flex-shrink-0 label"><span class="label-text">STT Plugin</span></label>
         <select class="select select-bordered flex-auto w-full" [ngModel]="speechState.selectedPlugin[0]" (ngModelChange)="speechService.SelectPlugin($event)">
           <option [value]="lang.key" *ngFor="let lang of plugins| keyvalue; let index = index">{{lang.value.name}}</option>
         </select>

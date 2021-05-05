@@ -12,7 +12,7 @@ The current goal of this project is to help streamers with similar problems to m
 - <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> Deep visual customization
 - <img src="https://cdn.betterttv.net/emote/587fc95dafc2ff756c3f3012/1x" width="20" height="20"> Auto saves everything from last session
 - <img src="https://cdn.betterttv.net/emote/5b35cae2f3a33e2b6f0058ef/1x" width="20" height="20"> All Changes automatically applied to client on the fly
-- <img src="https://cdn.frankerfacez.com/emoticon/145916/1" width="20" height="20"> Use subtitles on multiple clients simultaneously, even over the network
+- <img src="https://cdn.frankerfacez.com/emoticon/145916/1" width="20" height="20"> Use subtitles on multiple clients simultaneously
 
 ## STT Plugins
 
@@ -22,7 +22,9 @@ The current goal of this project is to help streamers with similar problems to m
 
 ## Planned
 - [ ] Fonts - Google fonts integration 
-- [ ] Templates - Reusable styles 
+- [ ] Text animation - different text typing animations
+- [ ] Sounds - typing sounds, text bubble appearing sound etc
+- [ ] Templates - Reusable styles
 - [ ] Custom background for host preview
 
 ## Standalone version
@@ -30,7 +32,7 @@ Experimental, WebView2(Edge) based, electron-like app.
 Works like trash (No native stt, eating 130mb+ memory for nothing, not reusing already opened browser). 
 Still more efficient than electron, though ![txt](https://cdn.frankerfacez.com/emoticon/128054/1)
 
-*Tested only on windows.*
+*Tested on windows.*
 *Node 14 and Rust stable required.*
 1. Clone repo
 2. ``` npm run build ```
