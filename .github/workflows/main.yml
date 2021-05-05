@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -44,16 +44,16 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
 
-      - name: Prepare app for tauri
-        run: node clear-base-href.js
-
-      - uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: "App v__VERSION__"
-          body: "See the assets to download this version and install."
-          draft: true
-          prerelease: false
+#      - name: Prepare app for tauri
+#        run: node clear-base-href.js
+#
+#      - uses: tauri-apps/tauri-action@v0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+#          releaseName: "App v__VERSION__"
+#          body: "See the assets to download this version and install."
+#          draft: true
+#          prerelease: false
 
