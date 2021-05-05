@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --base-href=/simple_obs_stt/"
+    "build": "ng build --prod"
   },
   "private": true,
   "dependencies": {
