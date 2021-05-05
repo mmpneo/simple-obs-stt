@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1620236283938,
+  "timestamp": 1620243874962,
   "index": "/simple_obs_stt/index.html",
   "assetGroups": [
     {
@@ -11,7 +11,7 @@
         "ignoreVary": true
       },
       "urls": [
-        "/simple_obs_stt/5.f28bf3d8cee2f0a32dc6.js",
+        "/simple_obs_stt/5.5e4690868bebdf4c765e.js",
         "/simple_obs_stt/6.402ab0185cb8c0e75cb9.js",
         "/simple_obs_stt/common.768291d6e25de7a3490a.js",
         "/simple_obs_stt/favicon.ico",
@@ -19,7 +19,7 @@
         "/simple_obs_stt/main.29eadf0d71009e889bef.js",
         "/simple_obs_stt/manifest.webmanifest",
         "/simple_obs_stt/polyfills.6eedfed5e00126c8aade.js",
-        "/simple_obs_stt/runtime.2701fd707d0e50f646ee.js",
+        "/simple_obs_stt/runtime.6f89733a5f62da931feb.js",
         "/simple_obs_stt/styles.c5f7a962cb6c184878ca.css"
       ],
       "patterns": []
@@ -32,6 +32,11 @@
         "ignoreVary": true
       },
       "urls": [
+        "/simple_obs_stt/assets/browsers/chrome.png",
+        "/simple_obs_stt/assets/browsers/edge.png",
+        "/simple_obs_stt/assets/browsers/firefox.png",
+        "/simple_obs_stt/assets/browsers/opera.png",
+        "/simple_obs_stt/assets/browsers/safari.png",
         "/simple_obs_stt/assets/hahaa.png",
         "/simple_obs_stt/assets/icons/icon-128x128.png",
         "/simple_obs_stt/assets/icons/icon-144x144.png",
@@ -48,8 +53,13 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/simple_obs_stt/5.f28bf3d8cee2f0a32dc6.js": "a7864df33216cddefedffc502dc349beb91f253c",
+    "/simple_obs_stt/5.5e4690868bebdf4c765e.js": "f9d0c6fb33f0bc858aa6b7cc3b9f1337cf7fd0eb",
     "/simple_obs_stt/6.402ab0185cb8c0e75cb9.js": "0dfb698d2a33c4b850d04a1e4707d4ce2b6ff308",
+    "/simple_obs_stt/assets/browsers/chrome.png": "01b85f0e6bcb61729a215b38c5ea2b4b81aeb734",
+    "/simple_obs_stt/assets/browsers/edge.png": "be8771526567520cf2bac2a086c091bb535f347a",
+    "/simple_obs_stt/assets/browsers/firefox.png": "690c0bfd4698ab08227199ddd5fd4161129dd740",
+    "/simple_obs_stt/assets/browsers/opera.png": "2f1ffc8640558baa720d0d88731b68f3774d406b",
+    "/simple_obs_stt/assets/browsers/safari.png": "b7b559d0f3746d18680ae7d2030fdb171c787e51",
     "/simple_obs_stt/assets/hahaa.png": "dcc7e8f188ab9396a7a805dd2c3eb615e2168f93",
     "/simple_obs_stt/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
     "/simple_obs_stt/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
@@ -62,11 +72,11 @@
     "/simple_obs_stt/assets/pepehands.gif": "4401ff714120636a2ffa94c955bf1403ce4009c2",
     "/simple_obs_stt/common.768291d6e25de7a3490a.js": "932233d46329aef486177a0363a07b798d73bdad",
     "/simple_obs_stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple_obs_stt/index.html": "e0fd0edb0e85944c8f6057c2e10f401661f47948",
+    "/simple_obs_stt/index.html": "86b60fe515dfba25fd5ca5577bf4d17f5cf769fe",
     "/simple_obs_stt/main.29eadf0d71009e889bef.js": "c3bdfff25d5aeda99786c35ff16074102ab526e1",
     "/simple_obs_stt/manifest.webmanifest": "3a6cb16ab13dcf596d35e5d61ec3f572280fa34d",
     "/simple_obs_stt/polyfills.6eedfed5e00126c8aade.js": "436621bc861d60654bc3efb3dc5cee11a887105c",
-    "/simple_obs_stt/runtime.2701fd707d0e50f646ee.js": "ad372b1d5c7d1968ee87d33f7d7bf935a8297f59",
+    "/simple_obs_stt/runtime.6f89733a5f62da931feb.js": "0e60bafeea6db127d31ed524411d750c1d3c5769",
     "/simple_obs_stt/styles.c5f7a962cb6c184878ca.css": "531839e43c87fe8101f3560eca2134b762162204"
   },
   "navigationUrls": [
