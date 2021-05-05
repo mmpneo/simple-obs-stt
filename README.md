@@ -1,4 +1,4 @@
-# Simple STT
+# Simple STT ![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple_obs_stt)
 Real-time speech-to-text and keyboard input subtitles for OBS.
 
 ## Why
