@@ -16,9 +16,9 @@ The current goal of this project is to help streamers with similar problems to m
 
 ## STT Plugins
 
-- [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality speech recognition, has free tier with 5 hours of audio per month, setup is kinda complicated
-- [Browser native](https://caniuse.com/speech-recognition) - utilizes browser integrated api. (MS Edge quality is similar to Azure, but free, btw)
-- Noop - disable speech recognition and use text input only
+- <img src="src/assets/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality speech recognition, has free tier with 5 hours of audio per month, setup is kinda complicated
+- <img src="src/assets/browsers/chrome.png" height=20><img src="src/assets/browsers/edge.png" height=20> [Browser native](https://caniuse.com/speech-recognition) - utilizes browser integrated api. (MS Edge quality is similar to Azure, but free, btw)
+- <img src="src/assets/browsers/desktop_main.png" height=20> Noop - disable speech recognition and use text input only
 
 ## Planned
 - [ ] Fonts - Google fonts integration 
