@@ -22,7 +22,7 @@ export const SPEECH_PLUGINS: SpeechPluginDescriptor = {
     pluginDataFields: []
   },
   "noop": {
-    name:           'Disable STT (Text input only)',
+    name:           'Noop (Text input only)',
     dataInputLabel: '',
     hastDataInput:  false,
     plugin:         SpeechPluginNoop,
