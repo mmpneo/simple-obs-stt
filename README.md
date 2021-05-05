@@ -1,4 +1,5 @@
 # Simple STT
+Real-time speech-to-text and keyboard input subtitles for OBS.
 
 ## Why
 This project was started because I personally needed a free, simple and performant solution to compensate speech impairments and overall shyness with subtitles.
@@ -6,11 +7,12 @@ This project was started because I personally needed a free, simple and performa
 The current goal of this project is to help streamers with similar problems to make their streams more interactive and engaging.
 
 ## Features
-- No installation required
-- Simple OBS integration
-- Deep visual customization
-- Update visuals on the fly
-- Use subtitles on multiple clients simultaneously, even over the network
+- <img src="https://cdn.betterttv.net/emote/5d38aaa592fc550c2d5996b8/1x" width="20" height="20"> No installation required
+- <img src="https://cdn.betterttv.net/emote/6086e99a39b5010444d069fc/1x" width="20" height="20"> Simple OBS integration
+- <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> Deep visual customization
+- <img src="https://cdn.betterttv.net/emote/587fc95dafc2ff756c3f3012/1x" width="20" height="20"> Auto saves everything from last session
+- <img src="https://cdn.betterttv.net/emote/5b35cae2f3a33e2b6f0058ef/1x" width="20" height="20"> All Changes automatically applied to client on the fly
+- <img src="https://cdn.frankerfacez.com/emoticon/145916/1" width="20" height="20"> Use subtitles on multiple clients simultaneously, even over the network
 
 ## STT Plugins
 
@@ -19,13 +21,18 @@ The current goal of this project is to help streamers with similar problems to m
 - Noop - disable speech recognition and use text input only
 
 ## Planned
-- [] Templates - Reusable styles 
-- [] Custom background for host preview
+- [ ] Fonts - Google fonts integration 
+- [ ] Templates - Reusable styles 
+- [ ] Custom background for host preview
 
 ## Standalone version
-*Tested only on windows*
-*Node 14 and Rust 1.5.1 required*
+Experimental, WebView2(Edge) based, electron-like app. 
+Works like trash (No native stt, eating 130mb+ memory for nothing, not reusing already opened browser). 
+Still more efficient than electron, though ![txt](https://cdn.frankerfacez.com/emoticon/128054/1)
+
+*Tested only on windows.*
+*Node 14 and Rust stable required.*
 1. Clone repo
-2. > npm run build
-3. > npx tauri build
+2. ``` npm run build ```
+3. ```npx tauri build```
 4. Build will be available at *./src-tauri/target/release/*
