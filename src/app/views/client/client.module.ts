@@ -11,7 +11,10 @@ import {SttRendererModule} from "../../components/stt-renderer/stt-renderer.comp
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild([{path: ':id', component: ClientComponent}]),
+    RouterModule.forChild([
+      {path: ':id', component: ClientComponent},
+      {path: ':id/:isLocal', component: ClientComponent}
+    ]),
     SttRendererModule
   ]
 })

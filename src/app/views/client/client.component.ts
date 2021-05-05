@@ -17,7 +17,8 @@ export class ClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.networkService.InitClient(this.activatedRoute.snapshot.params.id)
+    this.networkService.SetClientNetworkMode(!!this.activatedRoute.snapshot.params.isLocal);
+    this.networkService.InitClient(this.activatedRoute.snapshot.params.id);
   }
 
 }

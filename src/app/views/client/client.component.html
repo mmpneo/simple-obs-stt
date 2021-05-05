@@ -1,6 +1,6 @@
 
-<div class="w-screen h-screen flex items-center justify-center">
-  <div *ngIf="(networkQuery.state$ | async)?.peerConnectionState === 1">Connecting</div>
+<div class="w-screen h-screen flex items-center justify-center" *ngIf="networkQuery.state$ | async as networkState">
+  <div *ngIf="networkState?.peerConnectionState === 1 || networkState?.peerConnectionState === 0">Connecting</div>
   <app-stt-renderer></app-stt-renderer>
 </div>
 

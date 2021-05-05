@@ -4,6 +4,7 @@ import {NetworkService}                     from "@store/network/network.service
 import {Router}                             from "@angular/router";
 import {StyleService}                       from "@store/style/style.service";
 import {ApplicationService}                 from "@store/application/application.service";
+import {IsTauri}                            from "./utils/client_type";
 
 @Component({
   selector:        'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
     private applicationService: ApplicationService,
     private _styleService: StyleService,
     private router: Router) {
+    console.log("[System] Is tauri:", IsTauri());
     let path = localStorage.getItem('path');
     if (path) {
       localStorage.removeItem('path');

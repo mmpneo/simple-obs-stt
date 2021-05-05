@@ -89,8 +89,35 @@ input[type=range].range::-webkit-slider-thumb {
     transform: translateY(0);
 }
 
+.stt-box-text > span{
+    vertical-align: bottom;
+}
+
 .progress-ring__circle {
     transition: stroke-dasharray 0.05s;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
+}
+
+
+.titlebar {
+    height: 30px;
+    background: #329ea3;
+    user-select: none;
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.titlebar-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+}
+.titlebar-button:hover {
+    background: #5bbec3;
 }

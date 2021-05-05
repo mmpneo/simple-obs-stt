@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod"
+    "build": "ng build --prod --base-href=/simple_obs_stt/"
   },
   "private": true,
   "dependencies": {
@@ -21,7 +21,10 @@
     "@ngneat/helipopper": "^3.1.1",
     "@ngneat/hot-toast": "^2.0.1",
     "@ngneat/overview": "^1.0.0",
+    "@tauri-apps/api": "^1.0.0-beta-rc.3",
+    "@tauri-apps/cli": "^1.0.0-beta-rc.4",
     "@types/ua-parser-js": "^0.7.35",
+    "@types/uuid": "^8.3.0",
     "daisyui": "^0.20.1",
     "deepmerge": "^4.2.2",
     "immer": "^9.0.2",
@@ -33,6 +36,7 @@
     "simplebar-angular": "^2.3.2",
     "tslib": "^2.0.0",
     "ua-parser-js": "^0.7.28",
+    "uuid": "^8.3.2",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {

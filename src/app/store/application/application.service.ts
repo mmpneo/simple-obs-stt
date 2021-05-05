@@ -1,11 +1,12 @@
-import {Injectable}       from '@angular/core';
-import {ApplicationStore} from './application.store';
-import {NetworkService}   from "@store/network/network.service";
-import {SpeechService}    from "@store/speech/speech.service";
-import {NetworkStore}     from "@store/network/network.store";
-import {NetworkQuery}     from "@store/network/network.query";
-import {SpeechQuery}      from "@store/speech/speech.query";
-import {HotToastService}  from "@ngneat/hot-toast";
+import {Injectable}                from '@angular/core';
+import {ApplicationStore}          from './application.store';
+import {NetworkService}            from "@store/network/network.service";
+import {SpeechService}             from "@store/speech/speech.service";
+import {NetworkMode, NetworkStore} from "@store/network/network.store";
+import {NetworkQuery}              from "@store/network/network.query";
+import {SpeechQuery}               from "@store/speech/speech.query";
+import {HotToastService}           from "@ngneat/hot-toast";
+import {environment}               from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class ApplicationService {
@@ -13,16 +14,17 @@ export class ApplicationService {
     private applicationStore: ApplicationStore,
     private networkService: NetworkService,
     private networkQuery: NetworkQuery,
+    private networkStore: NetworkStore,
     private speechService: SpeechService,
     private speechQuery: SpeechQuery,
-    private networkStore: NetworkStore,
     private toast: HotToastService
-  ) {
-  }
+  ) {}
 
   public CopyLink() {
-    let url = location.href.split("/").slice(0, -1).join("/");
-    navigator.clipboard.writeText(`${url}/client/${this.networkService?.getPeerId()}`)
+    const isLocal = this.networkQuery.getValue().networkMode === NetworkMode.localhost;
+    let url = isLocal ? environment.localhostClientPath : environment.remoteClientPath;
+    url = `${url}/client/${this.networkService?.getPeerId()}/${isLocal ? 'local' : ''}`
+    navigator.clipboard.writeText(url);
   }
 
   public async StartHost() {
