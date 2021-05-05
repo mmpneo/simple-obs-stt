@@ -17,9 +17,8 @@ struct WsQueryData {
     id: String
 }
 
-
 pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
-    let base_href: &'static str = env!("BASE_HREF");
+
     let users = Users::default();
     let users = warp::any().map(move || users.clone());
 
@@ -39,6 +38,7 @@ pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
 async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<impl Reply, Rejection> {
     let glob = Glob::new("/**/*.{css,js,png,ico,webmanifest}").unwrap().compile_matcher();
     let path = path.as_str();
+
     let substr = &path[1..];
     if !(glob.is_match(path)) {
         let asset = assets.get("index.html").unwrap();
