@@ -7,14 +7,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2-beta
+      - name: Install node
+        uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 14
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
       - uses: actions/cache@v2
         id: cache
@@ -38,3 +43,17 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+
+      - name: Prepare app for tauri
+        run: node clear-base-href.js
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: "App v__VERSION__"
+          body: "See the assets to download this version and install."
+          draft: true
+          prerelease: false
+
