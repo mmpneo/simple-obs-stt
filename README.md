@@ -1,5 +1,5 @@
 # Simple STT ![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple_obs_stt)
-Real-time speech-to-text and keyboard input subtitles for OBS.
+Real-time speech-to-text and keyboard input captions for OBS.
 
 ## Why
 This project was started because I personally needed a free, simple and performant solution to compensate speech impairments and overall shyness with subtitles.  
@@ -11,7 +11,7 @@ The current goal of this project is to help streamers with similar problems to m
 - <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> Deep visual customization
 - <img src="https://cdn.betterttv.net/emote/587fc95dafc2ff756c3f3012/1x" width="20" height="20"> Auto saves styles and configuration
 - <img src="https://cdn.betterttv.net/emote/5b35cae2f3a33e2b6f0058ef/1x" width="20" height="20"> All Changes automatically applied to client on the fly
-- <img src="https://cdn.frankerfacez.com/emoticon/145916/1" width="20" height="20"> Use subtitles on multiple clients simultaneously
+- <img src="https://cdn.frankerfacez.com/emoticon/145916/1" width="20" height="20"> Use captions on multiple clients simultaneously
 
 ## STT Plugins
 - <img src=".github/images/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality speech recognition, has free tier with 5 hours of audio per month, setup is kinda complicated
