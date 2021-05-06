@@ -1,4 +1,4 @@
-<div class="flex flex-col space-y-4" *ngIf="styleQuery.current$ | async as currentStyle">
+<div class="flex flex-col space-y-2" *ngIf="styleQuery.current$ | async as currentStyle">
   <div class="tabs self-center">
     <a class="tab px-2 tab-bordered" tippy="Text" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
