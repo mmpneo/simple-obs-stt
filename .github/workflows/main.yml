@@ -37,7 +37,7 @@ jobs:
         run: |
           npx ng build --prod --build-optimizer --base-href=/simple_obs_stt/
           cp ./src/404.html ./dist/
-          cp ./robots.tx ./dist/
+          cp ./robots.txt ./dist/
 
       - name: Deploy Github pages
         uses: peaceiris/actions-gh-pages@v3
