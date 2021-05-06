@@ -57,14 +57,6 @@ app-root > *:not(router-outlet) {
     @apply text-base-100;
 }
 
-.stt-box {
-    scrollbar-width: none;
-}
-.stt-box::-webkit-scrollbar {
-    display: none;
-}
-
-
 input[type=range].range::-webkit-slider-thumb {
     pointer-events: all;
     width: 24px;
@@ -87,6 +79,18 @@ input[type=range].range::-webkit-slider-thumb {
 .stt-container.show{
     opacity: 1;
     transform: translateY(0);
+}
+
+.stt-box-text {
+    scrollbar-width: none;
+}
+.stt-box-text.host{
+    @apply border;
+    @apply border-dashed;
+    border-color: rgba(68, 68, 68, 0.3);
+}
+.stt-box-text::-webkit-scrollbar {
+    display: none;
 }
 
 .stt-box-text > span{

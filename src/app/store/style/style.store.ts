@@ -31,8 +31,13 @@ export interface STTStyle {
   textStyle: {
     color: StyleValue<StyleValueType.string>;
     fontSize: StyleValue<StyleValueType.pixels>;
+    lineHeight: StyleValue<StyleValueType.string>;
     fontWeight: StyleValue<StyleValueType.string>;
     textTransform: StyleValue<StyleValueType.string>;
+    top: StyleValue<StyleValueType.pixels>
+    bottom: StyleValue<StyleValueType.pixels>
+    left: StyleValue<StyleValueType.pixels>
+    right: StyleValue<StyleValueType.pixels>
   };
   textStyleComposite: {
     textShadow: {
@@ -77,8 +82,13 @@ export const STYLE_TEMPLATE: STTStyle = {
   textStyle:          {
     color:         {type: StyleValueType.string, value: 'white'},
     fontSize:      {type: StyleValueType.pixels, value: '18'},
+    lineHeight:    {type: StyleValueType.string, value: '1.2'},
     fontWeight:    {type: StyleValueType.string, value: 'normal'},
     textTransform: {type: StyleValueType.string, value: 'none'},
+    top:           {type: StyleValueType.pixels, value: '0'},
+    bottom:        {type: StyleValueType.pixels, value: '0'},
+    left:          {type: StyleValueType.pixels, value: '10'},
+    right:         {type: StyleValueType.pixels, value: '10'},
   },
   textStyleComposite: {
     textShadow: {

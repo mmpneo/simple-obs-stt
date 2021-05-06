@@ -57,7 +57,7 @@ export class SpeechService {
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
     this.timeout = timer(200, 200).pipe(
       map(timerVal => ((timerVal * 200) / targetTime) * 100), // convert to % | >= 100% - time to stop
-      tap(timerVal => this.speechStore.update({showTimer: timerVal <= 100 ? timerVal : 0, show: timerVal < 100})),
+      tap(timerVal => this.speechStore.update({show: timerVal < 100})),
       takeWhile(val => val < 100)
     ).subscribe();
   }

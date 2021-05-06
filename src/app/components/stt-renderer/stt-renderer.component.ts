@@ -71,7 +71,7 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.speechQuery.sentences$.subscribe(value => { // hotfix of pipe change detection
       this.detector.detectChanges();
-      this.boxElement?.nativeElement?.scrollTo?.({top: this.boxElement.nativeElement?.scrollHeight, behavior: 'smooth'})
+      setTimeout(() => this.textElement?.nativeElement?.scrollTo?.({top: this.textElement.nativeElement?.scrollHeight, behavior: 'smooth'}), 50)
     });
   }
 

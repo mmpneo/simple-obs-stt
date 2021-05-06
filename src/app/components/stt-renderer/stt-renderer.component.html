@@ -1,11 +1,9 @@
 <ng-container *ngIf="styleQuery.current$ | async as currentStyle">
   <ng-container *ngIf="speechQuery.state$ | async as speechState">
     <div [class.show]="speechQuery.showBubble$ | async" class="stt-container flex items-end relative">
-      <div [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value"
-           class="z-50 -mr-4 w-36 h-36 bg-contain bg-center bg-no-repeat" #avatarElement
-           style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
-      <div #boxElement class="relative stt-box flex flex-col overflow-y-scroll overflow-x-hidden bg-cover bg-center" style="scroll-behavior: smooth;">
-        <div #textElement class="p-4 stt-box-text w-full min-h-full" style="flex: 0 0 auto">
+      <div [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value" class="z-50 -mr-4 w-36 h-36 bg-contain bg-center bg-no-repeat" #avatarElement style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
+      <div #boxElement class="box-content relative stt-box flex flex-col bg-cover bg-center">
+        <div #textElement [class.host]="speechState.speechServiceState === 2" class="stt-box-text absolute overflow-y-scroll overflow-x-hidden">
           <span class="break-words" *ngFor="let sentence of speechState.sentences; trackBy: track" [class.opacity-70]="!sentence.finalized">{{sentence.value}} </span>
         </div>
       </div>

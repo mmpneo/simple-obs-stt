@@ -89,6 +89,7 @@
       <div class="font-semibold">Font</div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyle.color.value, fn: GetFn('txt', 'color')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('txt', 'fontSize'), min: 10, max: 64}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('txt', 'lineHeight'), min: 1, max: 2}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('txt', 'fontWeight'), options: [['Normal', 'normal'], ['Bold', 'bold']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('txt', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
       <div class="divider"></div>
@@ -97,6 +98,12 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset x', $implicit: currentStyle.textStyleComposite.textShadow.x.value, fn: GetCompositeFn('txt', 'textShadow', 'x'), min: -20, max: 20}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset y', $implicit: currentStyle.textStyleComposite.textShadow.y.value, fn: GetCompositeFn('txt', 'textShadow', 'y'), min: -20, max: 20}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Blur', $implicit: currentStyle.textStyleComposite.textShadow.b.value, fn: GetCompositeFn('txt', 'textShadow', 'b'), min: -20, max: 20}"></ng-container>
+      <div class="divider"></div>
+      <div class="font-semibold">Margin</div>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.top.value, fn: GetFn('txt', 'top'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.bottom.value, fn: GetFn('txt', 'bottom'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.left.value, fn: GetFn('txt', 'left'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right', $implicit: currentStyle.textStyle.right.value, fn: GetFn('txt', 'right'), min: 0, max: 1000}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
