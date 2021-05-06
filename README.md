@@ -1,5 +1,6 @@
 # Simple STT ![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple_obs_stt)
-Real-time speech-to-text and keyboard input captions for OBS.
+Real-time speech-to-text and keyboard input captions for OBS.  
+[See examples](#examples)
 
 ## Why
 This project was started because I personally needed a free, simple and performant solution to compensate speech impairments and overall shyness with captions.  
@@ -29,7 +30,7 @@ The current goal of this project is to help streamers with similar problems to m
 <img src=".github/images/howto/stt_ui.gif">
 <img src=".github/images/howto/obs_ui.gif">
 
-## Examples
+##Examples
 <img src=".github/images/examples/ex-1.gif">
 <img src=".github/images/examples/ex-1.png">
 <img src=".github/images/examples/ex-2.png">
