@@ -27,7 +27,7 @@ The current goal of this project is to help streamers with similar problems to m
 5. Create browser source and past link
 
 <img src=".github/images/howto/stt_ui.gif">
-<img src=".github/images/howto/stt_ui.gif">
+<img src=".github/images/howto/obs_ui.gif">
 
 
 ## Planned
