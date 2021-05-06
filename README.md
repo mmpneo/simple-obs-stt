@@ -26,6 +26,10 @@ The current goal of this project is to help streamers with similar problems to m
 4. Copy client link
 5. Create browser source and past link
 
+<img src=".github/images/howto/stt_ui.gif">
+<img src=".github/images/howto/stt_ui.gif">
+
+
 ## Planned
 - [ ] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
 - [ ] Fonts - Google fonts integration
