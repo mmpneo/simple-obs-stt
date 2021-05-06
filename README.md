@@ -2,7 +2,7 @@
 Real-time speech-to-text and keyboard input captions for OBS.
 
 ## Why
-This project was started because I personally needed a free, simple and performant solution to compensate speech impairments and overall shyness with subtitles.  
+This project was started because I personally needed a free, simple and performant solution to compensate speech impairments and overall shyness with captions.  
 The current goal of this project is to help streamers with similar problems to make their streams more interactive and engaging.
 
 ## Features
