@@ -43,8 +43,8 @@ Experimental, WebView2(Edge) based, electron-like app.
 Works like trash (No native stt, eating 130mb+ memory for nothing, not reusing already opened browser). 
 Still more efficient than electron, though ![txt](https://cdn.frankerfacez.com/emoticon/128054/1)  
 
-**How to build**
-*Tested on windows.*
+**How to build**  
+*Tested on windows.*  
 *Node 14 and Rust stable required.*
 1. Clone repo
 2. ``` npm run build ```
