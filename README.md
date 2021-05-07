@@ -38,8 +38,8 @@ The current goal of this project is to help streamers with similar problems to m
 <img src=".github/images/examples/ex-4.jpg">
 
 ## Planned
+- [x] Fonts - Google fonts integration
 - [ ] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
-- [ ] Fonts - Google fonts integration
 - [ ] Text animation - different text typing animations
 - [ ] Twitch emotes integration
 - [ ] Sounds - typing sounds, text bubble appearing sound etc
