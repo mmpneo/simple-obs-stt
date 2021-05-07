@@ -147,6 +147,8 @@ function PatchStyle(style: STTStyle) {
   const currentStyle: any = deepmerge(STYLE_TEMPLATE, style);
   if (currentStyle.avatarStyle.bottom) delete currentStyle.avatarStyle.bottom;
   if (currentStyle.avatarStyle.left) delete currentStyle.avatarStyle.left;
+  if (currentStyle.avatarStyle.animationName) delete currentStyle.avatarStyle.animationName;
+  if (currentStyle.avatarStyle.animationDuration) delete currentStyle.avatarStyle.animationDuration;
   if (currentStyle.globalStyle.clearOnHide) delete currentStyle.globalStyle.clearOnHide;
   if (currentStyle.globalStyle.alwaysShow) delete currentStyle.globalStyle.alwaysShow;
   if (currentStyle.globalStyle.hideAfter) delete currentStyle.globalStyle.hideAfter;
