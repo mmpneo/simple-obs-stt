@@ -52,14 +52,15 @@ export class SpeechService {
   // Show text and start or restart countdown to hide it
   TriggerShowTimer() {
     const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
-    const targetTime   = parseInt(globalConfig.hideAfter?.value || '1000');
+    const targetTime   = parseInt(globalConfig.inactivityTimer?.value || '1000');
     this.speechStore.update({show: true});
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
-    this.timeout = timer(200, 200).pipe(
-      map(timerVal => ((timerVal * 200) / targetTime) * 100), // convert to % | >= 100% - time to stop
-      tap(timerVal => this.speechStore.update({show: timerVal < 100})),
-      takeWhile(val => val < 100)
-    ).subscribe();
+    this.timeout = timer(targetTime).subscribe(_ => {
+      this.speechStore.update(state => {
+        if (globalConfig.clearOnInactivity?.value) state.sentences = [];
+        state.show = false;
+      });
+    });
   }
 
   @transaction()

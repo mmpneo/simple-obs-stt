@@ -36,14 +36,12 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 
   private BuildTypedValue(value: StyleValue): string {
     switch (value.type) {
-      case StyleValueType.pixels:
-        return value.value + 'px';
-      case StyleValueType.ms:
-        return value.value + 'ms';
-      case StyleValueType.url:
-        return `url(${value.value})`;
-      default:
-        return value.value;
+      case StyleValueType.pixels:return value.value + 'px';
+      case StyleValueType.ms:return value.value + 'ms';
+      case StyleValueType.url:return `url(${value.value})`;
+      case StyleValueType.translateX:return `translateX(${value.value}px)`;
+      case StyleValueType.translateY:return `translateY(${value.value}px)`;
+      default:return value.value;
     }
   }
 
@@ -61,7 +59,9 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
     this.ApplyElementStyleDAta(this.avatarElement.nativeElement, style.avatarStyle);
     this.ApplyElementStyleDAta(this.boxElement.nativeElement, style.boxStyle);
     this.ApplyElementStyleDAta(this.textElement.nativeElement, style.textStyle);
+
     this.ApplyCompositeElementStyleData(this.textElement.nativeElement, style.textStyleComposite);
+    this.ApplyCompositeElementStyleData(this.avatarElement.nativeElement, style.avatarStyleComposite);
   }
 
   ngAfterViewInit(): void {

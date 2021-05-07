@@ -41,9 +41,14 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  GetCompositeFn(section: string, objectKey: string, key: string) {
-    // if (section === 'txt')
-    return (val: string) => this.styleService.UpdateTextComposite(objectKey as any, {[key]: val})
+  GetCompositeFn(section: 'txt' | 'box' | 'avatar' | 'global', objectKey: string, key: string) {
+    switch (section) {
+      case 'txt':     return (val: string) => this.styleService.UpdateTextComposite(objectKey as any, {[key]: val});
+      case 'avatar':  return (val: string) => this.styleService.UpdateAvatarComposite(objectKey as any, {[key]: val});
+      // case 'box':     return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
+      // case 'global':  return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
+      default: return (val: string) => null;
+    }
   }
 
 

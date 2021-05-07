@@ -45,4 +45,13 @@ export class StyleService {
     })
     this.SendUpdatedStyle();
   }
+
+  UpdateAvatarComposite(compositeKey: keyof STTStyle["avatarStyleComposite"], value: object) {
+    this.styleStore.update(state => {
+      for (let styleKey in value) { // @ts-ignore
+        state.currentStyle.avatarStyleComposite[compositeKey][styleKey].value = value[styleKey];
+      }
+    })
+    this.SendUpdatedStyle();
+  }
 }

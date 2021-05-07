@@ -23,9 +23,7 @@
     "@ngneat/overview": "^1.0.0",
     "@tauri-apps/api": "^1.0.0-beta-rc.3",
     "@tauri-apps/cli": "^1.0.0-beta-rc.4",
-    "@types/ua-parser-js": "^0.7.35",
-    "@types/uuid": "^8.3.0",
-    "daisyui": "^0.20.1",
+    "daisyui": "^0.22.1",
     "deepmerge": "^4.2.2",
     "immer": "^9.0.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.16.0",
@@ -34,6 +32,7 @@
     "popper-max-size-modifier": "^0.2.0",
     "rxjs": "~6.6.0",
     "simplebar-angular": "^2.3.2",
+    "source-map-explorer": "^2.5.2",
     "tslib": "^2.0.0",
     "ua-parser-js": "^0.7.28",
     "uuid": "^8.3.2",
@@ -45,6 +44,8 @@
     "@angular/compiler-cli": "~11.2.11",
     "@datorama/akita-ngdevtools": "^6.0.0",
     "@types/node": "^12.11.1",
+    "@types/ua-parser-js": "^0.7.35",
+    "@types/uuid": "^8.3.0",
     "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4"
   }

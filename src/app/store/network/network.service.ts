@@ -1,10 +1,10 @@
 import {Injectable}                from '@angular/core';
 import {NetworkMode, NetworkStore} from './network.store';
-import Peer                        from "peerjs";
 import {NetworkQuery}              from "@store/network/network.query";
 import {ConnectionState}           from "../../utils/types";
 import {Subject}                   from "rxjs";
 import {v4 as uuid}                from 'uuid';
+import Peer                        from "peerjs";
 
 interface Message {
   type: string,

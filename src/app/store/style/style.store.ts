@@ -8,10 +8,13 @@ export enum StyleValueType {
   pixels,
   ms,
   url,
-  bool
+  bool,
+  translateX,
+  translateY,
+  scale,
 }
 
-export type StyleValue<T = StyleValueType.string | StyleValueType.pixels | StyleValueType.url | StyleValueType.ms> = {
+export type StyleValue<T = StyleValueType> = {
   type: T
   value: string
 }
@@ -38,6 +41,8 @@ export interface STTStyle {
     bottom: StyleValue<StyleValueType.pixels>
     left: StyleValue<StyleValueType.pixels>
     right: StyleValue<StyleValueType.pixels>
+    paddingTop: StyleValue<StyleValueType.pixels>
+    paddingBottom: StyleValue<StyleValueType.pixels>
   };
   textStyleComposite: {
     textShadow: {
@@ -48,19 +53,24 @@ export interface STTStyle {
     }
   };
   avatarStyle: {
+    order: StyleValue<StyleValueType.string>;
     width: StyleValue<StyleValueType.pixels>;
     height: StyleValue<StyleValueType.pixels>;
     backgroundImage: StyleValue<StyleValueType.url>;
-    marginBottom: StyleValue<StyleValueType.pixels>;
-    marginRight: StyleValue<StyleValueType.pixels>;
     animationName: StyleValue<StyleValueType.string>;
     animationDuration: StyleValue<StyleValueType.ms>;
   },
+  avatarStyleComposite: {
+    transform: {
+      x: StyleValue<StyleValueType.translateX>;
+      y: StyleValue<StyleValueType.translateY>;
+    }
+  }
   globalStyle: {
-    alwaysShow: StyleValue<StyleValueType.bool>;
-    clearOnHide: StyleValue<StyleValueType.bool>;
+    hideOnInactivity: StyleValue<StyleValueType.bool>;
+    clearOnInactivity: StyleValue<StyleValueType.bool>;
     realtimeTyping: StyleValue<StyleValueType.bool>;
-    hideAfter: StyleValue<StyleValueType.string>;
+    inactivityTimer: StyleValue<StyleValueType.string>;
   }
 }
 
@@ -70,7 +80,7 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  boxStyle:           {
+  boxStyle:             {
     backgroundImage: {type: StyleValueType.url, value: ''},
     width:           {type: StyleValueType.pixels, value: '300'},
     height:          {type: StyleValueType.pixels, value: '100'},
@@ -79,7 +89,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     borderWidth:     {type: StyleValueType.pixels, value: '0'},
     borderColor:     {type: StyleValueType.string, value: 'transparent'},
   },
-  textStyle:          {
+  textStyle:            {
     color:         {type: StyleValueType.string, value: 'white'},
     fontSize:      {type: StyleValueType.pixels, value: '18'},
     lineHeight:    {type: StyleValueType.string, value: '1.2'},
@@ -89,8 +99,10 @@ export const STYLE_TEMPLATE: STTStyle = {
     bottom:        {type: StyleValueType.pixels, value: '0'},
     left:          {type: StyleValueType.pixels, value: '10'},
     right:         {type: StyleValueType.pixels, value: '10'},
+    paddingTop:    {type: StyleValueType.pixels, value: '0'},
+    paddingBottom: {type: StyleValueType.pixels, value: '0'},
   },
-  textStyleComposite: {
+  textStyleComposite:   {
     textShadow: {
       x:     {type: StyleValueType.pixels, value: '0'},
       y:     {type: StyleValueType.pixels, value: '0'},
@@ -98,26 +110,42 @@ export const STYLE_TEMPLATE: STTStyle = {
       color: {type: StyleValueType.string, value: 'black'}
     }
   },
-  avatarStyle:        {
+  avatarStyle:          {
+    order:             {type: StyleValueType.string, value: '0'},
     width:             {type: StyleValueType.pixels, value: '120'},
     height:            {type: StyleValueType.pixels, value: '120'},
     backgroundImage:   {type: StyleValueType.url, value: ''},
-    marginBottom:      {type: StyleValueType.pixels, value: '0'},
-    marginRight:       {type: StyleValueType.pixels, value: '0'},
     animationName:     {type: StyleValueType.string, value: 'none'},
     animationDuration: {type: StyleValueType.ms, value: '2000'},
   },
-  globalStyle:        {
-    alwaysShow:     {type: StyleValueType.bool, value: ''},
-    clearOnHide:    {type: StyleValueType.bool, value: ''},
-    realtimeTyping: {type: StyleValueType.bool, value: '1'},
-    hideAfter:      {type: StyleValueType.string, value: '5000'},
+  avatarStyleComposite: {
+    transform: {
+      x: {type: StyleValueType.translateX, value: '0'},
+      y: {type: StyleValueType.translateY, value: '0'}
+    }
+  },
+  globalStyle:          {
+    hideOnInactivity:  {type: StyleValueType.bool, value: ''},
+    clearOnInactivity: {type: StyleValueType.bool, value: ''},
+    realtimeTyping:    {type: StyleValueType.bool, value: '1'},
+    inactivityTimer:   {type: StyleValueType.string, value: '5000'},
   }
 }
 
 export const STATE_TEMPLATE: StyleState = {
   currentStyle: STYLE_TEMPLATE,
   templates:    []
+}
+
+
+function PatchStyle(style: STTStyle) {
+  const currentStyle: any = deepmerge(STYLE_TEMPLATE, style);
+  if (currentStyle.avatarStyle.bottom) delete currentStyle.avatarStyle.bottom;
+  if (currentStyle.avatarStyle.left) delete currentStyle.avatarStyle.left;
+  if (currentStyle.globalStyle.clearOnHide) delete currentStyle.globalStyle.clearOnHide;
+  if (currentStyle.globalStyle.alwaysShow) delete currentStyle.globalStyle.alwaysShow;
+  if (currentStyle.globalStyle.hideAfter) delete currentStyle.globalStyle.hideAfter;
+  return currentStyle;
 }
 
 @Injectable({providedIn: 'root'})
@@ -127,8 +155,8 @@ export class StyleStore extends Store<StyleState> {
     super(STATE_TEMPLATE);
     selectPersistStateInit().subscribe(value => {
       this.update({
-        currentStyle: deepmerge(STYLE_TEMPLATE, this.getValue().currentStyle),
-        templates:    this.getValue().templates.map(template => deepmerge(STYLE_TEMPLATE, template))
+        currentStyle: PatchStyle(this.getValue().currentStyle),
+        templates:    this.getValue().templates.map(template => PatchStyle(template))
       });
     })
   }

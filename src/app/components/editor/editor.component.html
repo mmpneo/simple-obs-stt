@@ -104,6 +104,10 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.bottom.value, fn: GetFn('txt', 'bottom'), min: 0, max: 1000}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.left.value, fn: GetFn('txt', 'left'), min: 0, max: 1000}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right', $implicit: currentStyle.textStyle.right.value, fn: GetFn('txt', 'right'), min: 0, max: 1000}"></ng-container>
+      <div class="divider"></div>
+      <div class="font-semibold">Padding</div>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.paddingTop.value, fn: GetFn('txt', 'paddingTop'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.paddingBottom.value, fn: GetFn('txt', 'paddingBottom'), min: 0, max: 1000}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
@@ -119,11 +123,13 @@
     </ng-container>
     <ng-container *ngSwitchCase="'avatar'">
       <div class="font-semibold">Avatar image</div>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Side', $implicit: currentStyle.avatarStyle.order.value, fn: GetFn('avatar', 'order'), options: [['Left', '0'], ['Right', '1']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.avatarStyle.backgroundImage.value, fn: GetFn('avatar', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.avatarStyle.width.value, fn: GetFn('avatar', 'width'), min: 10, max: 1000}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.avatarStyle.height.value, fn: GetFn('avatar', 'height'), min: 10, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset X', $implicit: currentStyle.avatarStyle.marginRight.value, fn: GetFn('avatar', 'marginRight'), min: -500, max: 500}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset Y', $implicit: currentStyle.avatarStyle.marginBottom.value, fn: GetFn('avatar', 'marginBottom'), min: -500, max: 500}"></ng-container>
+
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset X', $implicit: currentStyle.avatarStyleComposite.transform.x.value, fn: GetCompositeFn('avatar', 'transform', 'x'), min: -500, max: 500}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset Y', $implicit: currentStyle.avatarStyleComposite.transform.y.value, fn: GetCompositeFn('avatar', 'transform', 'y'), min: -500, max: 500}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Animation</div>
       <ng-container *ngTemplateOutlet="fieldSelect; context: {title: 'Type', $implicit: currentStyle.avatarStyle.animationName.value, fn: GetFn('avatar', 'animationName'), options: [['None', 'none'], ['Floating', 'avatar-floating']]}"></ng-container>
@@ -131,9 +137,9 @@
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping.value, fn: GetFn('global', 'realtimeTyping')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Box always visible', $implicit: currentStyle.globalStyle.alwaysShow.value, fn: GetFn('global', 'alwaysShow')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on hide', $implicit: currentStyle.globalStyle.clearOnHide.value, fn: GetFn('global', 'clearOnHide')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.hideAfter.value, fn: GetFn('global', 'hideAfter'), min: 100, max: 30000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Hide on inactivity', $implicit: currentStyle.globalStyle.hideOnInactivity.value, fn: GetFn('global', 'hideOnInactivity')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity.value, fn: GetFn('global', 'clearOnInactivity')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.inactivityTimer.value, fn: GetFn('global', 'inactivityTimer'), min: 100, max: 30000}"></ng-container>
     </ng-container>
   </ng-container>
 </div>

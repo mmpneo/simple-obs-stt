@@ -16,7 +16,7 @@ export class SpeechQuery extends Query<SpeechState> {
     this.styleQuery.globalConfig$
   ]).pipe(map(([speechState, config]) =>
     speechState.speechServiceState === ConnectionState.Connected || // if hosting
-    !!config.alwaysShow.value || // if should always show
+    !config.hideOnInactivity?.value || // if should always show
     (speechState.show && speechState.sentences.length > 0))); // if time to show and has anything to show
 
   sentences$       = this.select("sentences");
