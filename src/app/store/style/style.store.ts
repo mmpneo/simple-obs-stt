@@ -19,7 +19,6 @@ export type StyleValue<T = StyleValueType> = {
   value: string
 }
 
-
 export interface STTStyle {
   boxStyle: {
     width: StyleValue<StyleValueType.pixels>;
@@ -32,6 +31,7 @@ export interface STTStyle {
     [key: string]: any
   };
   textStyle: {
+    fontFamily: StyleValue<StyleValueType.string>;
     color: StyleValue<StyleValueType.string>;
     fontSize: StyleValue<StyleValueType.pixels>;
     lineHeight: StyleValue<StyleValueType.string>;
@@ -43,6 +43,8 @@ export interface STTStyle {
     right: StyleValue<StyleValueType.pixels>
     paddingTop: StyleValue<StyleValueType.pixels>
     paddingBottom: StyleValue<StyleValueType.pixels>
+    paddingLeft: StyleValue<StyleValueType.pixels>
+    paddingRight: StyleValue<StyleValueType.pixels>
   };
   textStyleComposite: {
     textShadow: {
@@ -90,10 +92,11 @@ export const STYLE_TEMPLATE: STTStyle = {
     borderColor:     {type: StyleValueType.string, value: 'transparent'},
   },
   textStyle:            {
+    fontFamily:    {type: StyleValueType.string, value: 'Roboto'},
     color:         {type: StyleValueType.string, value: 'white'},
     fontSize:      {type: StyleValueType.pixels, value: '18'},
     lineHeight:    {type: StyleValueType.string, value: '1.2'},
-    fontWeight:    {type: StyleValueType.string, value: 'normal'},
+    fontWeight:    {type: StyleValueType.string, value: '500'},
     textTransform: {type: StyleValueType.string, value: 'none'},
     top:           {type: StyleValueType.pixels, value: '0'},
     bottom:        {type: StyleValueType.pixels, value: '0'},
@@ -101,6 +104,8 @@ export const STYLE_TEMPLATE: STTStyle = {
     right:         {type: StyleValueType.pixels, value: '10'},
     paddingTop:    {type: StyleValueType.pixels, value: '0'},
     paddingBottom: {type: StyleValueType.pixels, value: '0'},
+    paddingLeft:   {type: StyleValueType.pixels, value: '0'},
+    paddingRight:   {type: StyleValueType.pixels, value: '0'},
   },
   textStyleComposite:   {
     textShadow: {

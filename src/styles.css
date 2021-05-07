@@ -21,6 +21,9 @@ app-root > *:not(router-outlet) {
     @apply flex;
     /*@apply shadow-xl;*/
 }
+[data-tippy-root].with-shadow {
+    @apply shadow-md;
+}
 
 [role="popper"] .tippy-content {
     @apply bg-base-100;

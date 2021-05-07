@@ -9,8 +9,9 @@ import {popperVariation, TippyModule, tooltipVariation} from '@ngneat/helipopper
 import {popper_max_size}                                from "./utils/popper_max_size";
 import maxSize                                          from "popper-max-size-modifier";
 import {HotToastModule}                                 from '@ngneat/hot-toast';
-import {ServiceWorkerModule}                from '@angular/service-worker';
-import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
+import {ServiceWorkerModule}                            from '@angular/service-worker';
+import {ClientType, GetClientType, IsTauri}             from "./utils/client_type";
+import {InitializeApplication}                          from "./app.init";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,7 @@ import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
     }),
     HotToastModule.forRoot()
   ],
-  providers:    [],
+  providers:    [InitializeApplication],
   bootstrap:    [AppComponent]
 })
 export class AppModule {

@@ -35,6 +35,7 @@ The current goal of this project is to help streamers with similar problems to m
 <img src=".github/images/examples/ex-1.png">
 <img src=".github/images/examples/ex-2.png">
 <img src=".github/images/examples/ex-3.png">
+<img src=".github/images/examples/ex-4.jpg">
 
 ## Planned
 - [ ] Style Templates - Instant switching between styles. For ex: Swappable styles for different games

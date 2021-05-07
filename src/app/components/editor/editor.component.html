@@ -1,36 +1,29 @@
 <div class="flex flex-col space-y-2" *ngIf="styleQuery.current$ | async as currentStyle">
   <div class="tabs self-center">
     <a class="tab px-2 tab-bordered" tippy="Text" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-      </svg>
-<!--      Text-->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
     </a>
     <a class="tab px-2 tab-bordered" tippy="Box" [class.tab-active]="activeTab === 'box'" (click)="ChangeTab('box')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-      </svg>
-<!--      Box-->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
     </a>
     <a class="tab px-2 tab-bordered" tippy="Avatar" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-<!--      Avatar-->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     </a>
     <a class="tab px-2 tab-bordered" tippy="Global" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-<!--      Global-->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
     </a>
   </div>
 
   <ng-template #fieldNumber let-value let-title="title" let-fn="fn" let-min="min" let-max="max">
     <div class="flex justify-between items-center">
       <div>{{title}}</div>
-      <input type="number" [min]="min || 0" [max]="max || 100" class="w-20 input input-bordered input-sm" [ngModel]="value" (ngModelChange)="fn($event)">
+      <input type="number" [min]="min || 0" [max]="max || 100" class="w-20 input input-bordered input-sm"      [ngModel]="value" (ngModelChange)="fn($event)">
+    </div>
+  </ng-template>
+  <ng-template #fieldSlider let-value let-title="title" let-fn="fn" let-min="min" let-max="max">
+    <div class="flex justify-between items-center">
+      <div>{{title}}</div>
+      <input type="range" [min]="min || 0" [max]="max || 100" class="px-0 w-20 input input-range input-bordered input-sm" [ngModel]="value" (ngModelChange)="fn($event)">
     </div>
   </ng-template>
 
@@ -43,12 +36,7 @@
 
   <ng-template #fieldToggle let-value let-title="title" let-fn="fn">
     <div class="form-control">
-      <label class="cursor-pointer p-0 label">
-        <span class="label-text">{{title}}</span>
-        <div>
-          <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!value" (ngModelChange)="fn($event ? '1' : '')">
-          <span class="toggle-mark"></span>
-        </div>
+      <label class="cursor-pointer p-0 label"> <span class="label-text">{{title}}</span> <div>   <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!value" (ngModelChange)="fn($event ? '1' : '')">   <span class="toggle-mark"></span> </div>
       </label>
     </div>
   </ng-template>
@@ -56,8 +44,7 @@
   <ng-template #fieldChips let-value let-title="title" let-fn="fn" let-options="options">
     <div class="flex justify-between items-center">
       <div>{{title}}</div>
-      <div class="btn-group">
-        <button *ngFor="let option of options" class="btn btn-sm normal-case" (click)="fn(option[1])" [class.btn-active]="value === option[1]">{{option[0]}}</button>
+      <div class="btn-group"> <button *ngFor="let option of options" class="btn btn-sm normal-case" (click)="fn(option[1])" [class.btn-active]="value === option[1]">{{option[0]}}</button>
       </div>
     </div>
   </ng-template>
@@ -65,8 +52,7 @@
   <ng-template #fieldSelect let-value let-title="title" let-fn="fn" let-options="options">
     <div class="flex justify-between items-center">
       <div>{{title}}</div>
-      <select class="w-44 select select-bordered select-sm" [ngModel]="value" (ngModelChange)="fn($event)">
-        <option *ngFor="let option of options" [ngValue]="option[1]">{{option[0]}}</option>
+      <select class="w-44 select select-bordered select-sm" [ngModel]="value" (ngModelChange)="fn($event)"> <option *ngFor="let option of options" [ngValue]="option[1]">{{option[0]}}</option>
       </select>
     </div>
   </ng-template>
@@ -74,7 +60,7 @@
   <ng-template #fieldColor let-value let-title="title" let-fn="fn">
     <div class="flex justify-between items-center">
       <div>{{title}}</div>
-      <button class="btn btn-sm btn-circle" [tippy]="colorSelector" [data]="{value: value, fn: fn}" variation="color_menu" placement="right" [style.background-color]="value"></button>
+      <button class="btn btn-sm btn-circle" [tippy]="colorSelector" [data]="{value: value, fn: fn}"       variation="color_menu" placement="right" [style.background-color]="value"></button>
     </div>
   </ng-template>
 
@@ -84,13 +70,24 @@
     </div>
   </ng-template>
 
+  <ng-template #fontSelect>
+    <ngx-simplebar class="w-56 h-96">
+      <div class="flex flex-col items-start space-y-1 overflow-x-hidden"> <button class="btn btn-xs truncate" *ngFor="let font of (applicationQuery.fonts$ | async); trackBy:trackFonts" (click)="GetFn('txt', 'fontFamily')(font.family);prevent($event)">{{font.family}}</button>
+      </div>
+    </ngx-simplebar>
+  </ng-template>
+
   <ng-container [ngSwitch]="activeTab">
     <ng-container *ngSwitchCase="'text'">
       <div class="font-semibold">Font</div>
+
+      <div class="flex justify-between items-center"> <div>Family</div> <div class="cursor-pointer w-44 input input-bordered input-sm truncate" appendTo="parent" className="with-shadow" [tippy]="fontSelect" variation="popper" placement="bottom">{{currentStyle.textStyle.fontFamily.value}}</div>
+      </div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyle.color.value, fn: GetFn('txt', 'color')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('txt', 'fontSize'), min: 10, max: 64}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('txt', 'lineHeight'), min: 1, max: 2}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('txt', 'fontWeight'), options: [['Normal', 'normal'], ['Bold', 'bold']]}"></ng-container>
+<!--      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('txt', 'fontWeight'), options: [['Normal', 'normal'], ['Bold', 'bold']]}"></ng-container>-->
+      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('txt', 'fontWeight'), min: 100, max: 900}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('txt', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Shadow</div>
@@ -108,6 +105,8 @@
       <div class="font-semibold">Padding</div>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.paddingTop.value, fn: GetFn('txt', 'paddingTop'), min: 0, max: 1000}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.paddingBottom.value, fn: GetFn('txt', 'paddingBottom'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.paddingLeft.value, fn: GetFn('txt', 'paddingLeft'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.paddingRight.value, fn: GetFn('txt', 'paddingRight'), min: 0, max: 1000}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
@@ -130,10 +129,10 @@
 
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset X', $implicit: currentStyle.avatarStyleComposite.transform.x.value, fn: GetCompositeFn('avatar', 'transform', 'x'), min: -500, max: 500}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset Y', $implicit: currentStyle.avatarStyleComposite.transform.y.value, fn: GetCompositeFn('avatar', 'transform', 'y'), min: -500, max: 500}"></ng-container>
-      <div class="divider"></div>
-      <div class="font-semibold">Animation</div>
-      <ng-container *ngTemplateOutlet="fieldSelect; context: {title: 'Type', $implicit: currentStyle.avatarStyle.animationName.value, fn: GetFn('avatar', 'animationName'), options: [['None', 'none'], ['Floating', 'avatar-floating']]}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Duration', $implicit: currentStyle.avatarStyle.animationDuration.value, fn: GetFn('avatar', 'animationDuration'), min: 0, max: 20000}"></ng-container>
+      <!--      <div class="divider"></div>-->
+      <!--      <div class="font-semibold">Animation</div>-->
+      <!--      <ng-container *ngTemplateOutlet="fieldSelect; context: {title: 'Type', $implicit: currentStyle.avatarStyle.animationName.value, fn: GetFn('avatar', 'animationName'), options: [['None', 'none'], ['Floating', 'avatar-floating']]}"></ng-container>-->
+      <!--      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Duration', $implicit: currentStyle.avatarStyle.animationDuration.value, fn: GetFn('avatar', 'animationDuration'), min: 0, max: 20000}"></ng-container>-->
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping.value, fn: GetFn('global', 'realtimeTyping')}"></ng-container>
@@ -143,3 +142,4 @@
     </ng-container>
   </ng-container>
 </div>
+<!--https://fightersgeneration.com/nf7/char/jacko-ggxrd-sit.gif-->

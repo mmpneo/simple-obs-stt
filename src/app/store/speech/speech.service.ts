@@ -7,7 +7,6 @@ import {StyleQuery}                                                 from "@store
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
 import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
 import {Subscription, timer}                                        from "rxjs";
-import {map, takeWhile, tap}                                        from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -19,10 +18,7 @@ export class SpeechService {
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.speechStore.update({sentences: []});
       if (m.type === 'stt:updatesentence') {
-        this.speechStore.update(e => {
-          if (e.sentences.length > 20) e.sentences.splice(0, 1); // limit number of sentences
-          e.sentences = arrayUpsert(e.sentences, m.data.id, m.data);
-        })
+        this.speechStore.update(e => ({sentences: arrayUpsert(e.sentences, m.data.id, m.data)}));
         this.TriggerShowTimer();
       }
     }); // listen for network messages
@@ -69,10 +65,7 @@ export class SpeechService {
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) {
       // create new
       const newSentence: SpeechSentence = {finalized, value: text, id: guid(), type};
-      this.speechStore.update(e => {
-        if (e.sentences.length > 20) e.sentences.splice(0, 1); // limit number of sentences
-        e.sentences = arrayAdd(e.sentences, newSentence);
-      });
+      this.speechStore.update(e => ({sentences: arrayAdd(e.sentences, newSentence)}));
       this.networkService.SendMessage({type: 'stt:updatesentence', data: newSentence})
     }
     else {
