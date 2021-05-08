@@ -22,6 +22,9 @@ export class ApplicationService {
   ) {
   }
 
+  // too big for akita
+  public fonts: GoogleFont[] = [];
+
   public CopyLink() {
     const isLocal = this.networkQuery.getValue().networkMode === NetworkMode.localhost;
     let url       = isLocal ? environment.localhostClientPath : environment.remoteClientPath;
@@ -53,7 +56,7 @@ export class ApplicationService {
     console.log('font', fontFamily);
     if (!fontFamily)
       return;
-    const fontData: GoogleFont | null = this.applicationStore.getValue().fonts.find(f => f.family === fontFamily) || null;
+    const fontData: GoogleFont | null = this.fonts.find(f => f.family === fontFamily) || null;
     if (!fontData)
       return;
     let url             = "https://fonts.googleapis.com/css2?family="
@@ -86,7 +89,9 @@ export class ApplicationService {
     const resp = await fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBLnmSeeiFBd2OQrizWjuYHTIFDm8XwL6k');
     const json = await resp.json();
     if (json.items?.length)
-      this.applicationStore.update({fonts: json.items});
+      this.fonts = json.items;
+
+    //Load font on style update
     this.styleQuery.current$.pipe(
       map(current => current?.textStyle.fontFamily?.value),
       distinctUntilChanged()

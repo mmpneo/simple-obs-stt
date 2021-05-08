@@ -8,6 +8,7 @@ import {TippyModule}                                          from "@ngneat/heli
 import {ColorSketchModule}                                    from "ngx-color/sketch";
 import {ApplicationQuery}                                     from "@store/application/application.query";
 import {SimplebarAngularModule}                               from "simplebar-angular";
+import {ApplicationService}                                   from "@store/application/application.service";
 
 @Component({
   selector:        'app-editor',
@@ -20,6 +21,7 @@ export class EditorComponent implements OnInit {
     public styleService: StyleService,
     public styleQuery: StyleQuery,
     public applicationQuery: ApplicationQuery,
+    public applicationService: ApplicationService,
   ) {
   }
 
@@ -45,29 +47,21 @@ export class EditorComponent implements OnInit {
 
   GetFn(section: 'txt' | 'box' | 'avatar' | 'global', key: string) {
     switch (section) {
-      case 'txt':
-        return (val: string) => this.styleService.UpdateTextStyle({[key]: val});
-      case 'box':
-        return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
-      case 'avatar':
-        return (val: string) => this.styleService.UpdateAvatarStyle({[key]: val});
-      case 'global':
-        return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
-      default:
-        return (val: string) => null;
+      case 'txt':     return (val: string) => this.styleService.UpdateTextStyle({[key]: val});
+      case 'box':     return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
+      case 'avatar':  return (val: string) => this.styleService.UpdateAvatarStyle({[key]: val});
+      case 'global':  return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
+      default:        return (val: string) => null;
     }
   }
 
   GetCompositeFn(section: 'txt' | 'box' | 'avatar' | 'global', objectKey: string, key: string) {
     switch (section) {
-      case 'txt':
-        return (val: string) => this.styleService.UpdateTextComposite(objectKey as any, {[key]: val});
-      case 'avatar':
-        return (val: string) => this.styleService.UpdateAvatarComposite(objectKey as any, {[key]: val});
+      case 'txt':     return (val: string) => this.styleService.UpdateTextComposite(objectKey as any, {[key]: val});
+      case 'avatar':  return (val: string) => this.styleService.UpdateAvatarComposite(objectKey as any, {[key]: val});
       // case 'box':     return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
       // case 'global':  return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
-      default:
-        return (val: string) => null;
+      default:        return (val: string) => null;
     }
   }
 

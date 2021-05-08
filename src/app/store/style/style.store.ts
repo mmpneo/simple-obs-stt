@@ -78,7 +78,8 @@ export interface STTStyle {
 
 export interface StyleState {
   currentStyle: STTStyle;
-  templates: STTStyle[];
+  templates: { name: string, value: STTStyle }[];
+  currentTemplate: number | null
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
@@ -105,7 +106,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     paddingTop:    {type: StyleValueType.pixels, value: '0'},
     paddingBottom: {type: StyleValueType.pixels, value: '0'},
     paddingLeft:   {type: StyleValueType.pixels, value: '0'},
-    paddingRight:   {type: StyleValueType.pixels, value: '0'},
+    paddingRight:  {type: StyleValueType.pixels, value: '0'},
   },
   textStyleComposite:   {
     textShadow: {
@@ -139,7 +140,8 @@ export const STYLE_TEMPLATE: STTStyle = {
 
 export const STATE_TEMPLATE: StyleState = {
   currentStyle: STYLE_TEMPLATE,
-  templates:    []
+  templates:    [],
+  currentTemplate: null
 }
 
 
@@ -163,7 +165,7 @@ export class StyleStore extends Store<StyleState> {
     selectPersistStateInit().subscribe(value => {
       this.update({
         currentStyle: PatchStyle(this.getValue().currentStyle),
-        templates:    this.getValue().templates.map(template => PatchStyle(template))
+        templates:    this.getValue().templates.map(template => ({...template, value: PatchStyle(template.value)}))
       });
     })
   }

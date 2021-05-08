@@ -40,7 +40,6 @@ export class ServerComponent implements OnInit {
 
   plugins = SPEECH_PLUGINS;
   langs   = languages;
-  usable  = true;
 
   RgbaToString(rgba: RGBA) {
     return `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`

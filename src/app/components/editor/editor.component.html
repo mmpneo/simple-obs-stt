@@ -1,4 +1,4 @@
-<div class="flex flex-col space-y-2" *ngIf="styleQuery.current$ | async as currentStyle">
+<div class="text-sm flex flex-col space-y-2" *ngIf="styleQuery.current$ | async as currentStyle">
   <div class="tabs self-center">
     <a class="tab px-2 tab-bordered" tippy="Text" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
@@ -72,7 +72,7 @@
 
   <ng-template #fontSelect>
     <ngx-simplebar class="w-56 h-96">
-      <div class="flex flex-col items-start space-y-1 overflow-x-hidden"> <button class="btn btn-xs truncate" *ngFor="let font of (applicationQuery.fonts$ | async); trackBy:trackFonts" (click)="GetFn('txt', 'fontFamily')(font.family);prevent($event)">{{font.family}}</button>
+      <div class="flex flex-col items-start space-y-1 overflow-x-hidden"> <button class="btn btn-xs truncate" *ngFor="let font of applicationService.fonts; trackBy:trackFonts" (click)="GetFn('txt', 'fontFamily')(font.family);prevent($event)">{{font.family}}</button>
       </div>
     </ngx-simplebar>
   </ng-template>
@@ -135,7 +135,10 @@
       <!--      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Duration', $implicit: currentStyle.avatarStyle.animationDuration.value, fn: GetFn('avatar', 'animationDuration'), min: 0, max: 20000}"></ng-container>-->
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
+      <div class="font-semibold">Text input</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping.value, fn: GetFn('global', 'realtimeTyping')}"></ng-container>
+      <div class="divider"></div>
+      <div class="font-semibold">Inactivity</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Hide on inactivity', $implicit: currentStyle.globalStyle.hideOnInactivity.value, fn: GetFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity.value, fn: GetFn('global', 'clearOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.inactivityTimer.value, fn: GetFn('global', 'inactivityTimer'), min: 100, max: 30000}"></ng-container>

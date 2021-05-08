@@ -12,8 +12,6 @@ export class ApplicationQuery extends Query<ApplicationState> {
     super(store);
   }
 
-  fonts$ = this.select('fonts');
-
   connectionState$ = combineQueries([this.networkQuery.state$, this.speechQuery.state$]).pipe(
     map(([networkQuery, speechQuery]) => {
       if (networkQuery.peerConnectionState === ConnectionState.Connected && speechQuery.speechServiceState === ConnectionState.Connected)

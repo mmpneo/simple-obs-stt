@@ -16,13 +16,11 @@ export interface GoogleFont{
 
 export interface ApplicationState {
    key: string;
-   fonts: GoogleFont[]
 }
 
 export function createInitialState(): ApplicationState {
   return {
-    key: '',
-    fonts: []
+    key: ''
   };
 }
 

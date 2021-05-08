@@ -9,6 +9,11 @@ export class StyleQuery extends Query<StyleState> {
     super(store);
   }
 
+  state$ = this.select();
+
+  currentTemplate$ = this.select("currentTemplate");
+  templates$ = this.select("templates");
+
   current$ = this.select("currentStyle");
   globalConfig$ = this.select("currentStyle").pipe(map(c => c.globalStyle))
 
