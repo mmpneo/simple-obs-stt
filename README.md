@@ -1,4 +1,4 @@
-# Simple STT ![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple_obs_stt)
+# Simple STT ![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt)
 Real-time speech-to-text and keyboard input captions for OBS.  
 [See examples](#examples)
 
@@ -21,7 +21,7 @@ The current goal of this project is to help streamers with similar problems to m
 - <img src=".github/images/browsers/desktop_main.png" height=20> Noop - disable speech recognition and use text input only
 
 ## How to start
-1. Open [host page](https://mmpneo.github.io/simple_obs_stt)
+1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
 2. Select stt plugin
 2. Select language to recognize
 3. Start

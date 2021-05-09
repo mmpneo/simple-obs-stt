@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "simple_obs_stt",
+    "productName": "simple-obs-stt",
     "version": "0.1.0"
   },
   "build": {

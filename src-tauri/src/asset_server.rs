@@ -36,7 +36,7 @@ pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
 }
 
 async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<impl Reply, Rejection> {
-    let glob = Glob::new("/**/*.{css,js,png,ico,webmanifest}").unwrap().compile_matcher();
+    let glob = Glob::new("/**/*.{css,js,png,ico,wav,mp3,webmanifest}").unwrap().compile_matcher();
     let path = path.as_str();
 
     let substr = &path[1..];
