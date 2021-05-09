@@ -17,6 +17,8 @@ export class SoundService {
 
   Play() {
     const volValue = parseFloat(this.styleQuery.getValue().currentStyle.soundStyle.volume.value);
+    if (volValue === 0)
+      return;
     this.typeClip.volume = volValue ?? 0.5;
     (this.typeClip.currentTime !== 0) && this.typeClip.pause();
     this.typeClip.currentTime = 0;
