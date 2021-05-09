@@ -1,19 +1,19 @@
-import {APP_INITIALIZER}    from '@angular/core';
-import {ApplicationService} from "@store/application/application.service";
+import {APP_INITIALIZER} from '@angular/core';
+import {FontsService}    from "@store/fonts/fonts.service";
 
 export const InitializeApplication = {
   provide:    APP_INITIALIZER,
   useFactory: InitLoading,
-  deps:       [ApplicationService,],
+  deps:       [FontsService],
   multi:      true
 };
 
 export function InitLoading(
-  applicationService: ApplicationService,
+  fontsService: FontsService,
 ): () => Promise<boolean> {
   return async () => {
     try {
-      await applicationService.LoadFonts();
+      await fontsService.LoadFonts();
       return true;
     } catch (error) {
       return true;

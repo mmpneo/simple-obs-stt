@@ -13,7 +13,7 @@ if (environment.production) {
 }
 if (GetClientType() === ClientType.host) { //add persistent for host
   const storage_main = persistState({
-    include: ['network', 'speech', 'style'],
+    include: ['application', 'network', 'speech', 'style'],
     preStorageUpdate(storeName: string, state: any): any {
       if (storeName === 'network')
         return {saveHost: state.saveHost, hostID : state.saveHost ? state.hostID : null}

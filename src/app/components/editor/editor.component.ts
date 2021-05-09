@@ -9,6 +9,7 @@ import {ColorSketchModule}                                    from "ngx-color/sk
 import {ApplicationQuery}                                     from "@store/application/application.query";
 import {SimplebarAngularModule}                               from "simplebar-angular";
 import {ApplicationService}                                   from "@store/application/application.service";
+import {FontsService}                                         from "@store/fonts/fonts.service";
 
 @Component({
   selector:        'app-editor',
@@ -22,6 +23,7 @@ export class EditorComponent implements OnInit {
     public styleQuery: StyleQuery,
     public applicationQuery: ApplicationQuery,
     public applicationService: ApplicationService,
+    public fontsService: FontsService
   ) {
   }
 
