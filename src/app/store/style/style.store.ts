@@ -12,17 +12,47 @@ export enum StyleValueType {
   translateX,
   translateY,
   scale,
+  logic// system type for stt-renderer
 }
 
-export type StyleValue<T = StyleValueType> = {
+export type StyleValue<T = StyleValueType, V = string> = {
   type: T
-  value: string
+  value: V
+}
+
+export type CustomStyleFn = (state: STTStyle, elementStyle: any, calculatedValue: string) => void;
+
+// override style applying with side effects
+export const CUSTOM_STYLE_LOGIC: {[sectionKey: string]: {[styleKey: string]: CustomStyleFn}} = {
+  boxStyle: {
+    // based on boxStyle.heightMode keep height fixed or minimized with max height
+    height: (state, elementStyle, calculatedValue) => {
+      if (state.boxStyle.heightMode.value === 'grow') {
+        elementStyle.maxHeight = calculatedValue;
+        elementStyle.height = 'auto';
+      } else {
+        elementStyle.maxHeight = 'none';
+        elementStyle.height = calculatedValue;
+      }
+    }
+  },
+  textStyle: {
+    right: (state, elementStyle, value) => {
+      const isFixed = state.boxStyle.heightMode.value === 'fixed';
+      elementStyle.position = isFixed ? 'absolute' : 'relative';
+      elementStyle.right = isFixed ? value : 0;
+      elementStyle.left = isFixed ? elementStyle.left : 0;
+      elementStyle.bottom = isFixed ? elementStyle.bottom : 0;
+      elementStyle.top = isFixed ? elementStyle.top : 0;
+    }
+  }
 }
 
 export interface STTStyle {
   boxStyle: {
     width: StyleValue<StyleValueType.pixels>;
     height: StyleValue<StyleValueType.pixels>;
+    heightMode: StyleValue<StyleValueType.logic, 'grow' | 'fixed'>;
     backgroundImage: StyleValue<StyleValueType.url>;
     backgroundColor: StyleValue<StyleValueType.string>;
     borderWidth: StyleValue<StyleValueType.pixels>;
@@ -67,7 +97,10 @@ export interface STTStyle {
       x: StyleValue<StyleValueType.translateX>;
       y: StyleValue<StyleValueType.translateY>;
     }
-  }
+  },
+  soundStyle: {
+    volume: StyleValue<StyleValueType.string>
+  },
   globalStyle: {
     hideOnInactivity: StyleValue<StyleValueType.bool>;
     clearOnInactivity: StyleValue<StyleValueType.bool>;
@@ -87,6 +120,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     backgroundImage: {type: StyleValueType.url, value: ''},
     width:           {type: StyleValueType.pixels, value: '300'},
     height:          {type: StyleValueType.pixels, value: '100'},
+    heightMode:      {type: StyleValueType.logic, value: 'fixed'},
     backgroundColor: {type: StyleValueType.string, value: 'transparent'},
     borderRadius:    {type: StyleValueType.pixels, value: '0'},
     borderWidth:     {type: StyleValueType.pixels, value: '0'},
@@ -130,6 +164,9 @@ export const STYLE_TEMPLATE: STTStyle = {
       y: {type: StyleValueType.translateY, value: '0'}
     }
   },
+  soundStyle:           {
+    volume: {type: StyleValueType.string, value: '0.5'},
+  },
   globalStyle:          {
     hideOnInactivity:  {type: StyleValueType.bool, value: ''},
     clearOnInactivity: {type: StyleValueType.bool, value: ''},
@@ -139,8 +176,8 @@ export const STYLE_TEMPLATE: STTStyle = {
 }
 
 export const STATE_TEMPLATE: StyleState = {
-  currentStyle: STYLE_TEMPLATE,
-  templates:    [],
+  currentStyle:    STYLE_TEMPLATE,
+  templates:       [],
   currentTemplate: null
 }
 

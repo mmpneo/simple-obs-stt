@@ -10,9 +10,9 @@ import {
 }                                             from '@angular/core';
 import {CommonModule}                         from "@angular/common";
 import {SpeechQuery}                          from "@store/speech/speech.query";
-import {StyleQuery}                           from "@store/style/style.query";
-import {STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
-import {SpeechSentence}                       from "@store/speech/speech.store";
+import {StyleQuery}                                               from "@store/style/style.query";
+import {CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
+import {SpeechSentence}                                           from "@store/speech/speech.store";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -45,9 +45,16 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private ApplyElementStyleDAta(element: any, styles: { [key: string]: StyleValue }) {
-    for (const cssKey in styles)
-      element.style[cssKey] = this.BuildTypedValue(styles[cssKey]);
+  private ApplyElementStyleDAta(style: STTStyle, section: keyof STTStyle, element: any, styles: { [key: string]: StyleValue }) {
+    for (const cssKey in styles) {
+      if (styles[cssKey].type === StyleValueType.logic)
+        continue;
+      const customLogic = CUSTOM_STYLE_LOGIC[section]?.[cssKey];
+      if (!!customLogic)
+        customLogic(style, element.style, this.BuildTypedValue(styles[cssKey]))
+      else
+        element.style[cssKey] = this.BuildTypedValue(styles[cssKey]);
+    }
   }
 
   private ApplyCompositeElementStyleData(element: any, styles: { [styleKey: string]: { [partialKey: string]: StyleValue } }) {
@@ -56,9 +63,9 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   }
 
   private ApplyStyles(style: STTStyle) {
-    this.ApplyElementStyleDAta(this.avatarElement.nativeElement, style.avatarStyle);
-    this.ApplyElementStyleDAta(this.boxElement.nativeElement, style.boxStyle);
-    this.ApplyElementStyleDAta(this.textElement.nativeElement, style.textStyle);
+    this.ApplyElementStyleDAta(style, 'avatarStyle', this.avatarElement.nativeElement, style.avatarStyle);
+    this.ApplyElementStyleDAta(style, 'boxStyle', this.boxElement.nativeElement, style.boxStyle);
+    this.ApplyElementStyleDAta(style, 'textStyle', this.textElement.nativeElement, style.textStyle);
 
     this.ApplyCompositeElementStyleData(this.textElement.nativeElement, style.textStyleComposite);
     this.ApplyCompositeElementStyleData(this.avatarElement.nativeElement, style.avatarStyleComposite);

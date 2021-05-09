@@ -11,6 +11,8 @@ import {SimplebarAngularModule}                               from "simplebar-an
 import {ApplicationService}                                   from "@store/application/application.service";
 import {FontsService}                                         from "@store/fonts/fonts.service";
 
+type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global';
+
 @Component({
   selector:        'app-editor',
   templateUrl:     './editor.component.html',
@@ -27,7 +29,7 @@ export class EditorComponent implements OnInit {
   ) {
   }
 
-  activeTab: 'text' | 'box' | 'avatar' | 'global' = 'text';
+  activeTab: StyleSections = 'text';
 
   selectedFontLetter = 'a';
 
@@ -49,11 +51,12 @@ export class EditorComponent implements OnInit {
     return false;
   }
 
-  GetFn(section: 'txt' | 'box' | 'avatar' | 'global', key: string) {
+  GetFn(section: StyleSections, key: string) {
     switch (section) {
-      case 'txt':     return (val: string) => this.styleService.UpdateTextStyle({[key]: val});
+      case 'text':     return (val: string) => this.styleService.UpdateTextStyle({[key]: val});
       case 'box':     return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
       case 'avatar':  return (val: string) => this.styleService.UpdateAvatarStyle({[key]: val});
+      case 'sound':  return (val: string) => this.styleService.UpdateSoundStyle({[key]: val});
       case 'global':  return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
       default:        return (val: string) => null;
     }
@@ -63,8 +66,6 @@ export class EditorComponent implements OnInit {
     switch (section) {
       case 'txt':     return (val: string) => this.styleService.UpdateTextComposite(objectKey as any, {[key]: val});
       case 'avatar':  return (val: string) => this.styleService.UpdateAvatarComposite(objectKey as any, {[key]: val});
-      // case 'box':     return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
-      // case 'global':  return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
       default:        return (val: string) => null;
     }
   }

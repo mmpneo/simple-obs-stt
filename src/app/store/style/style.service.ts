@@ -116,6 +116,7 @@ export class StyleService {
   UpdateTextStyle   = (style: Partial<StyleSectionObject<"textStyle">>) => this.UpdateNormalStyles("textStyle", style);
   UpdateBoxStyle    = (style: Partial<StyleSectionObject<"boxStyle">>) => this.UpdateNormalStyles("boxStyle", style);
   UpdateAvatarStyle = (style: Partial<StyleSectionObject<"avatarStyle">>) => this.UpdateNormalStyles("avatarStyle", style);
+  UpdateSoundStyle = (style: Partial<StyleSectionObject<"soundStyle">>) => this.UpdateNormalStyles("soundStyle", style);
   UpdateGlobalStyle = (style: Partial<StyleSectionObject<"globalStyle">>) => this.UpdateNormalStyles("globalStyle", style);
 
   UpdateTextComposite   = (compositeKey: keyof STTStyle["textStyleComposite"], value: any) => this.UpdateCompositeStyles('textStyleComposite', compositeKey, value);

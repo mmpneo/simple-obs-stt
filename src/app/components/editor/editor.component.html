@@ -9,6 +9,11 @@
     <a class="tab px-2 tab-bordered" tippy="Avatar" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     </a>
+
+    <a class="tab px-2 tab-bordered" tippy="Sound" [class.tab-active]="activeTab === 'sound'" (click)="ChangeTab('sound')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+    </a>
+
     <a class="tab px-2 tab-bordered" tippy="Global" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
     </a>
@@ -20,10 +25,10 @@
       <input type="number" [min]="min || 0" [max]="max || 100" class="w-20 input input-bordered input-sm"      [ngModel]="value" (ngModelChange)="fn($event)">
     </div>
   </ng-template>
-  <ng-template #fieldSlider let-value let-title="title" let-fn="fn" let-min="min" let-max="max">
+  <ng-template #fieldSlider let-value let-title="title" let-fn="fn" let-min="min" let-max="max" let-step="step">
     <div class="flex justify-between items-center">
       <div>{{title}}</div>
-      <input type="range" [min]="min || 0" [max]="max || 100" class="px-0 w-20 input input-range input-bordered input-sm" [ngModel]="value" (ngModelChange)="fn($event)">
+      <input type="range" [step]="step" [min]="min || 0" [max]="max || 100" class="px-0 w-20 input input-range input-bordered input-sm" [ngModel]="value" (ngModelChange)="fn($event)">
     </div>
   </ng-template>
 
@@ -80,7 +85,7 @@
         <ul class="flex flex-col overflow-x-hidden">
           <li class="cursor-pointer px-4 py-2 hover:bg-primary hover:text-primary-content truncate"
             *ngFor="let font of fontsService.fontsMap[selectedFontLetter]; trackBy:trackFonts"
-            (click)="GetFn('txt', 'fontFamily')(font.family);prevent($event)">
+            (click)="GetFn('text', 'fontFamily')(font.family);prevent($event)">
             {{font.family}}
           </li>
         </ul>
@@ -94,12 +99,11 @@
 
       <div class="flex justify-between items-center"> <div>Family</div> <div class="cursor-pointer w-44 input input-bordered input-sm truncate" className="with-shadow" [tippy]="fontSelect" variation="popper" placement="right">{{currentStyle.textStyle.fontFamily.value}}</div>
       </div>
-      <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyle.color.value, fn: GetFn('txt', 'color')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('txt', 'fontSize'), min: 10, max: 64}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('txt', 'lineHeight'), min: 1, max: 2}"></ng-container>
-<!--      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('txt', 'fontWeight'), options: [['Normal', 'normal'], ['Bold', 'bold']]}"></ng-container>-->
-      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('txt', 'fontWeight'), min: 100, max: 900}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('txt', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyle.color.value, fn: GetFn('text', 'color')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('text', 'fontSize'), min: 10, max: 64}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('text', 'lineHeight'), min: 1, max: 2}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('text', 'fontWeight'), min: 100, max: 900, step: '100'}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('text', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Shadow</div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyleComposite.textShadow.color.value, fn: GetCompositeFn('txt', 'textShadow', 'color')}"></ng-container>
@@ -108,21 +112,22 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Blur', $implicit: currentStyle.textStyleComposite.textShadow.b.value, fn: GetCompositeFn('txt', 'textShadow', 'b'), min: -20, max: 20}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Margin</div>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.top.value, fn: GetFn('txt', 'top'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.bottom.value, fn: GetFn('txt', 'bottom'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.left.value, fn: GetFn('txt', 'left'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right', $implicit: currentStyle.textStyle.right.value, fn: GetFn('txt', 'right'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.top.value, fn: GetFn('text', 'top'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.bottom.value, fn: GetFn('text', 'bottom'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.left.value, fn: GetFn('text', 'left'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right', $implicit: currentStyle.textStyle.right.value, fn: GetFn('text', 'right'), min: 0, max: 1000}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Padding</div>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.paddingTop.value, fn: GetFn('txt', 'paddingTop'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.paddingBottom.value, fn: GetFn('txt', 'paddingBottom'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.paddingLeft.value, fn: GetFn('txt', 'paddingLeft'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.paddingRight.value, fn: GetFn('txt', 'paddingRight'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.paddingTop.value, fn: GetFn('text', 'paddingTop'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.paddingBottom.value, fn: GetFn('text', 'paddingBottom'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.paddingLeft.value, fn: GetFn('text', 'paddingLeft'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.paddingRight.value, fn: GetFn('text', 'paddingRight'), min: 0, max: 1000}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
       <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.boxStyle.backgroundImage.value, fn: GetFn('box', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.backgroundColor.value, fn: GetFn('box', 'backgroundColor')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Height mode', $implicit: currentStyle.boxStyle.heightMode.value, fn: GetFn('box', 'heightMode'), options: [['Grow', 'grow'], ['Fixed', 'fixed']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.boxStyle.width.value, fn: GetFn('box', 'width'), min: 100, max: 600}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.boxStyle.height.value, fn: GetFn('box', 'height'), min: 50, max: 600}"></ng-container>
       <div class="divider"></div>
@@ -134,16 +139,16 @@
     <ng-container *ngSwitchCase="'avatar'">
       <div class="font-semibold">Avatar image</div>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Side', $implicit: currentStyle.avatarStyle.order.value, fn: GetFn('avatar', 'order'), options: [['Left', '0'], ['Right', '1']]}"></ng-container>
-      ╕<ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.avatarStyle.backgroundImage.value, fn: GetFn('avatar', 'backgroundImage')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.avatarStyle.backgroundImage.value, fn: GetFn('avatar', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.avatarStyle.width.value, fn: GetFn('avatar', 'width'), min: 10, max: 1000}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.avatarStyle.height.value, fn: GetFn('avatar', 'height'), min: 10, max: 1000}"></ng-container>
 
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset X', $implicit: currentStyle.avatarStyleComposite.transform.x.value, fn: GetCompositeFn('avatar', 'transform', 'x'), min: -500, max: 500}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Offset Y', $implicit: currentStyle.avatarStyleComposite.transform.y.value, fn: GetCompositeFn('avatar', 'transform', 'y'), min: -500, max: 500}"></ng-container>
-      <!--      <div class="divider"></div>-->
-      <!--      <div class="font-semibold">Animation</div>-->
-      <!--      <ng-container *ngTemplateOutlet="fieldSelect; context: {title: 'Type', $implicit: currentStyle.avatarStyle.animationName.value, fn: GetFn('avatar', 'animationName'), options: [['None', 'none'], ['Floating', 'avatar-floating']]}"></ng-container>-->
-      <!--      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Duration', $implicit: currentStyle.avatarStyle.animationDuration.value, fn: GetFn('avatar', 'animationDuration'), min: 0, max: 20000}"></ng-container>-->
+    </ng-container>
+    <ng-container *ngSwitchCase="'sound'">
+      <div class="font-semibold">Sound</div>
+      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Volume', $implicit: currentStyle.soundStyle.volume.value, fn: GetFn('sound', 'volume'), min: 0, max: 1, step: '0.1'}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
       <div class="font-semibold">Text input</div>

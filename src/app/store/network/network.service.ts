@@ -40,7 +40,7 @@ export class NetworkService {
     setTimeout(() => {
       console.log("[Client] Reset")
       this.InitClient(hostId);
-    }, 4000);
+    }, 2000);
   }
 
   Stop() {
