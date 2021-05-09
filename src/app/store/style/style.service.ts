@@ -1,7 +1,9 @@
-import {Injectable}           from '@angular/core';
-import {STTStyle, StyleStore} from './style.store';
-import {NetworkService}       from "@store/network/network.service";
-import {transaction}          from "@datorama/akita";
+import {Injectable}                       from '@angular/core';
+import {PatchStyle, STTStyle, StyleStore} from './style.store';
+import {NetworkService}                   from "@store/network/network.service";
+import {transaction}                      from "@datorama/akita";
+import {fileOpen, fileSave}               from "browser-fs-access";
+import {HotToastService}                  from "@ngneat/hot-toast";
 
 type StyleSectionObject<T extends keyof STTStyle> = Partial<STTStyle[T]>
 
@@ -9,7 +11,8 @@ type StyleSectionObject<T extends keyof STTStyle> = Partial<STTStyle[T]>
 export class StyleService {
   constructor(
     private styleStore: StyleStore,
-    private networkService: NetworkService
+    private networkService: NetworkService,
+    private toast: HotToastService
   ) {
     networkService.messages$.subscribe(m => m.type === 'style' && this.ReceiveFullStyle(m.data))
     networkService.messages$.subscribe(m => m.type === 'style:partial' && this.ReceivePartialStyle(m.data))
@@ -51,6 +54,35 @@ export class StyleService {
       state.templates.splice(state.currentTemplate, 1);
       state.currentTemplate = null;
     })
+  }
+
+  async ImportTemplate() {
+    try {
+      const resp = await fileOpen({mimeTypes: ['application/json'], extensions: ['.json']});
+      const txt = await resp.text();
+      const json: {name: string, value: STTStyle} = JSON.parse(txt);
+      if (!json.name || !json.value)
+        return;
+      const patch = {...json, value: PatchStyle(json.value)};
+      this.styleStore.update(state => {state.templates.push(patch)});
+      this.toast.success(`Template "${patch.name}" has been imported`)
+      // this.SelectTemplate(this.styleStore.getValue().templates.length -1);
+    } catch (error) {throw new Error(error);}
+  }
+
+  ExportTemplate() {
+    const state = this.styleStore.getValue();
+    if (state.currentTemplate === null)
+      return;
+    const template = state.templates[state.currentTemplate];
+    const blob = new Blob([JSON.stringify(template)]);
+    const blobUrl = URL.createObjectURL(blob);
+    // fileSave(blob, {fileName: `${template.name}.json`});
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = `${template.name}.json`
+    a.click();
+    URL.revokeObjectURL(blobUrl);
   }
   // endregion
 

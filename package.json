@@ -23,6 +23,7 @@
     "@ngneat/overview": "^1.0.0",
     "@tauri-apps/api": "^1.0.0-beta-rc.3",
     "@tauri-apps/cli": "^1.0.0-beta-rc.4",
+    "browser-fs-access": "^0.17.0",
     "daisyui": "^0.22.1",
     "deepmerge": "^4.2.2",
     "immer": "^9.0.2",

@@ -182,7 +182,7 @@ export const STATE_TEMPLATE: StyleState = {
 }
 
 
-function PatchStyle(style: STTStyle) {
+export function PatchStyle(style: STTStyle) {
   const currentStyle: any = deepmerge(STYLE_TEMPLATE, style);
   if (currentStyle.avatarStyle.bottom) delete currentStyle.avatarStyle.bottom;
   if (currentStyle.avatarStyle.left) delete currentStyle.avatarStyle.left;
