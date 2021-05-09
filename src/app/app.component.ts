@@ -5,6 +5,7 @@ import {Router}                             from "@angular/router";
 import {StyleService}                       from "@store/style/style.service";
 import {IsTauri}                            from "./utils/client_type";
 import {FontsService}                       from "@store/fonts/fonts.service";
+import {SoundService}                       from "@store/sound/sound.service";
 
 @Component({
   selector:        'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
     private _networkService: NetworkService,
     private _styleService: StyleService,
     private _fontsService: FontsService,
+    private _soundService: SoundService,
     private router: Router) {
     console.log("[System] Is tauri:", IsTauri());
     let path = localStorage.getItem('path');
