@@ -125,7 +125,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
-      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.boxStyle.backgroundImage.value, fn: GetFn('box', 'backgroundImage')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Image url', $implicit: currentStyle.boxStyle.backgroundImage.value, fn: GetFn('box', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.backgroundColor.value, fn: GetFn('box', 'backgroundColor')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Height mode', $implicit: currentStyle.boxStyle.heightMode.value, fn: GetFn('box', 'heightMode'), options: [['Grow', 'grow'], ['Fixed', 'fixed']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.boxStyle.width.value, fn: GetFn('box', 'width'), min: 100, max: 600}"></ng-container>
