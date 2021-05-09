@@ -34,6 +34,7 @@ The current goal of this project is to help streamers with similar problems to m
 ## Examples
 <img src=".github/images/examples/ex-1.gif">
 <img src=".github/images/examples/ex-1.png">
+<img src=".github/images/examples/ex-5.jpg">
 <img src=".github/images/examples/ex-2.png">
 <img src=".github/images/examples/ex-3.png">
 <img src=".github/images/examples/ex-4.jpg">
@@ -41,10 +42,10 @@ The current goal of this project is to help streamers with similar problems to m
 ## Planned
 - [x] Fonts - Google fonts integration
 - [x] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
+- [ ] Sounds - typing sounds
 - [ ] Text animation - different text typing animations
-- [ ] Twitch emotes integration
-- [ ] Sounds - typing sounds, text bubble appearing sound etc
 - [ ] Custom background for host preview
+- [ ] Twitch emotes integration
 
 ## Standalone version
 Experimental, WebView2(Edge) based, electron-like app.  
