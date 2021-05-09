@@ -71,17 +71,28 @@
   </ng-template>
 
   <ng-template #fontSelect>
-    <ngx-simplebar class="w-56 h-96">
-      <div class="flex flex-col items-start space-y-1 overflow-x-hidden"> <button class="btn btn-xs truncate" *ngFor="let font of applicationService.fonts; trackBy:trackFonts" (click)="GetFn('txt', 'fontFamily')(font.family);prevent($event)">{{font.family}}</button>
+    <div class="flex flex-col items-start w-56 space-y-2">
+      <div class="flex flex-wrap gap-1">
+        <button class="btn btn-xs btn-circle" [class.btn-accent]="selectedFontLetter === a.key" *ngFor="let a of applicationService.fontsMap | keyvalue" (click)="selectedFontLetter = a.key">{{a.key}}</button>
       </div>
-    </ngx-simplebar>
+      <span>Preview fonts at <a class="link link-primary" href="https://fonts.google.com" target="_blank">Google Fonts</a></span>
+      <ngx-simplebar class="bg-base-200 rounded-md h-56 w-full">
+        <ul class="flex flex-col overflow-x-hidden">
+          <li class="cursor-pointer px-4 py-2 hover:bg-primary hover:text-primary-content truncate"
+            *ngFor="let font of applicationService.fontsMap[selectedFontLetter]; trackBy:trackFonts"
+            (click)="GetFn('txt', 'fontFamily')(font.family);prevent($event)">
+            {{font.family}}
+          </li>
+        </ul>
+      </ngx-simplebar>
+    </div>
   </ng-template>
 
   <ng-container [ngSwitch]="activeTab">
     <ng-container *ngSwitchCase="'text'">
       <div class="font-semibold">Font</div>
 
-      <div class="flex justify-between items-center"> <div>Family</div> <div class="cursor-pointer w-44 input input-bordered input-sm truncate" appendTo="parent" className="with-shadow" [tippy]="fontSelect" variation="popper" placement="bottom">{{currentStyle.textStyle.fontFamily.value}}</div>
+      <div class="flex justify-between items-center"> <div>Family</div> <div class="cursor-pointer w-44 input input-bordered input-sm truncate" className="with-shadow" [tippy]="fontSelect" variation="popper" placement="right">{{currentStyle.textStyle.fontFamily.value}}</div>
       </div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyle.color.value, fn: GetFn('txt', 'color')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('txt', 'fontSize'), min: 10, max: 64}"></ng-container>
@@ -123,7 +134,7 @@
     <ng-container *ngSwitchCase="'avatar'">
       <div class="font-semibold">Avatar image</div>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Side', $implicit: currentStyle.avatarStyle.order.value, fn: GetFn('avatar', 'order'), options: [['Left', '0'], ['Right', '1']]}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.avatarStyle.backgroundImage.value, fn: GetFn('avatar', 'backgroundImage')}"></ng-container>
+      ╕<ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.avatarStyle.backgroundImage.value, fn: GetFn('avatar', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.avatarStyle.width.value, fn: GetFn('avatar', 'width'), min: 10, max: 1000}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.avatarStyle.height.value, fn: GetFn('avatar', 'height'), min: 10, max: 1000}"></ng-container>
 

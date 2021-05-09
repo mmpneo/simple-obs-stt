@@ -23,7 +23,7 @@ export class ApplicationService {
   }
 
   // too big for akita
-  public fonts: GoogleFont[] = [];
+  public fontsMap: {[letter: string]: GoogleFont[]} = {};
 
   public CopyLink() {
     const isLocal = this.networkQuery.getValue().networkMode === NetworkMode.localhost;
@@ -56,7 +56,8 @@ export class ApplicationService {
     console.log('font', fontFamily);
     if (!fontFamily)
       return;
-    const fontData: GoogleFont | null = this.fonts.find(f => f.family === fontFamily) || null;
+    const fontData = this.fontsMap[fontFamily[0].toLocaleLowerCase()]?.find(f => f.family === fontFamily) || null;
+
     if (!fontData)
       return;
     let url             = "https://fonts.googleapis.com/css2?family="
@@ -86,18 +87,28 @@ export class ApplicationService {
   }
 
   async LoadFonts() {
-    const resp = await fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBLnmSeeiFBd2OQrizWjuYHTIFDm8XwL6k');
-    const json = await resp.json();
-    if (json.items?.length)
-      this.fonts = json.items;
+    this.fontsMap = 'abcdefghijklmnopqrstuvwxyz'.split('').reduce((obj, letter) => ({...obj, [letter]: []}), {});
+    try {
+      const resp = await fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBLnmSeeiFBd2OQrizWjuYHTIFDm8XwL6k');
+      const json: {items: GoogleFont[]} = await resp.json();
+      if (!json.items?.length)
+        return;
 
-    //Load font on style update
-    this.styleQuery.current$.pipe(
-      map(current => current?.textStyle.fontFamily?.value),
-      distinctUntilChanged()
-    ).subscribe(fontFamily => {
-      this.SelectFont(fontFamily || '')
-    })
+      for (let i = 0; i < json.items.length; i++) {
+        const letter = json.items[i].family[0].toLocaleLowerCase();
+        this.fontsMap[letter] && this.fontsMap[letter].push(json.items[i])
+      }
+
+      //Load font on style update
+      this.styleQuery.current$.pipe(
+        map(current => current?.textStyle.fontFamily?.value),
+        distinctUntilChanged()
+      ).subscribe(fontFamily => {
+        this.SelectFont(fontFamily || '')
+      })
+    } catch (error) {
+      throw new Error("Cannot load google fonts");
+    }
   }
 
 }

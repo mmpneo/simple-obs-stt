@@ -27,6 +27,8 @@ export class EditorComponent implements OnInit {
 
   activeTab: 'text' | 'box' | 'avatar' | 'global' = 'text';
 
+  selectedFontLetter = 'a';
+
   trackFonts = (index: number, obj: any) => obj.family;
 
   ChangeTab(value: EditorComponent["activeTab"]) {

@@ -22,7 +22,7 @@ app-root > *:not(router-outlet) {
     /*@apply shadow-xl;*/
 }
 [data-tippy-root].with-shadow {
-    @apply shadow-md;
+    @apply shadow-lg;
 }
 
 [role="popper"] .tippy-content {
@@ -33,13 +33,6 @@ app-root > *:not(router-outlet) {
 [role="popper"] .tippy-content > div {
     @apply flex;
     @apply max-h-full;
-}
-
-[role="popper"] .tippy-content ngx-simplebar {
-    @apply -m-4;
-}
-[role="popper"] .tippy-content ngx-simplebar .simplebar-content {
-    @apply p-4 !important;
 }
 
 .tippy-box[role="popper"] {
