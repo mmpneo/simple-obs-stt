@@ -53,7 +53,7 @@ export class SpeechService {
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
     this.timeout = timer(targetTime).subscribe(_ => {
       this.speechStore.update(state => {
-        if (globalConfig.clearOnInactivity?.value) state.sentences = [];
+        if (globalConfig.clearOnInactivity?.value) state.sentences = state.sentences.filter(s => !s.finalized);
         state.show = false;
       });
     });
