@@ -6,9 +6,7 @@ export interface ApplicationState {
 }
 
 export function createInitialState(): ApplicationState {
-  return {
-    theme: ''
-  };
+  return {theme: 'halloween'};
 }
 
 @Injectable({ providedIn: 'root' })
