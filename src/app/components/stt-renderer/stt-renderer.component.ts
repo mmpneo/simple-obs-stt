@@ -7,9 +7,9 @@ import {
   NgModule,
   OnInit,
   ViewChild
-}                                             from '@angular/core';
-import {CommonModule}                         from "@angular/common";
-import {SpeechQuery}                          from "@store/speech/speech.query";
+}                                                                 from '@angular/core';
+import {CommonModule}                                             from "@angular/common";
+import {SpeechQuery}                                              from "@store/speech/speech.query";
 import {StyleQuery}                                               from "@store/style/style.query";
 import {CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
 import {SpeechSentence}                                           from "@store/speech/speech.store";
@@ -32,16 +32,16 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   @ViewChild("boxElement") boxElement!: ElementRef;
   @ViewChild("textElement") textElement!: ElementRef;
 
-  track = (index: number, obj: SpeechSentence) => obj.id && obj.value;
+  track       = (index: number, obj: SpeechSentence) => obj.value;
 
   private BuildTypedValue(value: StyleValue): string {
     switch (value.type) {
-      case StyleValueType.pixels:return value.value + 'px';
-      case StyleValueType.ms:return value.value + 'ms';
-      case StyleValueType.url:return `url(${value.value})`;
-      case StyleValueType.translateX:return `translateX(${value.value}px)`;
-      case StyleValueType.translateY:return `translateY(${value.value}px)`;
-      default:return value.value;
+      case StyleValueType.pixels: return value.value + 'px';
+      case StyleValueType.ms: return value.value + 'ms';
+      case StyleValueType.url: return `url(${value.value})`;
+      case StyleValueType.translateX: return `translateX(${value.value}px)`;
+      case StyleValueType.translateY: return `translateY(${value.value}px)`;
+      default: return value.value;
     }
   }
 
@@ -78,7 +78,10 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.speechQuery.sentences$.subscribe(value => { // hotfix of pipe change detection
       this.detector.detectChanges();
-      setTimeout(() => this.textElement?.nativeElement?.scrollTo?.({top: this.textElement.nativeElement?.scrollHeight, behavior: 'smooth'}), 50)
+      setTimeout(() => this.textElement?.nativeElement?.scrollTo?.({
+        top:      this.textElement.nativeElement?.scrollHeight,
+        behavior: 'smooth'
+      }), 50)
     });
   }
 
