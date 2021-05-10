@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1620616115831,
+  "timestamp": 1620623403234,
   "index": "/simple-obs-stt/index.html",
   "assetGroups": [
     {
@@ -22,13 +22,13 @@
         "/simple-obs-stt/7.35a9b65fd5f48dd1c150.js",
         "/simple-obs-stt/8.6e162083cf5c8a82cc34.js",
         "/simple-obs-stt/9.6443673e54582c287d89.js",
-        "/simple-obs-stt/common.8d70c91f5de8786923f2.js",
+        "/simple-obs-stt/common.cf62d5f7aac533cdc441.js",
         "/simple-obs-stt/favicon.ico",
         "/simple-obs-stt/index.html",
         "/simple-obs-stt/main.ec82514e8dca5aaf1a88.js",
         "/simple-obs-stt/manifest.webmanifest",
         "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js",
-        "/simple-obs-stt/runtime.823c33ee4844f9a16fff.js",
+        "/simple-obs-stt/runtime.edc666b97ab613b041de.js",
         "/simple-obs-stt/styles.f2e7fd5d4d6ae8c6fc71.css"
       ],
       "patterns": []
@@ -78,13 +78,13 @@
     "/simple-obs-stt/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/simple-obs-stt/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/simple-obs-stt/assets/sounds/type_1.wav": "bedbabda43cce5765d4a7b3b2622b6a8f4042485",
-    "/simple-obs-stt/common.8d70c91f5de8786923f2.js": "193b44152516cb3610c7cfd667a05fbb71612127",
+    "/simple-obs-stt/common.cf62d5f7aac533cdc441.js": "1193c2733bfb99270bfcbf373f8fbeeaa4b3bc10",
     "/simple-obs-stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple-obs-stt/index.html": "29ea677aee3cda21e458b8fb4f2dcfcc81075902",
+    "/simple-obs-stt/index.html": "b744a2748fa8cba9c6aa84732b6a28e6e0bb1408",
     "/simple-obs-stt/main.ec82514e8dca5aaf1a88.js": "6457b385ddc67530a7e1da552fd0b75720b8656c",
     "/simple-obs-stt/manifest.webmanifest": "3a6cb16ab13dcf596d35e5d61ec3f572280fa34d",
     "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js": "a5ff41e31215d1f7747e0632d885006d1f007c1d",
-    "/simple-obs-stt/runtime.823c33ee4844f9a16fff.js": "90e13fff6eee88e208279ffdb5d2385917fc38c4",
+    "/simple-obs-stt/runtime.edc666b97ab613b041de.js": "5c8d453e40f05037d64e339674cfe370dfec5ec6",
     "/simple-obs-stt/styles.f2e7fd5d4d6ae8c6fc71.css": "4a93b0b0328ec5d6399f6b15f644705b9a1d05d2"
   },
   "navigationUrls": [
