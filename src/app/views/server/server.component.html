@@ -1,151 +1,159 @@
 <ng-container *ngIf="speechQuery.state$ | async as speechState">
+  <ng-container *ngIf="networkQuery.state$ | async as networkState">
+    <div class="w-screen h-screen bg-base-300 drawer drawer-mobile text-base-content">
+      <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+      <div class="relative flex flex-col items-center justify-center drawer-content">
 
-  <div class="w-screen h-screen bg-base-300 drawer drawer-mobile text-base-content">
-    <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
-    <div class="relative flex flex-col items-center justify-center drawer-content">
-
-      <div class="absolute top-2 left-2 right-2 flex items-center space-x-2" *ngIf="(applicationQuery.connectionState$ | async) === 2">
-        <div tippy="Create style template">
-          <button [tippy]="newTemplate" variation="popper" placement="bottom" class="btn btn-circle btn-ghost border-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          </button>
-        </div>
-
-        <ng-container *ngIf="styleQuery.state$ | async as state">
-          <select [disabled]="!state.templates.length" [ngModel]="styleQuery.currentTemplate$ | async" (ngModelChange)="styleService.SelectTemplate($event)" class="w-44 select-bordered select select-sm">
-            <option [ngValue]="null" selected disabled>Select template</option>
-            <option *ngFor="let template of state.templates; let index = index" [ngValue]="index">{{template.name}}</option>
-          </select>
-          <button *ngIf="state.currentTemplate !== null" tippy="Delete current template" (click)="styleService.DeleteTemplate()" class="btn btn-circle btn-ghost border-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-          <button *ngIf="state.currentTemplate !== null" tippy="Save current template to file" (click)="styleService.ExportTemplate()" class="btn btn-circle btn-ghost border-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-          </button>
-          <button tippy="Import template" (click)="styleService.ImportTemplate()" class="btn btn-circle btn-ghost border-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-          </button>
-        </ng-container>
-        <div class="flex-1"></div>
-
-        <select tippy="Change host theme" class="select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
-          <option value="aqua">Aqua</option>
-          <option value="black">Black</option>
-          <option value="bumblebee">Bumblebee</option>
-          <option value="cupcake">Cupcake</option>
-          <option value="cyberpunk">Cyberpunk</option>
-          <option value="dark">Dark</option>
-          <option value="dracula">Dracula</option>
-          <option value="fantasy">Fantasy</option>
-          <option value="forest">Forest</option>
-          <option value="garden">Garden</option>
-          <option value="halloween">Halloween</option>
-          <option value="light">Light (default)</option>
-          <option value="luxury">Luxury</option>
-          <option value="pastel">Pastel</option>
-          <option value="retro">Retro</option>
-          <option value="synthwave">Synthwave</option>
-          <option value="valentine">Valentine</option>
-        </select>
-
-        <button tippy="Copy client link" (click)="applicationService.CopyLink()" class="btn btn-circle btn-ghost border-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-          </svg>
-        </button>
-        <button tippy="Stop server" (click)="applicationService.StopHost()" class="btn btn-circle btn-ghost border-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-          </svg>
-        </button>
-      </div>
-
-      <ng-container [ngSwitch]="applicationQuery.connectionState$ | async">
-        <div class="flex flex-col w-96 space-y-2" *ngSwitchCase="0">
-          <div class="flex">
-            <label class="font-semibold w-24 flex-shrink-0 label"><span class="label-text">STT Plugin</span></label>
-            <select class="select select-bordered flex-auto w-full" [ngModel]="speechState.selectedPlugin[0]" (ngModelChange)="speechService.SelectPlugin($event)">
-              <option [value]="lang.key" *ngFor="let lang of plugins| keyvalue; let index = index">{{lang.value.name}}</option>
-            </select>
-          </div>
-
-          <ng-container *ngFor="let pluginField of plugins[speechState.selectedPlugin[0]].pluginDataFields; let index = index">
-            <div class="flex justify-between items-center mb-2">
-              <label class="label"><span class="label-text">{{pluginField}}</span></label>
-              <!--            <small>{{pluginField}}</small>-->
-              <input type="password" class="w-44 input input-bordered input-sm" [ngModel]="speechState.selectedPluginData[index]" (ngModelChange)="speechService.UpdatePluginData(index, $event)">
-            </div>
-          </ng-container>
-          <div class="flex">
-            <label class="font-semibold w-24 flex-shrink-0 label"><span class="label-text">Language</span></label>
-            <select class="select select-bordered w-full flex-1" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
-              <option [disabled]="true">Choose your language</option>
-              <option [value]="index" *ngFor="let lang of langs; let index = index">{{lang[0]}}</option>
-            </select>
-            <select *ngIf="langs[speechState.selectedLanguage[0]].length > 2" class="select select-bordered w-full flex-1 ml-2" [ngModel]="speechState.selectedLanguage[1]" (ngModelChange)="speechService.SelectDialect($event)">
-              <option [disabled]="true">Choose your Dialect</option>
-              <option [value]="index" *ngFor="let lang of langs[speechState.selectedLanguage[0]] | slice:1; let index = index">{{lang[1]}}</option>
-            </select>
-          </div>
-          <div class="form-control" *ngIf="networkQuery.state$ | async as networkState">
-            <label class="cursor-pointer label font-semibold">
-              <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" tippy="Use this if you don't want to update OBS browser source every time">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+        <div class="absolute top-2 left-2 right-2 flex flex-col space-y-2" *ngIf="(applicationQuery.connectionState$ | async) === 2">
+          <div class="flex space-x-2 items-center">
+            <div tippy="Create style template">
+              <button [tippy]="newTemplate" variation="popper" placement="bottom" class="btn btn-circle btn-ghost border-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
-                <span class="label-text">Remember source</span>
-              </div>
-              <div>
-                <input type="checkbox" checked="checked" class="toggle" [ngModel]="networkState.saveHost" (ngModelChange)="networkService.SwitchSaveHost()">
-                <span class="toggle-mark"></span>
-              </div>
-            </label>
-          </div>
-          <button class="btn btn-primary" (click)="applicationService.StartHost()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Start
-          </button>
-        </div>
-        <ng-container *ngSwitchCase="1">
-          Connecting
-        </ng-container>
-        <div class="flex flex-col space-y-4" *ngSwitchCase="2">
-          <div class="flex justify-center relative h-48 border-dotted border-2 border-base-300 self-center rounded-md">
-            <app-stt-renderer class="absolute bottom-0 self-center"></app-stt-renderer>
-          </div>
-          <div class="w-96 flex space-x-2">
-            <button tippy="Clear text box" (click)="speechService.ClearSentences()" class="btn btn-circle btn-ghost border-2">
+              </button>
+            </div>
+
+            <ng-container *ngIf="styleQuery.state$ | async as state">
+              <select [disabled]="!state.templates.length" [ngModel]="styleQuery.currentTemplate$ | async" (ngModelChange)="styleService.SelectTemplate($event)" class="w-44 select-bordered select select-sm">
+                <option [ngValue]="null" selected disabled>Select template</option>
+                <option *ngFor="let template of state.templates; let index = index" [ngValue]="index">{{template.name}}</option>
+              </select>
+              <button *ngIf="state.currentTemplate !== null" tippy="Delete current template" (click)="styleService.DeleteTemplate()" class="btn btn-circle btn-ghost border-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+              <button *ngIf="state.currentTemplate !== null" tippy="Save current template to file" (click)="styleService.ExportTemplate()" class="btn btn-circle btn-ghost border-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                </svg>
+              </button>
+              <button tippy="Import template" (click)="styleService.ImportTemplate()" class="btn btn-circle btn-ghost border-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+              </button>
+            </ng-container>
+            <div class="flex-1"></div>
+
+            <select tippy="Change host theme" class="select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
+              <option value="aqua">Aqua</option>
+              <option value="black">Black</option>
+              <option value="bumblebee">Bumblebee</option>
+              <option value="cupcake">Cupcake</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="dark">Dark</option>
+              <option value="dracula">Dracula</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="forest">Forest</option>
+              <option value="garden">Garden</option>
+              <option value="halloween">Halloween</option>
+              <option value="light">Light (default)</option>
+              <option value="luxury">Luxury</option>
+              <option value="pastel">Pastel</option>
+              <option value="retro">Retro</option>
+              <option value="synthwave">Synthwave</option>
+              <option value="valentine">Valentine</option>
+            </select>
+
+            <button tippy="Copy client link" (click)="applicationService.CopyLink()" class="btn btn-circle btn-ghost border-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
               </svg>
             </button>
-            <input class="flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="speechState.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
+            <button tippy="Stop server" (click)="applicationService.StopHost()" class="btn btn-circle btn-ghost border-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex flex-col space-y-2 pl-5">
+            <div class="text-xs opacity-50"><b>STT plugin - {{plugins[speechState.selectedPlugin[0]].name}}</b> - {{connectionState[speechState.speechServiceState]}}</div>
+            <div class="text-xs opacity-50"><b>Network</b> - {{connectionState[networkState.peerConnectionState]}}</div>
           </div>
         </div>
-      </ng-container>
-      <a href="https://github.com/mmpneo/simple-obs-stt" target="_blank" class="fixed right-2 bottom-2 btn btn-circle btn-ghost opacity-30"><img width="28" height="28" src="assets/icons/github.png"></a>
+
+        <ng-container [ngSwitch]="applicationQuery.connectionState$ | async">
+          <div class="flex flex-col w-96 space-y-2" *ngSwitchCase="0">
+            <div class="flex">
+              <label class="font-semibold w-24 flex-shrink-0 label"><span class="label-text">STT Plugin</span></label>
+              <select class="select select-bordered flex-auto w-full" [ngModel]="speechState.selectedPlugin[0]" (ngModelChange)="speechService.SelectPlugin($event)">
+                <option [value]="lang.key" *ngFor="let lang of plugins| keyvalue; let index = index">{{lang.value.name}}</option>
+              </select>
+            </div>
+
+            <ng-container *ngFor="let pluginField of plugins[speechState.selectedPlugin[0]].pluginDataFields; let index = index">
+              <div class="flex justify-between items-center mb-2">
+                <label class="label"><span class="label-text">{{pluginField}}</span></label>
+                <!--            <small>{{pluginField}}</small>-->
+                <input type="password" class="w-44 input input-bordered input-sm" [ngModel]="speechState.selectedPluginData[index]" (ngModelChange)="speechService.UpdatePluginData(index, $event)">
+              </div>
+            </ng-container>
+            <div class="flex">
+              <label class="font-semibold w-24 flex-shrink-0 label"><span class="label-text">Language</span></label>
+              <select class="select select-bordered w-full flex-1" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
+                <option [disabled]="true">Choose your language</option>
+                <option [value]="index" *ngFor="let lang of langs; let index = index">{{lang[0]}}</option>
+              </select>
+              <select *ngIf="langs[speechState.selectedLanguage[0]].length > 2" class="select select-bordered w-full flex-1 ml-2" [ngModel]="speechState.selectedLanguage[1]" (ngModelChange)="speechService.SelectDialect($event)">
+                <option [disabled]="true">Choose your Dialect</option>
+                <option [value]="index" *ngFor="let lang of langs[speechState.selectedLanguage[0]] | slice:1; let index = index">{{lang[1]}}</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label class="cursor-pointer label font-semibold">
+                <div class="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" tippy="Use this if you don't want to update OBS browser source every time">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="label-text">Remember source</span>
+                </div>
+                <div>
+                  <input type="checkbox" checked="checked" class="toggle" [ngModel]="networkState.saveHost" (ngModelChange)="networkService.SwitchSaveHost()">
+                  <span class="toggle-mark"></span>
+                </div>
+              </label>
+            </div>
+            <button class="btn btn-primary" (click)="applicationService.StartHost()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Start
+            </button>
+          </div>
+          <ng-container *ngSwitchCase="1">
+            Connecting
+          </ng-container>
+          <div class="flex flex-col space-y-4" *ngSwitchCase="2">
+            <div class="flex justify-center relative h-48 border-dotted border-2 border-base-300 self-center rounded-md">
+              <app-stt-renderer class="absolute bottom-0 self-center"></app-stt-renderer>
+            </div>
+            <div class="w-96 flex space-x-2">
+              <button tippy="Clear text box" (click)="speechService.ClearSentences()" class="btn btn-circle btn-ghost border-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+              <input class="flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="speechState.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
+            </div>
+          </div>
+        </ng-container>
+        <a href="https://github.com/mmpneo/simple-obs-stt" target="_blank" class="fixed right-2 bottom-2 btn btn-circle btn-ghost opacity-30"><img width="28" height="28" src="assets/icons/github.png"></a>
+      </div>
+      <div *ngIf="(applicationQuery.connectionState$ | async) === 2" class="flex drawer-side overflow-y-hidden text-base" style="overflow-y: hidden">
+        <label for="my-drawer-2" class="drawer-overlay"></label>
+        <ngx-simplebar class="w-72 flex flex-col h-screen bg-base-100">
+          <div class="p-4">
+            <app-editor></app-editor>
+          </div>
+        </ngx-simplebar>
+      </div>
     </div>
-    <div *ngIf="(applicationQuery.connectionState$ | async) === 2" class="flex drawer-side overflow-y-hidden text-base" style="overflow-y: hidden">
-      <label for="my-drawer-2" class="drawer-overlay"></label>
-      <ngx-simplebar class="w-72 flex flex-col h-screen bg-base-100">
-        <div class="p-4">
-          <app-editor></app-editor>
-        </div>
-      </ngx-simplebar>
-    </div>
-  </div>
+  </ng-container>
 </ng-container>
 
 
