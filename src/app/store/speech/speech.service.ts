@@ -61,6 +61,8 @@ export class SpeechService {
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
+    if (text === undefined)
+      return;
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) {
       // create new
