@@ -33,10 +33,20 @@ export class ServerComponent implements OnInit {
   }
 
   connectionState = ConnectionState;
-  activeTab: 'text' | 'box' | 'avatar' | 'global' = 'text';
 
-  ChangeTab(value: ServerComponent["activeTab"]) {
-    this.activeTab = value;
+  showHostView = false;
+
+  async Connect() {
+    try {
+      const resp = await this.applicationService.StartHost();
+      this.showHostView = true;
+      this.detector.markForCheck();
+    } catch (error) {}
+  }
+
+  async StopHost() {
+    this.applicationService.StopHost();
+    this.showHostView = false;
     this.detector.markForCheck();
   }
 
