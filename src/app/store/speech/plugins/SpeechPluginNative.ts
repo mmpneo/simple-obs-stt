@@ -64,8 +64,9 @@ export class SpeechPluginNative extends BasePlugin {
       });
 
       this.instance.addEventListener("end", _event => {
-        this.onStatusChanged$.next(ConnectionState.Connecting);
+        console.log(_event);
         if (this.onStatusChanged$.value === ConnectionState.Connected) {
+          this.onStatusChanged$.next(ConnectionState.Connecting);
           console.log("[Native] Try reconnect");
           this.instance?.start();
         }
