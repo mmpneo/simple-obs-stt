@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1620717406391,
+  "timestamp": 1620718488818,
   "index": "/simple-obs-stt/index.html",
   "assetGroups": [
     {
@@ -25,7 +25,7 @@
         "/simple-obs-stt/common.cfc588bd0bd5d1d9f839.js",
         "/simple-obs-stt/favicon.ico",
         "/simple-obs-stt/index.html",
-        "/simple-obs-stt/main.35f0dbddbc27cc269baf.js",
+        "/simple-obs-stt/main.2f3dc39373c12030795a.js",
         "/simple-obs-stt/manifest.webmanifest",
         "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js",
         "/simple-obs-stt/runtime.101ca7513778b34daf58.js",
@@ -80,8 +80,8 @@
     "/simple-obs-stt/assets/sounds/type_1.wav": "bedbabda43cce5765d4a7b3b2622b6a8f4042485",
     "/simple-obs-stt/common.cfc588bd0bd5d1d9f839.js": "2cd19069a3bdd2fd73d0a5bb985f491467da1d82",
     "/simple-obs-stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple-obs-stt/index.html": "93d46d05cdc16d52d42621d9262e22ab724bf4a0",
-    "/simple-obs-stt/main.35f0dbddbc27cc269baf.js": "bbfa8d55228b9a8eb7a0638a57526e97b62469ae",
+    "/simple-obs-stt/index.html": "eb244c5813edae1e3735753cfc8a906cc727a49d",
+    "/simple-obs-stt/main.2f3dc39373c12030795a.js": "6bf94e5ab4e9e8c9d3c500cda190230aa2ab9a5a",
     "/simple-obs-stt/manifest.webmanifest": "3a6cb16ab13dcf596d35e5d61ec3f572280fa34d",
     "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js": "a5ff41e31215d1f7747e0632d885006d1f007c1d",
     "/simple-obs-stt/runtime.101ca7513778b34daf58.js": "20619f5a1cc96c74f71e803e8108a006f4f39dd2",
