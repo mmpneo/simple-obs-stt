@@ -13,12 +13,23 @@ import {SpeechQuery}                                              from "@store/s
 import {StyleQuery}                                               from "@store/style/style.query";
 import {CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
 import {SpeechSentence}                                           from "@store/speech/speech.store";
+import {animate, query, style, transition, trigger}               from "@angular/animations";
 
 @Component({
   selector:        'app-stt-renderer',
   templateUrl:     './stt-renderer.component.html',
   styles:          [],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('listAnimation', [
+      transition('* => *', [ // each time the binding value changes
+        query(':enter', [
+          style({opacity: 0, transform: 'rotate({{rotation}}deg) scale({{scale}}) translateX({{translateX}}px) translateY({{translateY}}px)'}),
+          animate('{{time}}s', style({opacity: 1, transform: 'rotate(0) scale(1) translateX(0) translateY(0)'}))
+        ], {optional: true})
+      ])
+    ])
+  ]
 })
 export class SttRendererComponent implements OnInit, AfterViewInit {
   constructor(
@@ -32,16 +43,45 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   @ViewChild("boxElement") boxElement!: ElementRef;
   @ViewChild("textElement") textElement!: ElementRef;
 
-  track       = (index: number, obj: SpeechSentence) => obj.value;
+  track       = (index: number, obj: SpeechSentence) => index;
+  trackWord       = (index: number, obj: string[]) => index;
+  trackLetter       = (index: number, obj: string) => obj;
 
-  private BuildTypedValue(value: StyleValue): string {
+  private BuildTypedValue(value: StyleValue): string | number {
     switch (value.type) {
       case StyleValueType.pixels: return value.value + 'px';
       case StyleValueType.ms: return value.value + 'ms';
       case StyleValueType.url: return `url(${value.value})`;
       case StyleValueType.translateX: return `translateX(${value.value}px)`;
       case StyleValueType.translateY: return `translateY(${value.value}px)`;
+      case StyleValueType.number: return value.value;
       default: return value.value;
+    }
+  }
+
+  private GetRandomRange(min: number, max: number) {
+    return Math.random() * (max - min) + min
+  }
+  public GetRandomizedParams(currentStyle: STTStyle) {
+    //todo somehow triggering multiple time
+
+    const durationMin = currentStyle.textStyle.durationMin.value;
+    const durationMax = currentStyle.textStyle.durationMax.value;
+    const scaleMin = currentStyle.textStyle.scaleMin.value;
+    const scaleMax = currentStyle.textStyle.scaleMax.value;
+    const rotationMin = currentStyle.textStyle.rotationMin.value;
+    const rotationMax = currentStyle.textStyle.rotationMax.value;
+    const translationXMin = currentStyle.textStyle.translationXMin.value;
+    const translationXMax = currentStyle.textStyle.translationXMax.value;
+    const translationYMin = currentStyle.textStyle.translationYMin.value;
+    const translationYMax = currentStyle.textStyle.translationYMax.value;
+    // console.log(this.GetRandomRange(durationMin, durationMax).toFixed(1))
+    return {
+      time: this.GetRandomRange(durationMin, durationMax).toFixed(1),
+      scale: this.GetRandomRange(scaleMin, scaleMax).toFixed(1),
+      rotation: this.GetRandomRange(rotationMin, rotationMax).toFixed(1),
+      translateX: this.GetRandomRange(translationXMin, translationXMax).toFixed(1),
+      translateY: this.GetRandomRange(translationYMin, translationYMax).toFixed(1),
     }
   }
 
