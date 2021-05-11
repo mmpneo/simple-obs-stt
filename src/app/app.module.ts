@@ -36,7 +36,7 @@ import {BrowserAnimationsModule}                        from "@angular/platform-
           theme:         undefined,
           offset:        [0, 15],
           role:          'popper',
-          arrow: true,
+          arrow:         true,
           popperOptions: {modifiers: [{name: 'preventOverflow', options: {padding: 20}}, maxSize, popper_max_size]}
         },
         menu:       {

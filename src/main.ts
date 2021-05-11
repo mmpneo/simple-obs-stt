@@ -5,7 +5,6 @@ import {AppModule}                         from './app/app.module';
 import {environment}                       from './environments/environment';
 import {enableAkitaProdMode, persistState} from "@datorama/akita";
 import {ClientType, GetClientType}         from "./app/utils/client_type";
-import {ClearSWCache}                      from "./app/utils/clear_sw_cache";
 
 if (environment.production) {
   enableProdMode();
@@ -25,7 +24,8 @@ if (GetClientType() === ClientType.host) { //add persistent for host
   const providers = [{provide: 'persistStorage', useValue: storage_main, multi: true}];
   platformBrowserDynamic(providers).bootstrapModule(AppModule).catch(err => console.error(err));
 }
-else { // there should be no SW cache on client
-  ClearSWCache().then(_ => platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err)));
+else {
+  platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err))
+  // ClearSWCache().then(_ => platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err)));
 }
 

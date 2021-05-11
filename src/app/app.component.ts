@@ -3,9 +3,10 @@ import {SpeechService}                      from "@store/speech/speech.service";
 import {NetworkService}                     from "@store/network/network.service";
 import {Router}                             from "@angular/router";
 import {StyleService}                       from "@store/style/style.service";
-import {IsTauri}                            from "./utils/client_type";
+import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
 import {FontsService}                       from "@store/fonts/fonts.service";
 import {SoundService}                       from "@store/sound/sound.service";
+import {SwUpdate}                           from "@angular/service-worker";
 
 @Component({
   selector:        'app-root',
@@ -20,12 +21,27 @@ export class AppComponent {
     private _styleService: StyleService,
     private _fontsService: FontsService,
     private _soundService: SoundService,
-    private router: Router) {
+    private router: Router,
+    private updates: SwUpdate) {
+
     console.log("[System] Is tauri:", IsTauri());
+    !IsTauri() && this.CheckUpdate();
     let path = localStorage.getItem('path');
     if (path) {
       localStorage.removeItem('path');
       this.router.navigate([path.replace("simple-obs-stt", "")]);
     }
   }
+
+  CheckUpdate() {
+    this.updates.available.subscribe(event => {
+      if (GetClientType() === ClientType.client)
+        this.updates.activateUpdate().then(document.location.reload)
+
+      if (window.confirm("Update available. Update now"))
+        this.updates.activateUpdate().then(document.location.reload)
+    })
+    this.updates.checkForUpdate();
+  }
+
 }
