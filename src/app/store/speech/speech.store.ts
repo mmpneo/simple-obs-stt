@@ -13,6 +13,7 @@ export interface SpeechSentence {
   type: SpeechSentenceType;
   finalized: boolean;
   value: string;
+  valueNext: string[][]
 }
 
 export interface SpeechState {

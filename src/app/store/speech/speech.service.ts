@@ -63,16 +63,18 @@ export class SpeechService {
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
     if (text === undefined)
       return;
+    const words = (text + " ").split(" ");
+    const value = words.map((word, i) => [...word.split(""), ...(i === words.length - 1 ? [] : [" "])]); // add space to every word except last one
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) {
       // create new
-      const newSentence: SpeechSentence = {finalized, value: text, id: guid(), type};
+      const newSentence: SpeechSentence = {finalized, value: text, valueNext: value, id: guid(), type};
       this.speechStore.update(e => ({sentences: arrayAdd(e.sentences, newSentence)}));
       this.networkService.SendMessage({type: 'stt:updatesentence', data: newSentence})
     }
     else {
       const lastSentence = sentences[sentences.length - 1];
-      const updated      = {...lastSentence, finalized, value: text}
+      const updated: SpeechSentence      = {...lastSentence, finalized, value: text, valueNext: value}
       this.speechStore.update(state => ({sentences: arrayUpdate(state.sentences, lastSentence.id, updated)}))
       this.networkService.SendMessage({type: 'stt:updatesentence', data: updated})
     }

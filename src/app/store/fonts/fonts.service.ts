@@ -66,7 +66,7 @@ export class FontsService {
         map(current => current?.textStyle.fontFamily?.value),
         distinctUntilChanged()
       ).subscribe(fontFamily => {
-        this.SelectFont(fontFamily || '')
+        this.SelectFont(fontFamily.toString() || '')
       })
     } catch (error) {
       throw new Error("Cannot load google fonts");

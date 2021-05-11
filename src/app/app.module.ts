@@ -12,6 +12,7 @@ import {HotToastModule}                                 from '@ngneat/hot-toast'
 import {ServiceWorkerModule}                            from '@angular/service-worker';
 import {ClientType, GetClientType, IsTauri}             from "./utils/client_type";
 import {InitializeApplication}                          from "./app.init";
+import {BrowserAnimationsModule}                        from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {InitializeApplication}                          from "./app.init";
   ],
   imports:      [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {

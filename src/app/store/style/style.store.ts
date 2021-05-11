@@ -12,38 +12,43 @@ export enum StyleValueType {
   translateX,
   translateY,
   scale,
-  logic// system type for stt-renderer
+  logic,// system type for stt-renderer
+  number,
 }
 
-export type StyleValue<T = StyleValueType, V = string> = {
-  type: T
-  value: V
-}
+type ValueType<T> = T extends StyleValueType.number ? number : string;
 
-export type CustomStyleFn = (state: STTStyle, elementStyle: any, calculatedValue: string) => void;
+export type StyleValue<T = StyleValueType, V = ValueType<T>> =
+  {
+    type: T,
+    value: V
+  }
+
+export type CustomStyleFn = (state: STTStyle, elementStyle: any, calculatedValue: string | number) => void;
 
 // override style applying with side effects
-export const CUSTOM_STYLE_LOGIC: {[sectionKey: string]: {[styleKey: string]: CustomStyleFn}} = {
-  boxStyle: {
+export const CUSTOM_STYLE_LOGIC: { [sectionKey: string]: { [styleKey: string]: CustomStyleFn } } = {
+  boxStyle:  {
     // based on boxStyle.heightMode keep height fixed or minimized with max height
     height: (state, elementStyle, calculatedValue) => {
       if (state.boxStyle.heightMode.value === 'grow') {
         elementStyle.maxHeight = calculatedValue;
-        elementStyle.height = 'auto';
-      } else {
+        elementStyle.height    = 'auto';
+      }
+      else {
         elementStyle.maxHeight = 'none';
-        elementStyle.height = calculatedValue;
+        elementStyle.height    = calculatedValue;
       }
     }
   },
   textStyle: {
     right: (state, elementStyle, value) => {
-      const isFixed = state.boxStyle.heightMode.value === 'fixed';
+      const isFixed         = state.boxStyle.heightMode.value === 'fixed';
       elementStyle.position = isFixed ? 'absolute' : 'relative';
-      elementStyle.right = isFixed ? value : 0;
-      elementStyle.left = isFixed ? elementStyle.left : 0;
-      elementStyle.bottom = isFixed ? elementStyle.bottom : 0;
-      elementStyle.top = isFixed ? elementStyle.top : 0;
+      elementStyle.right    = isFixed ? value : 0;
+      elementStyle.left     = isFixed ? elementStyle.left : 0;
+      elementStyle.bottom   = isFixed ? elementStyle.bottom : 0;
+      elementStyle.top      = isFixed ? elementStyle.top : 0;
     }
   }
 }
@@ -71,10 +76,23 @@ export interface STTStyle {
     bottom: StyleValue<StyleValueType.pixels>
     left: StyleValue<StyleValueType.pixels>
     right: StyleValue<StyleValueType.pixels>
+    // padding
     paddingTop: StyleValue<StyleValueType.pixels>
     paddingBottom: StyleValue<StyleValueType.pixels>
     paddingLeft: StyleValue<StyleValueType.pixels>
     paddingRight: StyleValue<StyleValueType.pixels>
+    // animation
+    scaleMin: StyleValue<StyleValueType.number>
+    scaleMax: StyleValue<StyleValueType.number>
+    durationMin: StyleValue<StyleValueType.number>
+    durationMax: StyleValue<StyleValueType.number>
+    rotationMin: StyleValue<StyleValueType.number>
+    rotationMax: StyleValue<StyleValueType.number>
+    translationXMin: StyleValue<StyleValueType.number>
+    translationXMax: StyleValue<StyleValueType.number>
+    translationYMin: StyleValue<StyleValueType.number>
+    translationYMax: StyleValue<StyleValueType.number>
+
   };
   textStyleComposite: {
     textShadow: {
@@ -141,6 +159,17 @@ export const STYLE_TEMPLATE: STTStyle = {
     paddingBottom: {type: StyleValueType.pixels, value: '0'},
     paddingLeft:   {type: StyleValueType.pixels, value: '0'},
     paddingRight:  {type: StyleValueType.pixels, value: '0'},
+
+    scaleMin:        {type: StyleValueType.number, value: 0},
+    scaleMax:        {type: StyleValueType.number, value: 0},
+    durationMin:     {type: StyleValueType.number, value: 0},
+    durationMax:     {type: StyleValueType.number, value: 0},
+    rotationMin:     {type: StyleValueType.number, value: 0},
+    rotationMax:     {type: StyleValueType.number, value: 0},
+    translationXMin: {type: StyleValueType.number, value: 0},
+    translationXMax: {type: StyleValueType.number, value: 0},
+    translationYMin: {type: StyleValueType.number, value: 0},
+    translationYMax: {type: StyleValueType.number, value: 0},
   },
   textStyleComposite:   {
     textShadow: {
