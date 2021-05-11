@@ -12,8 +12,8 @@ import {CommonModule}                                             from "@angular
 import {SpeechQuery}                                              from "@store/speech/speech.query";
 import {StyleQuery}                                               from "@store/style/style.query";
 import {CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
-import {SpeechSentence}                                           from "@store/speech/speech.store";
-import {animate, query, style, transition, trigger}               from "@angular/animations";
+import {SpeechSentence}                                      from "@store/speech/speech.store";
+import {animate, query, stagger, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -25,7 +25,9 @@ import {animate, query, style, transition, trigger}               from "@angular
       transition('* => *', [ // each time the binding value changes
         query(':enter', [
           style({opacity: 0, transform: 'rotate({{rotation}}deg) scale({{scale}}) translateX({{translateX}}px) translateY({{translateY}}px)'}),
-          animate('{{time}}s', style({opacity: 1, transform: 'rotate(0) scale(1) translateX(0) translateY(0)'}))
+          stagger(30, [
+            animate('{{time}}s', style({opacity: 1, transform: 'rotate(0) scale(1) translateX(0) translateY(0)'}))
+          ])
         ], {optional: true})
       ])
     ])
