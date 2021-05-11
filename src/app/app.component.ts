@@ -37,8 +37,7 @@ export class AppComponent {
     this.updates.available.subscribe(event => {
       if (GetClientType() === ClientType.client)
         this.updates.activateUpdate().then(document.location.reload)
-
-      if (window.confirm("Update available. Update now"))
+      else if (window.confirm("Update available. Update now"))
         this.updates.activateUpdate().then(document.location.reload)
     })
     this.updates.checkForUpdate();
