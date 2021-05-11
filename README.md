@@ -1,8 +1,7 @@
-<h1 align="center"><img src=".github/images/logo.png" height="200"/><br/></h1>
+<h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
-Real-time speech-to-text and keyboard input captions for OBS. <br>
-[See examples](#examples)<br>
-![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt)
+  Real-time speech-to-text and keyboard input captions for OBS.<br>
+  <a href="#examples">See examples</a><br>
 </p>
 
 ## Why
@@ -62,4 +61,5 @@ Works offline (Still requires connection for STT).
 3. ```npx tauri build```
 4. Build will be available at *./src-tauri/target/release/*
 
+<img src="https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt">
 ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x)
