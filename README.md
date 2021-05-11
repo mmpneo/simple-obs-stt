@@ -62,4 +62,5 @@ Works offline (Still requires connection for STT).
 4. Build will be available at *./src-tauri/target/release/*
 
 <img src="https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt">
+
 ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x)
