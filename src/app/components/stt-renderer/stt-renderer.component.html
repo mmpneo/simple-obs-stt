@@ -3,12 +3,14 @@
     <div [class.show]="speechQuery.showBubble$ | async" class="flex stt-container flex items-end relative">
       <div [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value" class="pointer-events-none z-50 w-36 h-36 bg-contain bg-center bg-no-repeat" #avatarElement style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
       <div #boxElement class="box-content relative stt-box flex flex-col bg-cover bg-center">
-        <div #textElement [class.host]="speechState.speechServiceState === 2" class="flex flex-wrap items-start break-words min-h-8 stt-box-text absolute overflow-y-scroll overflow-x-hidden">
-          <ng-container *ngFor="let sentence of speechState.sentences; trackBy: track">
-            <div [@listAnimation]="{value: word.length, params: GetRandomizedParams(currentStyle)}" class="flex word whitespace-pre-wrap" [class.opacity-70]="!sentence.finalized" *ngFor="let word of sentence.valueNext; trackBy: trackWord">
-              <div *ngFor="let letter of word; trackBy: trackLetter">{{letter}}</div>
-            </div>
-          </ng-container>
+        <div #textElement [class.host]="speechState.speechServiceState === 2" class="flex stt-box-text absolute overflow-y-scroll overflow-x-hidden">
+          <div class="w-full flex flex flex-wrap break-words min-h-8">
+            <ng-container *ngFor="let sentence of speechState.sentences; trackBy: track">
+              <div [@listAnimation]="{value: word.length, params: GetRandomizedParams(currentStyle)}" class="flex whitespace-pre-wrap" [class.opacity-70]="!sentence.finalized" *ngFor="let word of sentence.valueNext; trackBy: trackWord">
+                <div *ngFor="let letter of word; trackBy: trackLetter">{{letter}}</div>
+              </div>
+            </ng-container>
+          </div>
         </div>
 
       </div>
