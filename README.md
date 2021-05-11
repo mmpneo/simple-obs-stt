@@ -1,6 +1,9 @@
-# Simple STT ![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt)
-Real-time speech-to-text and keyboard input captions for OBS.  
-[See examples](#examples)
+<h1 align="center"><img src=".github/images/logo.png" height="200"/><br/></h1>
+<p align="center">
+Real-time speech-to-text and keyboard input captions for OBS. <br>
+[See examples](#examples)<br>
+![visitors](https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt)
+</p>
 
 ## Why
 This project was started because I personally needed a free, simple and performant solution to compensate speech impairments and overall shyness with captions.  
@@ -58,6 +61,5 @@ Works offline (Still requires connection for STT).
 2. ``` npm run build ```
 3. ```npx tauri build```
 4. Build will be available at *./src-tauri/target/release/*
-
 
 ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x)
