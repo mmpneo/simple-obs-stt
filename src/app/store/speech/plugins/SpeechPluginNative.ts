@@ -44,27 +44,32 @@ export class SpeechPluginNative extends BasePlugin {
         this.instance.onstart = res;
         this.instance.start();
       });
-      this.onStatusChanged$.next(ConnectionState.Connected);
       this.instance.onstart = null;
-      this.instance.onerror = (error) => {
-        if (error.error === "no-speech") {}
-        // else if (error.error === "network")
+      this.instance.onerror = null;
+      this.onStatusChanged$.next(ConnectionState.Connected);
+      this.instance.addEventListener("start", () => this.onStatusChanged$.next(ConnectionState.Connected));
+      this.instance.addEventListener("error", (error) => {
+        if (error.error === "no-speech") {
+          console.log("no speech")
+        }
+          // else if (error.error === "network")
         //   this.Stop();
         else this.Stop();
         console.error(error)
-      };
+      })
 
       window.addEventListener("beforeunload", () => { // temp fix for browser freezing on page reload
         if (this.onStatusChanged$.value === ConnectionState.Connected)
           this.instance?.stop();
       });
 
-      this.instance.onend = _event => {
+      this.instance.addEventListener("end", _event => {
+        this.onStatusChanged$.next(ConnectionState.Connecting);
         if (this.onStatusChanged$.value === ConnectionState.Connected) {
-          console.log("Reconnect");
+          console.log("[Native] Try reconnect");
           this.instance?.start();
         }
-      } // auto restart after silence
+      }) // auto restart after silence
       this.BindSpeech();
     } catch (error) {
       this.onStatusChanged$.next(ConnectionState.Disconnected);
