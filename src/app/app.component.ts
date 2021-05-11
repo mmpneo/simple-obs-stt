@@ -3,11 +3,12 @@ import {SpeechService}                      from "@store/speech/speech.service";
 import {NetworkService}                     from "@store/network/network.service";
 import {Router}                             from "@angular/router";
 import {StyleService}                       from "@store/style/style.service";
-import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
+import {IsTauri}                            from "./utils/client_type";
 import {FontsService}                       from "@store/fonts/fonts.service";
 import {SoundService}                       from "@store/sound/sound.service";
 import {SwUpdate}                           from "@angular/service-worker";
 import {environment}                        from "../environments/environment";
+import {HotToastService}                    from "@ngneat/hot-toast";
 
 @Component({
   selector:        'app-root',
@@ -23,6 +24,7 @@ export class AppComponent {
     private _fontsService: FontsService,
     private _soundService: SoundService,
     private router: Router,
+    private toast: HotToastService,
     private updates: SwUpdate) {
 
     console.log("[System] Is tauri:", IsTauri());
@@ -38,10 +40,7 @@ export class AppComponent {
     if (IsTauri() || !environment.production)
       return;
     this.updates.available.subscribe(event => {
-      if (GetClientType() === ClientType.client)
-        this.updates.activateUpdate().then(_ => document.location.reload())
-      else if (window.confirm("Update available. Update now"))
-        this.updates.activateUpdate().then(_ => document.location.reload())
+      this.updates.activateUpdate().then(_ => this.toast.success("Update available. Refresh page"))
     })
     this.updates.checkForUpdate();
   }
