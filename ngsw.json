@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1620721350801,
+  "timestamp": 1620723450364,
   "index": "/simple-obs-stt/index.html",
   "assetGroups": [
     {
@@ -22,13 +22,13 @@
         "/simple-obs-stt/7.35a9b65fd5f48dd1c150.js",
         "/simple-obs-stt/8.6e162083cf5c8a82cc34.js",
         "/simple-obs-stt/9.6443673e54582c287d89.js",
-        "/simple-obs-stt/common.cfc588bd0bd5d1d9f839.js",
+        "/simple-obs-stt/common.12a6c94096c43c37028e.js",
         "/simple-obs-stt/favicon.ico",
         "/simple-obs-stt/index.html",
-        "/simple-obs-stt/main.b1ef4c12f0503b5e9440.js",
+        "/simple-obs-stt/main.eebebbb72c5488e2dcbb.js",
         "/simple-obs-stt/manifest.webmanifest",
         "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js",
-        "/simple-obs-stt/runtime.86c56332e7058e4c8b71.js",
+        "/simple-obs-stt/runtime.00193707e62e4f40d799.js",
         "/simple-obs-stt/styles.832376ec09f254a8f723.css"
       ],
       "patterns": []
@@ -78,13 +78,13 @@
     "/simple-obs-stt/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/simple-obs-stt/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/simple-obs-stt/assets/sounds/type_1.wav": "bedbabda43cce5765d4a7b3b2622b6a8f4042485",
-    "/simple-obs-stt/common.cfc588bd0bd5d1d9f839.js": "2cd19069a3bdd2fd73d0a5bb985f491467da1d82",
+    "/simple-obs-stt/common.12a6c94096c43c37028e.js": "1452f67e7581068bd431b7fdd4c8144a5d995176",
     "/simple-obs-stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple-obs-stt/index.html": "a977056c8c8d7b6bf2527c59bce78e9d6f72809b",
-    "/simple-obs-stt/main.b1ef4c12f0503b5e9440.js": "4c79f43d08fecfc02ac10e118e7f10eb12260514",
+    "/simple-obs-stt/index.html": "225f1e7385eaf5d4f0c935f0a2f0d57454347993",
+    "/simple-obs-stt/main.eebebbb72c5488e2dcbb.js": "77d2218e9e97f9512436b1d0c1017f52ca9225e8",
     "/simple-obs-stt/manifest.webmanifest": "3a6cb16ab13dcf596d35e5d61ec3f572280fa34d",
     "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js": "a5ff41e31215d1f7747e0632d885006d1f007c1d",
-    "/simple-obs-stt/runtime.86c56332e7058e4c8b71.js": "1c48493ff691cc2830c803ed13063f7b9877f68b",
+    "/simple-obs-stt/runtime.00193707e62e4f40d799.js": "e1b9a3ea5f264e8094c7130f4d315b5a6967f034",
     "/simple-obs-stt/styles.832376ec09f254a8f723.css": "150239ec1a9b6700769da7985fe82f8f01043809"
   },
   "navigationUrls": [
