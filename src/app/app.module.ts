@@ -24,7 +24,7 @@ import {BrowserAnimationsModule}                        from "@angular/platform-
     AppRoutingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled:              !IsTauri() && GetClientType() === ClientType.host && environment.production,
+      enabled:              !IsTauri() && environment.production,
       registrationStrategy: 'registerWhenStable:30000'
     }),
     TippyModule.forRoot({

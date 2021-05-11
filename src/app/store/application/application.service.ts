@@ -6,6 +6,7 @@ import {NetworkMode, NetworkStore} from "@store/network/network.store";
 import {NetworkQuery}              from "@store/network/network.query";
 import {environment}               from "../../../environments/environment";
 import {HotToastService}           from "@ngneat/hot-toast";
+import {SpeechQuery}               from "@store/speech/speech.query";
 
 @Injectable({providedIn: 'root'})
 export class ApplicationService {
@@ -13,6 +14,7 @@ export class ApplicationService {
     private applicationStore: ApplicationStore,
     private networkService: NetworkService,
     private networkQuery: NetworkQuery,
+    private speechQuery: SpeechQuery,
     private networkStore: NetworkStore,
     private speechService: SpeechService,
     private toast: HotToastService
@@ -28,6 +30,9 @@ export class ApplicationService {
   }
 
   public async StartHost() {
+    // process only if everything is down
+    if (this.speechQuery.getValue().speechServiceState > 0 || this.networkQuery.getValue().peerConnectionState > 0)
+      return
     try {
       await this.speechService.StartHost();
       try {

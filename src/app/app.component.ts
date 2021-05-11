@@ -7,6 +7,7 @@ import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
 import {FontsService}                       from "@store/fonts/fonts.service";
 import {SoundService}                       from "@store/sound/sound.service";
 import {SwUpdate}                           from "@angular/service-worker";
+import {environment}                        from "../environments/environment";
 
 @Component({
   selector:        'app-root',
@@ -34,6 +35,8 @@ export class AppComponent {
   }
 
   CheckUpdate() {
+    if (IsTauri() || !environment.production)
+      return;
     this.updates.available.subscribe(event => {
       if (GetClientType() === ClientType.client)
         this.updates.activateUpdate().then(document.location.reload)

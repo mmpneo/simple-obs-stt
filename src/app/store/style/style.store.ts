@@ -164,8 +164,8 @@ export const STYLE_TEMPLATE: STTStyle = {
     paddingLeft:    {type: StyleValueType.pixels, value: '0'},
     paddingRight:   {type: StyleValueType.pixels, value: '0'},
 
-    scaleMin:        {type: StyleValueType.number, value: 0.5},
-    scaleMax:        {type: StyleValueType.number, value: 0.5},
+    scaleMin:        {type: StyleValueType.number, value: 1},
+    scaleMax:        {type: StyleValueType.number, value: 1},
     durationMin:     {type: StyleValueType.number, value: 0.1},
     durationMax:     {type: StyleValueType.number, value: 0.1},
     rotationMin:     {type: StyleValueType.number, value: 0},
@@ -224,6 +224,17 @@ export function PatchStyle(style: STTStyle) {
   if (currentStyle.globalStyle.clearOnHide) delete currentStyle.globalStyle.clearOnHide;
   if (currentStyle.globalStyle.alwaysShow) delete currentStyle.globalStyle.alwaysShow;
   if (currentStyle.globalStyle.hideAfter) delete currentStyle.globalStyle.hideAfter;
+  const textValues = currentStyle.textStyle;
+  if (typeof textValues.scaleMin.value === "string") currentStyle.textStyle.scaleMin.value = parseFloat(textValues.scaleMin.value)
+  if (typeof textValues.scaleMax.value === "string") currentStyle.textStyle.scaleMax.value = parseFloat(textValues.scaleMax.value)
+  if (typeof textValues.durationMin.value === "string") currentStyle.textStyle.durationMin.value = parseFloat(textValues.durationMin.value)
+  if (typeof textValues.durationMax.value === "string") currentStyle.textStyle.durationMax.value = parseFloat(textValues.durationMax.value)
+  if (typeof textValues.rotationMin.value === "string") currentStyle.textStyle.rotationMin.value = parseFloat(textValues.rotationMin.value)
+  if (typeof textValues.rotationMax.value === "string") currentStyle.textStyle.rotationMax.value = parseFloat(textValues.rotationMax.value)
+  if (typeof textValues.translationXMin.value === "string") currentStyle.textStyle.translationXMin.value = parseFloat(textValues.translationXMin.value)
+  if (typeof textValues.translationXMax.value === "string") currentStyle.textStyle.translationXMax.value = parseFloat(textValues.translationXMax.value)
+  if (typeof textValues.translationYMin.value === "string") currentStyle.textStyle.translationYMin.value = parseFloat(textValues.translationYMin.value)
+  if (typeof textValues.translationYMax.value === "string") currentStyle.textStyle.translationYMax.value = parseFloat(textValues.translationYMax.value)
   return currentStyle;
 }
 
