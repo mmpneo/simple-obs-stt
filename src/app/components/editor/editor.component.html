@@ -104,6 +104,8 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('text', 'lineHeight'), min: 1, max: 2}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('text', 'fontWeight'), min: 100, max: 900, step: '100'}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('text', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Align', $implicit: currentStyle.textStyle.justifyContent.value, fn: GetFn('text', 'justifyContent'), options: [['Left', 'flex-start'], ['Center', 'center'], ['Right', 'flex-end']]}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Vertical', $implicit: currentStyle.textStyle.alignItems.value, fn: GetFn('text', 'alignItems'), options: [['Up', 'flex-start'], ['Center', 'center'], ['Bottom', 'flex-end']]}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Shadow</div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyleComposite.textShadow.color.value, fn: GetCompositeFn('txt', 'textShadow', 'color')}"></ng-container>

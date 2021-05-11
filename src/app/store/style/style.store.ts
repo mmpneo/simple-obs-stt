@@ -72,6 +72,8 @@ export interface STTStyle {
     lineHeight: StyleValue<StyleValueType.string>;
     fontWeight: StyleValue<StyleValueType.string>;
     textTransform: StyleValue<StyleValueType.string>;
+    justifyContent: StyleValue<StyleValueType.string>;
+    alignItems: StyleValue<StyleValueType.string>;
     top: StyleValue<StyleValueType.pixels>
     bottom: StyleValue<StyleValueType.pixels>
     left: StyleValue<StyleValueType.pixels>
@@ -145,25 +147,27 @@ export const STYLE_TEMPLATE: STTStyle = {
     borderColor:     {type: StyleValueType.string, value: 'transparent'},
   },
   textStyle:            {
-    fontFamily:    {type: StyleValueType.string, value: 'Roboto'},
-    color:         {type: StyleValueType.string, value: 'white'},
-    fontSize:      {type: StyleValueType.pixels, value: '18'},
-    lineHeight:    {type: StyleValueType.string, value: '1.2'},
-    fontWeight:    {type: StyleValueType.string, value: '500'},
-    textTransform: {type: StyleValueType.string, value: 'none'},
-    top:           {type: StyleValueType.pixels, value: '0'},
-    bottom:        {type: StyleValueType.pixels, value: '0'},
-    left:          {type: StyleValueType.pixels, value: '10'},
-    right:         {type: StyleValueType.pixels, value: '10'},
-    paddingTop:    {type: StyleValueType.pixels, value: '0'},
-    paddingBottom: {type: StyleValueType.pixels, value: '0'},
-    paddingLeft:   {type: StyleValueType.pixels, value: '0'},
-    paddingRight:  {type: StyleValueType.pixels, value: '0'},
+    fontFamily:     {type: StyleValueType.string, value: 'Roboto'},
+    color:          {type: StyleValueType.string, value: 'white'},
+    fontSize:       {type: StyleValueType.pixels, value: '18'},
+    lineHeight:     {type: StyleValueType.string, value: '1.2'},
+    fontWeight:     {type: StyleValueType.string, value: '500'},
+    textTransform:  {type: StyleValueType.string, value: 'none'},
+    justifyContent: {type: StyleValueType.string, value: 'flex-start'},
+    alignItems:     {type: StyleValueType.string, value: 'flex-start'},
+    top:            {type: StyleValueType.pixels, value: '0'},
+    bottom:         {type: StyleValueType.pixels, value: '0'},
+    left:           {type: StyleValueType.pixels, value: '10'},
+    right:          {type: StyleValueType.pixels, value: '10'},
+    paddingTop:     {type: StyleValueType.pixels, value: '0'},
+    paddingBottom:  {type: StyleValueType.pixels, value: '0'},
+    paddingLeft:    {type: StyleValueType.pixels, value: '0'},
+    paddingRight:   {type: StyleValueType.pixels, value: '0'},
 
-    scaleMin:        {type: StyleValueType.number, value: 0},
-    scaleMax:        {type: StyleValueType.number, value: 0},
-    durationMin:     {type: StyleValueType.number, value: 0},
-    durationMax:     {type: StyleValueType.number, value: 0},
+    scaleMin:        {type: StyleValueType.number, value: 0.5},
+    scaleMax:        {type: StyleValueType.number, value: 0.5},
+    durationMin:     {type: StyleValueType.number, value: 0.1},
+    durationMax:     {type: StyleValueType.number, value: 0.1},
     rotationMin:     {type: StyleValueType.number, value: 0},
     rotationMax:     {type: StyleValueType.number, value: 0},
     translationXMin: {type: StyleValueType.number, value: 0},
