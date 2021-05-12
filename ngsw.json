@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1620723450364,
+  "timestamp": 1620794482137,
   "index": "/simple-obs-stt/index.html",
   "assetGroups": [
     {
@@ -17,19 +17,19 @@
         "/simple-obs-stt/13.c7c799e0197504e2ae0f.js",
         "/simple-obs-stt/14.aa3fc912b6f09e289f49.js",
         "/simple-obs-stt/15.74da56ead7a56ea87147.js",
-        "/simple-obs-stt/5.d08cb51bd828a5b00f90.js",
-        "/simple-obs-stt/6.a666b0fc49604e8b535f.js",
+        "/simple-obs-stt/5.581455569fb394560ce4.js",
+        "/simple-obs-stt/6.0bc4a6c44ccfef211cbf.js",
         "/simple-obs-stt/7.35a9b65fd5f48dd1c150.js",
         "/simple-obs-stt/8.6e162083cf5c8a82cc34.js",
         "/simple-obs-stt/9.6443673e54582c287d89.js",
-        "/simple-obs-stt/common.12a6c94096c43c37028e.js",
+        "/simple-obs-stt/common.2993f9c112f9cf37febc.js",
         "/simple-obs-stt/favicon.ico",
         "/simple-obs-stt/index.html",
-        "/simple-obs-stt/main.eebebbb72c5488e2dcbb.js",
+        "/simple-obs-stt/main.8568267fce4e6f0e947a.js",
         "/simple-obs-stt/manifest.webmanifest",
         "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js",
-        "/simple-obs-stt/runtime.00193707e62e4f40d799.js",
-        "/simple-obs-stt/styles.832376ec09f254a8f723.css"
+        "/simple-obs-stt/runtime.4e3574b34afbbdd5cb40.js",
+        "/simple-obs-stt/styles.57bdbe1746adac227e36.css"
       ],
       "patterns": []
     },
@@ -50,6 +50,7 @@
         "/simple-obs-stt/assets/icons/icon-512x512.png",
         "/simple-obs-stt/assets/icons/icon-72x72.png",
         "/simple-obs-stt/assets/icons/icon-96x96.png",
+        "/simple-obs-stt/assets/logo.png",
         "/simple-obs-stt/assets/sounds/type_1.wav"
       ],
       "patterns": []
@@ -63,8 +64,8 @@
     "/simple-obs-stt/13.c7c799e0197504e2ae0f.js": "1567199057d5057f400ffa4d2d721bc7f41ba93c",
     "/simple-obs-stt/14.aa3fc912b6f09e289f49.js": "cb937b683ab784fbd981789ebabf7445722a4fcc",
     "/simple-obs-stt/15.74da56ead7a56ea87147.js": "dead2b99e48eabe7378ecc5a9fc1b0d9db2207da",
-    "/simple-obs-stt/5.d08cb51bd828a5b00f90.js": "a457cb607e83a0380239238f7741a6ba05ad2c4a",
-    "/simple-obs-stt/6.a666b0fc49604e8b535f.js": "b2d6ddaf185f3c71bd5145592de3a55202468b0f",
+    "/simple-obs-stt/5.581455569fb394560ce4.js": "a4c532ab8d5c3fbda55e63c73b654fe5eda7d430",
+    "/simple-obs-stt/6.0bc4a6c44ccfef211cbf.js": "fd24dfc55444b27ddbd0e7f9c17d386873306c12",
     "/simple-obs-stt/7.35a9b65fd5f48dd1c150.js": "9069ca74304064a2e99352f1992c18fbba35bce8",
     "/simple-obs-stt/8.6e162083cf5c8a82cc34.js": "6c8914a1ed46ee8698b5cfae6507bd2eccd6d329",
     "/simple-obs-stt/9.6443673e54582c287d89.js": "b6168fcb7f45194489382f9dc8ce19ea7c55198c",
@@ -77,15 +78,16 @@
     "/simple-obs-stt/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
     "/simple-obs-stt/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/simple-obs-stt/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/simple-obs-stt/assets/logo.png": "c837672495924a1abbe73c17be1918d1cdc347c3",
     "/simple-obs-stt/assets/sounds/type_1.wav": "bedbabda43cce5765d4a7b3b2622b6a8f4042485",
-    "/simple-obs-stt/common.12a6c94096c43c37028e.js": "1452f67e7581068bd431b7fdd4c8144a5d995176",
+    "/simple-obs-stt/common.2993f9c112f9cf37febc.js": "3ccaf5d890736598a772493b1f12fd7933c55fd0",
     "/simple-obs-stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple-obs-stt/index.html": "225f1e7385eaf5d4f0c935f0a2f0d57454347993",
-    "/simple-obs-stt/main.eebebbb72c5488e2dcbb.js": "77d2218e9e97f9512436b1d0c1017f52ca9225e8",
+    "/simple-obs-stt/index.html": "f3e253819621eace8208f3c3e12ae8e6c08a09f2",
+    "/simple-obs-stt/main.8568267fce4e6f0e947a.js": "63f3ba250556475a2d3c3d25385219f755aec83f",
     "/simple-obs-stt/manifest.webmanifest": "3a6cb16ab13dcf596d35e5d61ec3f572280fa34d",
     "/simple-obs-stt/polyfills.ebb601822a0a0a31d4a5.js": "a5ff41e31215d1f7747e0632d885006d1f007c1d",
-    "/simple-obs-stt/runtime.00193707e62e4f40d799.js": "e1b9a3ea5f264e8094c7130f4d315b5a6967f034",
-    "/simple-obs-stt/styles.832376ec09f254a8f723.css": "150239ec1a9b6700769da7985fe82f8f01043809"
+    "/simple-obs-stt/runtime.4e3574b34afbbdd5cb40.js": "4a5b24dc6e0313e6c4bd67897ac175b6e89fb324",
+    "/simple-obs-stt/styles.57bdbe1746adac227e36.css": "787a5db54e456680fe3e87927ac080df9b74a9ac"
   },
   "navigationUrls": [
     {
