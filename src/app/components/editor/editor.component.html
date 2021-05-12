@@ -110,7 +110,7 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('text', 'fontSize'), min: 10, max: 64}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('text', 'lineHeight'), min: 1, max: 2, step: 0.1}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('text', 'fontWeight'), min: 100, max: 900, step: '100'}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('text', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('text', 'textTransform'), options: [['-', 'none'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChipsI; context: {title: 'Align', $implicit: currentStyle.textStyle.justifyContent.value, fn: GetFn('text', 'justifyContent'), options: [[iconTextLeft, 'flex-start'], [iconTextCenter, 'center'], [iconTextRight, 'flex-end']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChipsI; context: {title: 'Vertical', $implicit: currentStyle.textStyle.alignContent.value, fn: GetFn('text', 'alignContent'), options: [[iconTextUp, 'flex-start'], [iconTextCenterV, 'center'], [iconTextDown, 'flex-end']]}"></ng-container>
       <div class="divider"></div>
