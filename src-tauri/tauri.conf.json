@@ -58,7 +58,7 @@
         "width": 500,
         "height": 400,
         "minWidth": 500,
-        "minHeight": 300,
+        "minHeight": 500,
         "resizable": true,
         "fullscreen": false,
         "decorations": true

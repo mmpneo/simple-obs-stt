@@ -1824,9 +1824,9 @@ dependencies = [
 
 [[package]]
 name = "openssl-probe"
-version = "0.1.2"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
+checksum = "28988d872ab76095a6e6ac88d99b54fd267702734fd7ffe610ca27f533ddb95a"
 
 [[package]]
 name = "openssl-sys"
@@ -2497,9 +2497,9 @@ dependencies = [
 
 [[package]]
 name = "serde_repr"
-version = "0.1.6"
+version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2dc6b7951b17b051f3210b063f12cc17320e2fe30ae05b0fe2a3abb068551c76"
+checksum = "98d0516900518c29efa217c298fa1f4e6c6ffc85ae29fd7f4ee48f176e1a9ed5"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2530,9 +2530,9 @@ dependencies = [
 
 [[package]]
 name = "sha-1"
-version = "0.9.5"
+version = "0.9.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b659df5fc3ce22274daac600ffb845300bd2125bcfaec047823075afdab81c00"
+checksum = "8c4cfa741c5832d0ef7fab46cabed29c2aae926db0b11bb2069edd8db5e64e16"
 dependencies = [
  "block-buffer",
  "cfg-if 1.0.0",
@@ -2743,8 +2743,8 @@ dependencies = [
 
 [[package]]
 name = "tauri"
-version = "1.0.0-beta-rc.4"
-source = "git+https://github.com/tauri-apps/tauri/?branch=dev#55423590ddbf560684dab6a0214acf95aadfa8d2"
+version = "1.0.0-beta.0"
+source = "git+https://github.com/tauri-apps/tauri/?branch=dev#d03c98b0e63fb8a5e2e8924c8852ac8b4b1541e2"
 dependencies = [
  "base64",
  "bincode",
@@ -2785,9 +2785,9 @@ dependencies = [
 
 [[package]]
 name = "tauri-build"
-version = "1.0.0-beta-rc.1"
+version = "1.0.0-beta.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72c0791792e5b01df47ff580f7bdca3600d2e5fd98451471d75458f4dbddf2d8"
+checksum = "466b89fcc5a718d10adae43a1fa1a78c330b2b43dbe2c89ee518e9c2058d1c26"
 dependencies = [
  "anyhow",
  "proc-macro2",
@@ -2797,8 +2797,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-codegen"
-version = "1.0.0-beta-rc.1"
-source = "git+https://github.com/tauri-apps/tauri/?branch=dev#55423590ddbf560684dab6a0214acf95aadfa8d2"
+version = "1.0.0-beta.0"
+source = "git+https://github.com/tauri-apps/tauri/?branch=dev#d03c98b0e63fb8a5e2e8924c8852ac8b4b1541e2"
 dependencies = [
  "blake3",
  "proc-macro2",
@@ -2813,8 +2813,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-macros"
-version = "1.0.0-beta-rc.1"
-source = "git+https://github.com/tauri-apps/tauri/?branch=dev#55423590ddbf560684dab6a0214acf95aadfa8d2"
+version = "1.0.0-beta.0"
+source = "git+https://github.com/tauri-apps/tauri/?branch=dev#d03c98b0e63fb8a5e2e8924c8852ac8b4b1541e2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2824,8 +2824,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-runtime"
-version = "0.0.0"
-source = "git+https://github.com/tauri-apps/tauri/?branch=dev#55423590ddbf560684dab6a0214acf95aadfa8d2"
+version = "0.1.0"
+source = "git+https://github.com/tauri-apps/tauri/?branch=dev#d03c98b0e63fb8a5e2e8924c8852ac8b4b1541e2"
 dependencies = [
  "serde",
  "serde_json",
@@ -2836,8 +2836,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-runtime-wry"
-version = "0.0.0"
-source = "git+https://github.com/tauri-apps/tauri/?branch=dev#55423590ddbf560684dab6a0214acf95aadfa8d2"
+version = "0.1.0"
+source = "git+https://github.com/tauri-apps/tauri/?branch=dev#d03c98b0e63fb8a5e2e8924c8852ac8b4b1541e2"
 dependencies = [
  "image",
  "tauri-runtime",
@@ -2848,8 +2848,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-utils"
-version = "1.0.0-beta-rc.1"
-source = "git+https://github.com/tauri-apps/tauri/?branch=dev#55423590ddbf560684dab6a0214acf95aadfa8d2"
+version = "1.0.0-beta.0"
+source = "git+https://github.com/tauri-apps/tauri/?branch=dev#d03c98b0e63fb8a5e2e8924c8852ac8b4b1541e2"
 dependencies = [
  "heck",
  "html5ever",
