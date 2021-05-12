@@ -36,12 +36,18 @@ export class ServerComponent implements OnInit {
 
   showHostView = false;
 
+  starting = false;
+
   async Connect() {
     try {
+      this.starting = true
+      this.detector.markForCheck();
       const resp = await this.applicationService.StartHost();
       this.showHostView = true;
+    } catch (error) {} finally {
+      this.starting = false;
       this.detector.markForCheck();
-    } catch (error) {}
+    }
   }
 
   async StopHost() {
