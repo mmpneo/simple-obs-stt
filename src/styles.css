@@ -10,7 +10,7 @@
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
-app-root > *:not(router-outlet) {
+app-root > *:not(router-outlet):not(.titlebar) {
     @apply flex;
     @apply flex-col;
     @apply w-screen;
@@ -98,7 +98,6 @@ input[type=range].range::-webkit-slider-thumb {
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
 }
-
 
 .titlebar {
     height: 30px;
