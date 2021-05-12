@@ -43,7 +43,6 @@ export class ServerComponent implements OnInit {
       this.starting = true
       this.detector.markForCheck();
       const resp = await this.applicationService.StartHost();
-      console.log("start")
       this.showHostView = true;
     } catch (error) {} finally {
       this.starting = false;
@@ -59,7 +58,6 @@ export class ServerComponent implements OnInit {
 
   plugins: SpeechPluginDescriptor = {};
   langs   = languages;
-
   RgbaToString(rgba: RGBA) {
     return `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
   }
