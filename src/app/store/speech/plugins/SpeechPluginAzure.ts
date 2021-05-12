@@ -15,8 +15,6 @@ export class SpeechPluginAzure extends BasePlugin {
 
   private instance: SpeechRecognizer = (<any>window).webkitSpeechRecognition ? new ((<any>window).webkitSpeechRecognition) : null;
 
-  //63c59a3d54594857b58124295de2d9be
-  //westeurope
   async Start(language: string, data: string[]) {
     try {
       await navigator.mediaDevices.getUserMedia({video: false, audio: true});

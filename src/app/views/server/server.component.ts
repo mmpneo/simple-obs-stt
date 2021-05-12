@@ -8,9 +8,9 @@ import {languages}          from "@store/speech/speech.store";
 import {StyleService}       from "@store/style/style.service";
 import {StyleQuery}         from "@store/style/style.query";
 import {RGBA}               from "ngx-color";
-import {NetworkService}     from "@store/network/network.service";
-import {SPEECH_PLUGINS}     from "@store/speech/plugins";
-import {ConnectionState}    from "../../utils/types";
+import {NetworkService}                         from "@store/network/network.service";
+import {SPEECH_PLUGINS, SpeechPluginDescriptor} from "@store/speech/plugins";
+import {ConnectionState}                        from "../../utils/types";
 
 @Component({
   selector:        'app-server',
@@ -43,6 +43,7 @@ export class ServerComponent implements OnInit {
       this.starting = true
       this.detector.markForCheck();
       const resp = await this.applicationService.StartHost();
+      console.log("start")
       this.showHostView = true;
     } catch (error) {} finally {
       this.starting = false;
@@ -56,13 +57,19 @@ export class ServerComponent implements OnInit {
     this.detector.markForCheck();
   }
 
-  plugins = SPEECH_PLUGINS;
+  plugins: SpeechPluginDescriptor = {};
   langs   = languages;
 
   RgbaToString(rgba: RGBA) {
     return `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.plugins = Object.keys(SPEECH_PLUGINS).reduce((sum, pluginKey) => {
+      if (SPEECH_PLUGINS[pluginKey].platformValidate())
+        return {...sum, [pluginKey]: SPEECH_PLUGINS[pluginKey]}
+      return sum;
+    }, {});
+  }
 
 }

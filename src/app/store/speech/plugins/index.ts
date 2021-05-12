@@ -2,6 +2,7 @@ import {SpeechPluginNative} from "@store/speech/plugins/SpeechPluginNative";
 import {BasePlugin}         from "@store/speech/plugins/BasePlugin";
 import {SpeechPluginAzure}  from "@store/speech/plugins/SpeechPluginAzure";
 import {SpeechPluginNoop}   from "@store/speech/plugins/SpeechPluginNoop";
+import {IsTauri}            from "../../../utils/client_type";
 
 export type SpeechPluginDescriptor = {
   [pluginName: string]: {
@@ -9,7 +10,8 @@ export type SpeechPluginDescriptor = {
     dataInputLabel: string,
     hastDataInput: boolean
     plugin: { new(): BasePlugin },
-    pluginDataFields: string[]
+    pluginDataFields: string[],
+    platformValidate: () => boolean
   }
 }
 
@@ -19,20 +21,23 @@ export const SPEECH_PLUGINS: SpeechPluginDescriptor = {
     dataInputLabel: '',
     hastDataInput:  false,
     plugin:         SpeechPluginNative,
-    pluginDataFields: []
+    pluginDataFields: [],
+    platformValidate: () => !IsTauri()
   },
   "noop": {
     name:           'Noop (Text input only)',
     dataInputLabel: '',
     hastDataInput:  false,
     plugin:         SpeechPluginNoop,
-    pluginDataFields: []
+    pluginDataFields: [],
+    platformValidate: () => true
   },
   "azure":  {
     name:           "Azure Cognitive Services",
     dataInputLabel: 'Service key',
     hastDataInput:  true,
     plugin:         SpeechPluginAzure,
-    pluginDataFields: ["Subscription ID", "Location"]
+    pluginDataFields: ["Service key", "Service location"],
+    platformValidate: () => true
   }
 }
