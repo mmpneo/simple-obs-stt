@@ -54,6 +54,14 @@
     </div>
   </ng-template>
 
+  <ng-template #fieldChipsI let-value let-title="title" let-fn="fn" let-options="options">
+    <div class="flex justify-between items-center">
+      <div>{{title}}</div>
+      <div class="btn-group"> <button *ngFor="let option of options" class="btn btn-sm normal-case" (click)="fn(option[1])" [class.btn-active]="value === option[1]"><ng-container *ngTemplateOutlet="option[0]"></ng-container></button>
+      </div>
+    </div>
+  </ng-template>
+
   <ng-template #fieldSelect let-value let-title="title" let-fn="fn" let-options="options">
     <div class="flex justify-between items-center">
       <div>{{title}}</div>
@@ -97,15 +105,14 @@
     <ng-container *ngSwitchCase="'text'">
       <div class="font-semibold">Font</div>
 
-      <div class="flex justify-between items-center"> <div>Family</div> <div class="cursor-pointer w-44 input input-bordered input-sm truncate" className="with-shadow" [tippy]="fontSelect" variation="popper" placement="right">{{currentStyle.textStyle.fontFamily.value}}</div>
-      </div>
+      <div class="flex justify-between items-center"> <div>Family</div> <div class="cursor-pointer w-44 input input-bordered input-sm truncate" className="with-shadow" [tippy]="fontSelect" variation="popper" placement="right">{{currentStyle.textStyle.fontFamily.value}}</div></div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyle.color.value, fn: GetFn('text', 'color')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.textStyle.fontSize.value, fn: GetFn('text', 'fontSize'), min: 10, max: 64}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('text', 'lineHeight'), min: 1, max: 2}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Line height', $implicit: currentStyle.textStyle.lineHeight.value, fn: GetFn('text', 'lineHeight'), min: 1, max: 2, step: 0.1}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Weight', $implicit: currentStyle.textStyle.fontWeight.value, fn: GetFn('text', 'fontWeight'), min: 100, max: 900, step: '100'}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Case', $implicit: currentStyle.textStyle.textTransform.value, fn: GetFn('text', 'textTransform'), options: [['-', 'none'], ['Aa', 'capitalize'], ['AA', 'uppercase'], ['aa', 'lowercase']]}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Align', $implicit: currentStyle.textStyle.justifyContent.value, fn: GetFn('text', 'justifyContent'), options: [['Left', 'flex-start'], ['Center', 'center'], ['Right', 'flex-end']]}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Vertical', $implicit: currentStyle.textStyle.alignItems.value, fn: GetFn('text', 'alignItems'), options: [['Up', 'flex-start'], ['Center', 'center'], ['Bottom', 'flex-end']]}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChipsI; context: {title: 'Align', $implicit: currentStyle.textStyle.justifyContent.value, fn: GetFn('text', 'justifyContent'), options: [[iconTextLeft, 'flex-start'], [iconTextCenter, 'center'], [iconTextRight, 'flex-end']]}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChipsI; context: {title: 'Vertical', $implicit: currentStyle.textStyle.alignContent.value, fn: GetFn('text', 'alignContent'), options: [[iconTextUp, 'flex-start'], [iconTextCenterV, 'center'], [iconTextDown, 'flex-end']]}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Shadow</div>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.textStyleComposite.textShadow.color.value, fn: GetCompositeFn('txt', 'textShadow', 'color')}"></ng-container>
@@ -176,3 +183,35 @@
   </ng-container>
 </div>
 <!--https://fightersgeneration.com/nf7/char/jacko-ggxrd-sit.gif-->
+
+<ng-template #iconTextLeft>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+  </svg>
+</ng-template>
+<ng-template #iconTextCenter>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+  </svg>
+</ng-template>
+<ng-template #iconTextRight>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+  </svg>
+</ng-template>
+
+<ng-template #iconTextUp>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+  </svg>
+</ng-template>
+<ng-template #iconTextCenterV>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+</ng-template>
+<ng-template #iconTextDown>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+  </svg>
+</ng-template>
