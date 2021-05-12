@@ -43,7 +43,8 @@ export class ApplicationService {
       }
     } catch (error) {
       this.toast.error(error.message, {position: "bottom-right"})
-      console.log(error);
+      console.error(error);
+      throw new Error(error.message);
     }
   }
 
