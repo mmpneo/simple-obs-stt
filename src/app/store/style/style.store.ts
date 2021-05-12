@@ -73,7 +73,7 @@ export interface STTStyle {
     fontWeight: StyleValue<StyleValueType.string>;
     textTransform: StyleValue<StyleValueType.string>;
     justifyContent: StyleValue<StyleValueType.string>;
-    alignItems: StyleValue<StyleValueType.string>;
+    alignContent: StyleValue<StyleValueType.string>;
     top: StyleValue<StyleValueType.pixels>
     bottom: StyleValue<StyleValueType.pixels>
     left: StyleValue<StyleValueType.pixels>
@@ -154,7 +154,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     fontWeight:     {type: StyleValueType.string, value: '500'},
     textTransform:  {type: StyleValueType.string, value: 'none'},
     justifyContent: {type: StyleValueType.string, value: 'flex-start'},
-    alignItems:     {type: StyleValueType.string, value: 'flex-start'},
+    alignContent:   {type: StyleValueType.string, value: 'flex-start'},
     top:            {type: StyleValueType.pixels, value: '0'},
     bottom:         {type: StyleValueType.pixels, value: '0'},
     left:           {type: StyleValueType.pixels, value: '10'},
@@ -224,6 +224,10 @@ export function PatchStyle(style: STTStyle) {
   if (currentStyle.globalStyle.clearOnHide) delete currentStyle.globalStyle.clearOnHide;
   if (currentStyle.globalStyle.alwaysShow) delete currentStyle.globalStyle.alwaysShow;
   if (currentStyle.globalStyle.hideAfter) delete currentStyle.globalStyle.hideAfter;
+  if (currentStyle.textStyle.alignItems) {
+    currentStyle.textStyle.alignContent.value = currentStyle.textStyle.alignItems.value;
+    delete currentStyle.textStyle.alignItems;
+  }
   const textValues = currentStyle.textStyle;
   if (typeof textValues.scaleMin.value === "string") currentStyle.textStyle.scaleMin.value = parseFloat(textValues.scaleMin.value)
   if (typeof textValues.scaleMax.value === "string") currentStyle.textStyle.scaleMax.value = parseFloat(textValues.scaleMax.value)
