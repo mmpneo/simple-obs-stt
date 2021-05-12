@@ -5,8 +5,9 @@ import {NetworkService}                                             from "@store
 import {arrayAdd, arrayUpdate, arrayUpsert, guid, transaction}      from "@datorama/akita";
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
-import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
-import {Subscription, timer}                                        from "rxjs";
+import {SPEECH_PLUGINS}                     from "@store/speech/plugins";
+import {from, Subject, Subscription, timer} from "rxjs";
+import {switchMap, take, takeUntil}         from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -25,6 +26,7 @@ export class SpeechService {
   }
 
   private activePlugin?: BasePlugin;
+  private stopEvent$ = new Subject();
 
   public SelectPlugin     = (key: string) => {
     this.speechStore.update(e => ({
@@ -38,8 +40,9 @@ export class SpeechService {
   public SelectLanguage   = (index: string) => this.speechStore.update(e => ({selectedLanguage: [parseInt(index), 0]}));
   public SelectDialect    = (index: string) => this.speechStore.update(e => ({selectedLanguage: [e.selectedLanguage[0], parseInt(index)]}));
 
-  public Stop() {
-    this.activePlugin?.Stop();
+  public async StopHost() {
+    this.stopEvent$.next();
+    await this.activePlugin?.Stop();
     this.activePlugin = undefined;
   }
 
@@ -74,12 +77,21 @@ export class SpeechService {
       this.networkService.SendMessage({type: 'stt:updatesentence', data: newSentence})
     }
     else {
-      const lastSentence = sentences[sentences.length - 1];
-      const updated: SpeechSentence      = {...lastSentence, finalized, value: text, valueNext: value}
+      const lastSentence            = sentences[sentences.length - 1];
+      const updated: SpeechSentence = {...lastSentence, finalized, value: text, valueNext: value}
       this.speechStore.update(state => ({sentences: arrayUpdate(state.sentences, lastSentence.id, updated)}))
       this.networkService.SendMessage({type: 'stt:updatesentence', data: updated})
     }
     this.TriggerShowTimer();
+  }
+
+
+  private async RestartLoop() {
+    await this.StopHost();
+    timer(1500).pipe(
+      takeUntil(this.stopEvent$),
+      switchMap(_ => from(this.StartHost()))
+    ).subscribe({error: error => this.RestartLoop()})
   }
 
   async StartHost() {
@@ -92,7 +104,16 @@ export class SpeechService {
     this.activePlugin.onInter$.subscribe(value => this.UpdateLastVoiceSentence(value))
     this.activePlugin.onFinal$.subscribe(value => this.UpdateLastVoiceSentence(value, true))
     this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({speechServiceState: value}))
-    await this.activePlugin.Start(selectedDialect, selectedPluginData);
+    this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(_value => { // restart plugin
+      console.log("[Speech] Plugin crashed", _value);
+      this.RestartLoop();
+    });
+    try {
+      await this.activePlugin.Start(selectedDialect, selectedPluginData);
+    } catch (error) {
+      await this.StopHost(); // clear on initialization fail
+      throw new Error(error.message);
+    }
   }
 
   public ClearSentences() {

@@ -32,13 +32,13 @@ export class ApplicationService {
   public async StartHost() {
     // process only if everything is down
     if (this.speechQuery.getValue().speechServiceState > 0 || this.networkQuery.getValue().peerConnectionState > 0)
-      return
+      return;
     try {
       await this.speechService.StartHost();
       try {
         await this.networkService.StartHost();
       } catch (error) {
-        this.speechService.Stop();
+        await this.speechService.StopHost();
         throw new Error(error.message);
       }
     } catch (error) {
@@ -49,8 +49,8 @@ export class ApplicationService {
   }
 
   public StopHost() {
-    this.speechService.Stop()
-    this.networkService.Stop()
+    this.speechService.StopHost();
+    this.networkService.Stop();
   }
 
   ChangeTheme(theme: string) {

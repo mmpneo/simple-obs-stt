@@ -1,5 +1,6 @@
-import {BasePlugin}      from "@store/speech/plugins/BasePlugin";
-import {ConnectionState} from "../../../utils/types";
+import {BasePlugin}            from "@store/speech/plugins/BasePlugin";
+import {ConnectionState}       from "../../../utils/types";
+import {CancellationErrorCode} from "microsoft-cognitiveservices-speech-sdk";
 
 export class SpeechPluginNative extends BasePlugin {
   constructor() {super();}
@@ -38,39 +39,45 @@ export class SpeechPluginNative extends BasePlugin {
     this.instance.interimResults = true;
 
     try {
-      await new Promise((res, rej) => {
-        if (!this.instance) return rej("Something wrong");
-        this.instance.onerror = rej;
-        this.instance.onstart = res;
-        this.instance.start();
-      });
-      this.instance.onstart = null;
-      this.instance.onerror = null;
-      this.onStatusChanged$.next(ConnectionState.Connected);
-      this.instance.addEventListener("start", () => this.onStatusChanged$.next(ConnectionState.Connected));
-      this.instance.addEventListener("error", (error) => {
-        if (error.error === "no-speech") {
-          console.log("no speech")
-        }
-          // else if (error.error === "network")
-        //   this.Stop();
-        else this.Stop();
+      this.instance.addEventListener("error", (error) => { // listener for active connection
+        if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
+        if (error.error === "no-speech") console.log("no speech")
+        else if (error.error === "network")
+          this.onPluginCrashed$.next();
         console.error(error)
       })
+      this.instance.addEventListener("end", event => {
+        if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
+        console.log(`[Native] Stopped`, event)
+        this.onPluginCrashed$.next();
+      }) // auto restart after silence
+
+      //region initialization
+      const errorTimeoutPromise = new Promise<false>((res) => setTimeout(() => res(false), 500));
+      const listenErrorPromise = new Promise<string>((res, rej) => {
+        if (!this.instance) return rej("[Native] Cannot spawn native instance");
+        this.instance.onerror = (e) => {
+          if (this.instance) this.instance.onerror = null;
+          res(e.error);
+        };
+      });
+      this.instance.start();
+
+      const hasError: false | string = await Promise.race([errorTimeoutPromise, listenErrorPromise]); // wait for initial error
+
+      if (hasError !== false) {
+        this.instance.abort();
+        throw new Error(hasError);
+      }
+
+      //endregion
+      this.onStatusChanged$.next(ConnectionState.Connected);
+      console.log("[Native] Started");
 
       window.addEventListener("beforeunload", () => { // temp fix for browser freezing on page reload
         if (this.onStatusChanged$.value === ConnectionState.Connected)
           this.instance?.stop();
       });
-
-      this.instance.addEventListener("end", _event => {
-        console.log(_event);
-        if (this.onStatusChanged$.value === ConnectionState.Connected) {
-          this.onStatusChanged$.next(ConnectionState.Connecting);
-          console.log("[Native] Try reconnect");
-          this.instance?.start();
-        }
-      }) // auto restart after silence
       this.BindSpeech();
     } catch (error) {
       this.onStatusChanged$.next(ConnectionState.Disconnected);
@@ -80,6 +87,7 @@ export class SpeechPluginNative extends BasePlugin {
 
   async Stop() {
     await super.Stop();
+    console.log("[Native] Stopped");
     this.instance?.stop();
   }
 }

@@ -13,7 +13,7 @@ export class SpeechPluginAzure extends BasePlugin {
     super();
   }
 
-  private instance: SpeechRecognizer = (<any>window).webkitSpeechRecognition ? new ((<any>window).webkitSpeechRecognition) : null;
+  private instance!: SpeechRecognizer;
 
   async Start(language: string, data: string[]) {
     try {
@@ -26,17 +26,29 @@ export class SpeechPluginAzure extends BasePlugin {
       this.instance             = new SpeechRecognizer(speechConfig, audioConfig);
       this.instance.recognizing = (s, e) => this.onInter$.next(e.result.text);
       this.instance.recognized  = (s, e) => this.onFinal$.next(e.result.text);
-
       this.onStatusChanged$.next(ConnectionState.Connecting);
+
+      this.instance.sessionStopped = (s, e) => {
+        console.log("[Azure] Session stopped", e)
+      }
+      this.instance.sessionStarted = (s, e) => {
+        console.log("[Azure] Session started")
+        this.onStatusChanged$.next(ConnectionState.Connected);
+      }
+
       await new Promise((res, rej) => {
         this.instance.canceled = (r, e) => rej(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
         this.instance.startContinuousRecognitionAsync(() => res(null), rej);
       });
-      console.log("[Azure] Started")
-      this.onStatusChanged$.next(ConnectionState.Connected);
+      this.instance.canceled = (r, e) => {
+        console.log(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
+        this.onStatusChanged$.next(ConnectionState.Disconnected);
+        if (CancellationErrorCode.ConnectionFailure || CancellationErrorCode.ServiceTimeout)
+          this.onPluginCrashed$.next();
+      };
     } catch (error) {
       this.onStatusChanged$.next(ConnectionState.Disconnected);
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
