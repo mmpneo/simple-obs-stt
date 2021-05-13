@@ -1,0 +1,1 @@
+(self.webpackChunksimple_obs_stt=self.webpackChunksimple_obs_stt||[]).push([[324],{3324:(e,t,s)=>{"use strict";s.r(t),s.d(t,{default:()=>c});const c=async(e,t={})=>{const s=document.createElement("a");s.download=t.fileName||"Untitled",s.href=URL.createObjectURL(e),s.addEventListener("click",()=>{setTimeout(()=>URL.revokeObjectURL(s.href),3e4)}),s.click()}}}]);
