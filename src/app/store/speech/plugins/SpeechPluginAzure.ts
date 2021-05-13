@@ -44,7 +44,7 @@ export class SpeechPluginAzure extends BasePlugin {
         console.log(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
         this.onStatusChanged$.next(ConnectionState.Disconnected);
         if (CancellationErrorCode.ConnectionFailure || CancellationErrorCode.ServiceTimeout)
-          this.onPluginCrashed$.next();
+          this.onPluginCrashed$.next(CancellationErrorCode[e.errorCode]);
       };
     } catch (error) {
       this.onStatusChanged$.next(ConnectionState.Disconnected);

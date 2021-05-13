@@ -2,9 +2,9 @@ import {Injectable}                from '@angular/core';
 import {NetworkMode, NetworkStore} from './network.store';
 import {NetworkQuery}              from "@store/network/network.query";
 import {ConnectionState}           from "../../utils/types";
-import {Subject}                   from "rxjs";
 import {v4 as uuid}                from 'uuid';
 import Peer                        from "peerjs";
+import {Subject}                   from "rxjs";
 
 interface Message {
   type: string,
@@ -104,7 +104,7 @@ export class NetworkService {
     }
     this.networkStore.update({hostID: this.peerInstance?.id});
     this.peerInstance?.on("connection", _peerConnection => {
-      _peerConnection.on("open", () => this.onClientConnected$.next())
+      _peerConnection.on("open", () => this.onClientConnected$.next(null))
     })
   }
 

@@ -41,7 +41,7 @@ export class SpeechService {
   public SelectDialect    = (index: string) => this.speechStore.update(e => ({selectedLanguage: [e.selectedLanguage[0], parseInt(index)]}));
 
   public async StopHost() {
-    this.stopEvent$.next();
+    this.stopEvent$.next(null);
     await this.activePlugin?.Stop();
     this.activePlugin = undefined;
   }

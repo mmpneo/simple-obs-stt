@@ -43,13 +43,13 @@ export class SpeechPluginNative extends BasePlugin {
         if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
         if (error.error === "no-speech") console.log("no speech")
         else if (error.error === "network")
-          this.onPluginCrashed$.next();
+          this.onPluginCrashed$.next("network drop");
         console.error(error)
       })
       this.instance.addEventListener("end", event => {
         if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
         console.log(`[Native] Stopped`, event)
-        this.onPluginCrashed$.next();
+        this.onPluginCrashed$.next("end");
       }) // auto restart after silence
 
       //region initialization
