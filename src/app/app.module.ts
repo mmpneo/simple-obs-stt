@@ -10,7 +10,7 @@ import {popper_max_size}                                from "./utils/popper_max
 import maxSize                                          from "popper-max-size-modifier";
 import {HotToastModule}                                 from '@ngneat/hot-toast';
 import {ServiceWorkerModule}                            from '@angular/service-worker';
-import {ClientType, GetClientType, IsTauri}             from "./utils/client_type";
+import {IsTauri}                                        from "./utils/client_type";
 import {InitializeApplication}                          from "./app.init";
 import {BrowserAnimationsModule}                        from "@angular/platform-browser/animations";
 
