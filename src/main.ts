@@ -26,6 +26,6 @@ if (GetClientType() === ClientType.host) { //add persistent for host
   platformBrowserDynamic(providers).bootstrapModule(AppModule).catch(err => console.error(err));
 }
 else { // there should be no SW cache on client
-  ClearSWCache().then(_ => platformBrowserDynamic().bootstrapModule(AppModule).catch(err => console.error(err)));
+  ClearSWCache().then(_ => platformBrowserDynamic().bootstrapModule(AppModule, {ngZoneEventCoalescing: true}).catch(err => console.error(err)));
 }
 
