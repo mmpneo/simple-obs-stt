@@ -42,13 +42,9 @@ export const CUSTOM_STYLE_LOGIC: { [sectionKey: string]: { [styleKey: string]: C
     }
   },
   textStyle: {
-    right: (state, elementStyle, value) => {
-      const isFixed         = state.boxStyle.heightMode.value === 'fixed';
-      elementStyle.position = isFixed ? 'absolute' : 'relative';
-      elementStyle.right    = isFixed ? value : 0;
-      elementStyle.left     = isFixed ? elementStyle.left : 0;
-      elementStyle.bottom   = isFixed ? elementStyle.bottom : 0;
-      elementStyle.top      = isFixed ? elementStyle.top : 0;
+    marginRight:  (state, elementStyle, value) => {
+      elementStyle.position = state.boxStyle.heightMode.value === 'fixed' ? 'absolute' : 'relative';
+      elementStyle.right = value;
     }
   }
 }
@@ -74,10 +70,10 @@ export interface STTStyle {
     textTransform: StyleValue<StyleValueType.string>;
     justifyContent: StyleValue<StyleValueType.string>;
     alignContent: StyleValue<StyleValueType.string>;
-    top: StyleValue<StyleValueType.pixels>
-    bottom: StyleValue<StyleValueType.pixels>
-    left: StyleValue<StyleValueType.pixels>
-    right: StyleValue<StyleValueType.pixels>
+    marginTop: StyleValue<StyleValueType.pixels>
+    marginBottom: StyleValue<StyleValueType.pixels>
+    marginLeft: StyleValue<StyleValueType.pixels>
+    marginRight: StyleValue<StyleValueType.pixels>
     // padding
     paddingTop: StyleValue<StyleValueType.pixels>
     paddingBottom: StyleValue<StyleValueType.pixels>
@@ -155,10 +151,10 @@ export const STYLE_TEMPLATE: STTStyle = {
     textTransform:  {type: StyleValueType.string, value: 'none'},
     justifyContent: {type: StyleValueType.string, value: 'flex-start'},
     alignContent:   {type: StyleValueType.string, value: 'flex-start'},
-    top:            {type: StyleValueType.pixels, value: '0'},
-    bottom:         {type: StyleValueType.pixels, value: '0'},
-    left:           {type: StyleValueType.pixels, value: '10'},
-    right:          {type: StyleValueType.pixels, value: '10'},
+    marginTop:      {type: StyleValueType.pixels, value: '0'},
+    marginBottom:   {type: StyleValueType.pixels, value: '0'},
+    marginLeft:     {type: StyleValueType.pixels, value: '10'},
+    marginRight:    {type: StyleValueType.pixels, value: '10'},
     paddingTop:     {type: StyleValueType.pixels, value: '0'},
     paddingBottom:  {type: StyleValueType.pixels, value: '0'},
     paddingLeft:    {type: StyleValueType.pixels, value: '0'},
@@ -217,10 +213,14 @@ export const STATE_TEMPLATE: StyleState = {
 
 export function PatchStyle(style: STTStyle) {
   const currentStyle: any = deepmerge(STYLE_TEMPLATE, style);
+
+  // remove inset
   if (currentStyle.avatarStyle.bottom) delete currentStyle.avatarStyle.bottom;
   if (currentStyle.avatarStyle.left) delete currentStyle.avatarStyle.left;
+  // remove animations
   if (currentStyle.avatarStyle.animationName) delete currentStyle.avatarStyle.animationName;
   if (currentStyle.avatarStyle.animationDuration) delete currentStyle.avatarStyle.animationDuration;
+  // rename
   if (currentStyle.globalStyle.clearOnHide) delete currentStyle.globalStyle.clearOnHide;
   if (currentStyle.globalStyle.alwaysShow) delete currentStyle.globalStyle.alwaysShow;
   if (currentStyle.globalStyle.hideAfter) delete currentStyle.globalStyle.hideAfter;
@@ -229,6 +229,18 @@ export function PatchStyle(style: STTStyle) {
     delete currentStyle.textStyle.alignItems;
   }
   const textValues = currentStyle.textStyle;
+
+  // inset -> margin
+  if (!!textValues.top) {currentStyle.textStyle.marginTop.value = textValues.top.value;delete currentStyle.textStyle.top;}
+  if (!!textValues.bottom) {currentStyle.textStyle.marginBottom.value = textValues.bottom.value;delete currentStyle.textStyle.bottom;}
+  if (!!textValues.left) {currentStyle.textStyle.marginLeft.value = textValues.left.value;delete currentStyle.textStyle.left;}
+  if (!!textValues.right) {currentStyle.textStyle.marginRight.value = textValues.right.value;delete currentStyle.textStyle.right;}
+  if (typeof textValues.marginRight !== "object") currentStyle.textStyle.marginRight = STYLE_TEMPLATE.textStyle.marginRight;
+  if (typeof textValues.marginLeft !== "object") currentStyle.textStyle.marginLeft = STYLE_TEMPLATE.textStyle.marginLeft;
+  if (typeof textValues.marginTop !== "object") currentStyle.textStyle.marginTop = STYLE_TEMPLATE.textStyle.marginTop;
+  if (typeof textValues.marginBottom !== "object") currentStyle.textStyle.marginBottom = STYLE_TEMPLATE.textStyle.marginBottom;
+
+  // validate numbers
   if (typeof textValues.scaleMin.value === "string") currentStyle.textStyle.scaleMin.value = parseFloat(textValues.scaleMin.value)
   if (typeof textValues.scaleMax.value === "string") currentStyle.textStyle.scaleMax.value = parseFloat(textValues.scaleMax.value)
   if (typeof textValues.durationMin.value === "string") currentStyle.textStyle.durationMin.value = parseFloat(textValues.durationMin.value)

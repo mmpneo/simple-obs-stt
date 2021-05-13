@@ -121,10 +121,10 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Blur', $implicit: currentStyle.textStyleComposite.textShadow.b.value, fn: GetCompositeFn('txt', 'textShadow', 'b'), min: -20, max: 20}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Margin</div>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.top.value, fn: GetFn('text', 'top'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.bottom.value, fn: GetFn('text', 'bottom'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.left.value, fn: GetFn('text', 'left'), min: 0, max: 1000}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right', $implicit: currentStyle.textStyle.right.value, fn: GetFn('text', 'right'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.marginTop.value, fn: GetFn('text', 'marginTop'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom', $implicit: currentStyle.textStyle.marginBottom.value, fn: GetFn('text', 'marginBottom'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left', $implicit: currentStyle.textStyle.marginLeft.value, fn: GetFn('text', 'marginLeft'), min: 0, max: 1000}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right', $implicit: currentStyle.textStyle.marginRight.value, fn: GetFn('text', 'marginRight'), min: 0, max: 1000}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Padding</div>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top', $implicit: currentStyle.textStyle.paddingTop.value, fn: GetFn('text', 'paddingTop'), min: 0, max: 1000}"></ng-container>
