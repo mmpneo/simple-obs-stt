@@ -19,7 +19,7 @@ export class SpeechService {
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.speechStore.update({sentences: []});
       if (m.type === 'stt:updatesentence') {
-        this.speechStore.update(e => ({sentences: arrayUpsert(e.sentences, m.data.id, m.data)}));
+        this.UpsertSentence(m.data)
         this.TriggerShowTimer();
       }
     }); // listen for network messages
@@ -62,6 +62,11 @@ export class SpeechService {
     });
   }
 
+  private UpsertSentence(sentence: SpeechSentence) {
+    const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
+    this.speechStore.update(e => ({sentences: arrayUpsert(globalConfig.keepSingleSentence.value ? e.sentences.filter((s => !s.finalized)) : e.sentences, sentence.id, sentence)}));
+  }
+
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
     if (text === undefined)
@@ -70,21 +75,15 @@ export class SpeechService {
     const value = words.map((word, i) => [...word.split(""), " "]);
 
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
-    if (sentences.length === 0 || sentences[sentences.length - 1].finalized) {
-      // create new
-      const newSentence: SpeechSentence = {finalized, value: text, valueNext: value, id: guid(), type};
-      this.speechStore.update(e => ({sentences: arrayAdd(e.sentences, newSentence)}));
-      this.networkService.SendMessage({type: 'stt:updatesentence', data: newSentence})
-    }
-    else {
-      const lastSentence            = sentences[sentences.length - 1];
-      const updated: SpeechSentence = {...lastSentence, finalized, value: text, valueNext: value}
-      this.speechStore.update(state => ({sentences: arrayUpdate(state.sentences, lastSentence.id, updated)}))
-      this.networkService.SendMessage({type: 'stt:updatesentence', data: updated})
-    }
+    let targetSentence: SpeechSentence;
+    if (sentences.length === 0 || sentences[sentences.length - 1].finalized) // create new
+      targetSentence = {finalized, value: text, valueNext: value, id: guid(), type};
+    else // update last sentence
+      targetSentence = {...sentences[sentences.length - 1], finalized, value: text, valueNext: value};
+    this.UpsertSentence(targetSentence);
+    this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence})
     this.TriggerShowTimer();
   }
-
 
   private async RestartLoop() {
     await this.StopHost();
