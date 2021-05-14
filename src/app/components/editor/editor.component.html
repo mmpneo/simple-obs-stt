@@ -156,6 +156,8 @@
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Mode', $implicit: currentStyle.boxStyle.bgStyle.value, fn: GetFn('box', 'bgStyle'), options: [['Normal', 'normal'], ['Sliced', 'slice']]}"></ng-container>
       <ng-container [ngSwitch]="currentStyle.boxStyle.bgStyle.value">
         <ng-container *ngSwitchCase="'normal'">
+          <div class="divider"></div>
+          <div class="font-semibold">Border</div>
           <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.borderColor.value, fn: GetFn('box', 'borderColor')}"></ng-container>
           <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.boxStyle.borderWidth.value, fn: GetFn('box', 'borderWidth'), min: 0, max: 20}"></ng-container>
           <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Radius', $implicit: currentStyle.boxStyle.borderRadius.value, fn: GetFn('box', 'borderRadius'), min: 0, max: 100}"></ng-container>
