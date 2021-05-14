@@ -27,10 +27,16 @@ export type StyleValue<T = StyleValueType, V = ValueType<T>> =
 export type CustomStyleFn = (state: STTStyle, elementStyle: any, calculatedValue: string | number) => void;
 
 // override style applying with side effects
-export const CUSTOM_STYLE_LOGIC: { [sectionKey: string]: { [styleKey: string]: CustomStyleFn } } = {
-  boxStyle:  {
+export const CUSTOM_STYLE_LOGIC: { [k in keyof STTStyle]: { [styleKey: string]: CustomStyleFn } } = {
+  textStyle:            {
+    marginRight: (state, elementStyle, value) => {
+      elementStyle.position = state.boxStyle.heightMode.value === 'fixed' ? 'absolute' : 'relative';
+      elementStyle.marginRight    = value;
+    }
+  },
+  boxStyle:             {
     // based on boxStyle.heightMode keep height fixed or minimized with max height
-    height: (state, elementStyle, calculatedValue) => {
+    height:  (state, elementStyle, calculatedValue) => {
       if (state.boxStyle.heightMode.value === 'grow') {
         elementStyle.maxHeight = calculatedValue;
         elementStyle.height    = 'auto';
@@ -39,14 +45,30 @@ export const CUSTOM_STYLE_LOGIC: { [sectionKey: string]: { [styleKey: string]: C
         elementStyle.maxHeight = 'none';
         elementStyle.height    = calculatedValue;
       }
+    },
+    bgStyle: (state, elementStyle, calculatedValue) => {
+      //  normal | sliced
+
+      elementStyle.borderImage = null;
+      elementStyle.backgroundImage = null;
+      if (calculatedValue === 'normal')
+        elementStyle.backgroundImage = `url(${state.boxStyle.backgroundImage.value})`;
+      else {
+        // ignore border rules
+        elementStyle.border = '0px solid transparent';
+        elementStyle.borderImage = `url(${state.boxStyle.backgroundImage.value})`;
+        elementStyle.borderImageSlice = `${state.boxStyle.borderWidthTop.value} ${state.boxStyle.borderWidthRight.value} ${state.boxStyle.borderWidthBottom.value} ${state.boxStyle.borderWidthLeft.value} fill`;
+        elementStyle.borderImageWidth = `${state.boxStyle.borderWidthTop.value}px ${state.boxStyle.borderWidthRight.value}px ${state.boxStyle.borderWidthBottom.value}px ${state.boxStyle.borderWidthLeft.value}px`;
+        // border-image-slice x-x-x-x fill
+        // border-image-width x-x-x-x
+      }
     }
   },
-  textStyle: {
-    marginRight:  (state, elementStyle, value) => {
-      elementStyle.position = state.boxStyle.heightMode.value === 'fixed' ? 'absolute' : 'relative';
-      elementStyle.right = value;
-    }
-  }
+  avatarStyle:          {},
+  avatarStyleComposite: {},
+  globalStyle:          {},
+  soundStyle:           {},
+  textStyleComposite:   {},
 }
 
 export interface STTStyle {
@@ -54,11 +76,20 @@ export interface STTStyle {
     width: StyleValue<StyleValueType.pixels>;
     height: StyleValue<StyleValueType.pixels>;
     heightMode: StyleValue<StyleValueType.logic, 'grow' | 'fixed'>;
-    backgroundImage: StyleValue<StyleValueType.url>;
+    backgroundImage: StyleValue<StyleValueType.logic>; // apply it later in [bgStyle]
     backgroundColor: StyleValue<StyleValueType.string>;
+
     borderWidth: StyleValue<StyleValueType.pixels>;
     borderColor: StyleValue<StyleValueType.string>;
     borderRadius: StyleValue<StyleValueType.pixels>;
+
+    borderWidthTop: StyleValue<StyleValueType.logic>
+    borderWidthRight: StyleValue<StyleValueType.logic>
+    borderWidthBottom: StyleValue<StyleValueType.logic>
+    borderWidthLeft: StyleValue<StyleValueType.logic>
+
+    bgStyle: StyleValue<StyleValueType.logic>;
+
     [key: string]: any
   };
   textStyle: {
@@ -119,6 +150,7 @@ export interface STTStyle {
   },
   globalStyle: {
     hideOnInactivity: StyleValue<StyleValueType.bool>;
+    keepSingleSentence: StyleValue<StyleValueType.bool>;
     clearOnInactivity: StyleValue<StyleValueType.bool>;
     realtimeTyping: StyleValue<StyleValueType.bool>;
     inactivityTimer: StyleValue<StyleValueType.string>;
@@ -133,14 +165,20 @@ export interface StyleState {
 
 export const STYLE_TEMPLATE: STTStyle = {
   boxStyle:             {
-    backgroundImage: {type: StyleValueType.url, value: ''},
     width:           {type: StyleValueType.pixels, value: '300'},
     height:          {type: StyleValueType.pixels, value: '100'},
     heightMode:      {type: StyleValueType.logic, value: 'fixed'},
+    backgroundImage: {type: StyleValueType.logic, value: ''},
     backgroundColor: {type: StyleValueType.string, value: 'transparent'},
     borderRadius:    {type: StyleValueType.pixels, value: '0'},
     borderWidth:     {type: StyleValueType.pixels, value: '0'},
     borderColor:     {type: StyleValueType.string, value: 'transparent'},
+
+    borderWidthTop:    {type: StyleValueType.logic, value: '0'},
+    borderWidthRight:  {type: StyleValueType.logic, value: '0'},
+    borderWidthBottom: {type: StyleValueType.logic, value: '0'},
+    borderWidthLeft:   {type: StyleValueType.logic, value: '0'},
+    bgStyle:           {type: StyleValueType.logic, value: 'normal'},
   },
   textStyle:            {
     fontFamily:     {type: StyleValueType.string, value: 'Roboto'},
@@ -197,10 +235,11 @@ export const STYLE_TEMPLATE: STTStyle = {
     volume: {type: StyleValueType.string, value: '0.5'},
   },
   globalStyle:          {
-    hideOnInactivity:  {type: StyleValueType.bool, value: ''},
-    clearOnInactivity: {type: StyleValueType.bool, value: ''},
-    realtimeTyping:    {type: StyleValueType.bool, value: '1'},
-    inactivityTimer:   {type: StyleValueType.string, value: '5000'},
+    hideOnInactivity:   {type: StyleValueType.bool, value: ''},
+    keepSingleSentence: {type: StyleValueType.bool, value: ''},
+    clearOnInactivity:  {type: StyleValueType.bool, value: ''},
+    realtimeTyping:     {type: StyleValueType.bool, value: '1'},
+    inactivityTimer:    {type: StyleValueType.string, value: '5000'},
   }
 }
 
@@ -231,10 +270,22 @@ export function PatchStyle(style: STTStyle) {
   const textValues = currentStyle.textStyle;
 
   // inset -> margin
-  if (!!textValues.top) {currentStyle.textStyle.marginTop.value = textValues.top.value;delete currentStyle.textStyle.top;}
-  if (!!textValues.bottom) {currentStyle.textStyle.marginBottom.value = textValues.bottom.value;delete currentStyle.textStyle.bottom;}
-  if (!!textValues.left) {currentStyle.textStyle.marginLeft.value = textValues.left.value;delete currentStyle.textStyle.left;}
-  if (!!textValues.right) {currentStyle.textStyle.marginRight.value = textValues.right.value;delete currentStyle.textStyle.right;}
+  if (!!textValues.top) {
+    currentStyle.textStyle.marginTop.value = textValues.top.value;
+    delete currentStyle.textStyle.top;
+  }
+  if (!!textValues.bottom) {
+    currentStyle.textStyle.marginBottom.value = textValues.bottom.value;
+    delete currentStyle.textStyle.bottom;
+  }
+  if (!!textValues.left) {
+    currentStyle.textStyle.marginLeft.value = textValues.left.value;
+    delete currentStyle.textStyle.left;
+  }
+  if (!!textValues.right) {
+    currentStyle.textStyle.marginRight.value = textValues.right.value;
+    delete currentStyle.textStyle.right;
+  }
   if (typeof textValues.marginRight !== "object") currentStyle.textStyle.marginRight = STYLE_TEMPLATE.textStyle.marginRight;
   if (typeof textValues.marginLeft !== "object") currentStyle.textStyle.marginLeft = STYLE_TEMPLATE.textStyle.marginLeft;
   if (typeof textValues.marginTop !== "object") currentStyle.textStyle.marginTop = STYLE_TEMPLATE.textStyle.marginTop;
