@@ -146,16 +146,27 @@
     </ng-container>
     <ng-container *ngSwitchCase="'box'">
       <div class="font-semibold">Box</div>
-      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Image url', $implicit: currentStyle.boxStyle.backgroundImage.value, fn: GetFn('box', 'backgroundImage')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.backgroundColor.value, fn: GetFn('box', 'backgroundColor')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Height mode', $implicit: currentStyle.boxStyle.heightMode.value, fn: GetFn('box', 'heightMode'), options: [['Grow', 'grow'], ['Fixed', 'fixed']]}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Width', $implicit: currentStyle.boxStyle.width.value, fn: GetFn('box', 'width'), min: 100, max: 600}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.boxStyle.height.value, fn: GetFn('box', 'height'), min: 50, max: 600}"></ng-container>
       <div class="divider"></div>
-      <div class="font-semibold">Border</div>
-      <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.borderColor.value, fn: GetFn('box', 'borderColor')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.boxStyle.borderWidth.value, fn: GetFn('box', 'borderWidth'), min: 0, max: 20}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Radius', $implicit: currentStyle.boxStyle.borderRadius.value, fn: GetFn('box', 'borderRadius'), min: 0, max: 100}"></ng-container>
+      <div class="font-semibold">Background</div>
+      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Image url', $implicit: currentStyle.boxStyle.backgroundImage.value, fn: GetFn('box', 'backgroundImage')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldChips; context: {title: 'Mode', $implicit: currentStyle.boxStyle.bgStyle.value, fn: GetFn('box', 'bgStyle'), options: [['Normal', 'normal'], ['Sliced', 'slice']]}"></ng-container>
+      <ng-container [ngSwitch]="currentStyle.boxStyle.bgStyle.value">
+        <ng-container *ngSwitchCase="'normal'">
+          <ng-container *ngTemplateOutlet="fieldColor; context: {title: 'Color', $implicit: currentStyle.boxStyle.borderColor.value, fn: GetFn('box', 'borderColor')}"></ng-container>
+          <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Size', $implicit: currentStyle.boxStyle.borderWidth.value, fn: GetFn('box', 'borderWidth'), min: 0, max: 20}"></ng-container>
+          <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Radius', $implicit: currentStyle.boxStyle.borderRadius.value, fn: GetFn('box', 'borderRadius'), min: 0, max: 100}"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'slice'">
+          <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Top size', $implicit: currentStyle.boxStyle.borderWidthTop.value, fn: GetFn('box', 'borderWidthTop'), min: 0, max: 100}"></ng-container>
+          <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Right size', $implicit: currentStyle.boxStyle.borderWidthRight.value, fn: GetFn('box', 'borderWidthRight'), min: 0, max: 100}"></ng-container>
+          <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Bottom size', $implicit: currentStyle.boxStyle.borderWidthBottom.value, fn: GetFn('box', 'borderWidthBottom'), min: 0, max: 100}"></ng-container>
+          <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Left size', $implicit: currentStyle.boxStyle.borderWidthLeft.value, fn: GetFn('box', 'borderWidthLeft'), min: 0, max: 100}"></ng-container>
+        </ng-container>
+      </ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'avatar'">
       <div class="font-semibold">Avatar image</div>
@@ -174,6 +185,7 @@
     <ng-container *ngSwitchCase="'global'">
       <div class="font-semibold">Text input</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping.value, fn: GetFn('global', 'realtimeTyping')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Keep only last sentence', $implicit: currentStyle.globalStyle.keepSingleSentence.value, fn: GetFn('global', 'keepSingleSentence')}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Inactivity</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Hide on inactivity', $implicit: currentStyle.globalStyle.hideOnInactivity.value, fn: GetFn('global', 'hideOnInactivity')}"></ng-container>
