@@ -89,9 +89,11 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 
   private ApplyElementStyleDAta(style: STTStyle, section: keyof STTStyle, element: any, styles: { [key: string]: StyleValue }) {
     for (const cssKey in styles) {
-      if (styles[cssKey].type === StyleValueType.logic)
-        continue;
       const customLogic = CUSTOM_STYLE_LOGIC[section]?.[cssKey];
+      if (styles[cssKey].type === StyleValueType.logic) {
+        !!customLogic && customLogic(style, element.style, this.BuildTypedValue(styles[cssKey]));
+        continue;
+      }
       if (!!customLogic)
         customLogic(style, element.style, this.BuildTypedValue(styles[cssKey]))
       else
