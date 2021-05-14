@@ -9,6 +9,7 @@
               <div *ngFor="let letter of word; trackBy: trackLetter">{{letter}}</div>
             </div>
           </ng-container>
+          <div class="whitespace-pre-wrap" [innerHTML]="' '"></div> <!--Keep font height when text box is empty-->
         </div>
       </div>
     </div>
