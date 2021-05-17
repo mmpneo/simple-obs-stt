@@ -12,7 +12,6 @@ export interface SpeechSentence {
   id: ID;
   type: SpeechSentenceType;
   finalized: boolean;
-  value: string;
   valueNext: string[][]
 }
 
