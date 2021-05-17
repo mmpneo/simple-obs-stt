@@ -21,7 +21,7 @@
     "skipLibCheck": true,
     "lib": [
       "ESNext.String",
-      "es2018",
+      "es2020",
       "dom"
     ],
     "paths": {
