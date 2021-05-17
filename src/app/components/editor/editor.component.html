@@ -193,6 +193,19 @@
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Hide on inactivity', $implicit: currentStyle.globalStyle.hideOnInactivity.value, fn: GetFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity.value, fn: GetFn('global', 'clearOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.inactivityTimer.value, fn: GetFn('global', 'inactivityTimer'), min: 100, max: 30000}"></ng-container>
+      <div class="divider"></div>
+      <div class="font-semibold">Twitch emotes</div>
+      <div class="flex items-center space-x-2" *ngIf="emotesQuery.user$ | async as user else twitchLoginTemplate">
+        <img class="rounded-full" [src]="user.avatar" height="40" width="40">
+        <div class="flex flex-col">
+          <b>{{user.name}}</b>
+          <a class="link link-accent" (click)="emotesService.LogOut()">Disconnect</a>
+        </div>
+      </div>
+      <ng-template #twitchLoginTemplate>
+        <div>Connect your twitch account to use twitch/bttv/ffz emotes</div>
+        <a class="link link-primary" (click)="emotesService.Login()">Connect twitch account</a>
+      </ng-template>
     </ng-container>
   </ng-container>
 </div>

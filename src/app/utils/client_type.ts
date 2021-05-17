@@ -4,7 +4,12 @@ export enum ClientType {
 }
 
 export function GetClientType(): ClientType {
-  return (location.pathname === '/' || location.pathname === '/simple-obs-stt/') ?
+  return (
+    location.pathname === '/' ||
+    location.pathname === '/auth/twitch' ||
+    location.pathname === '/simple-obs-stt/' ||
+    location.pathname === '/simple-obs-stt/auth/twitch'
+  ) ?
     ClientType.host :
     ClientType.client;
 }
