@@ -39,7 +39,7 @@ jobs:
           npx ng build --prod --build-optimizer --base-href=/simple-obs-stt/
           cp ./src/404.html ./dist/
         env:
-          TW_CLIENT: {{secrets.TW_CLIENT}}
+          TW_CLIENT: ${{ secrets.TW_CLIENT }}
 
       - name: Deploy Github pages
         uses: peaceiris/actions-gh-pages@v3
