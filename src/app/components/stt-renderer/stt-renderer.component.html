@@ -6,7 +6,7 @@
         <div #textElement [class.host]="speechState.speechServiceState === 2" class="inset-0 flex flex-wrap break-words min-h-8 stt-box-text overflow-y-scroll overflow-x-hidden">
           <ng-container *ngFor="let sentence of speechState.sentences; trackBy: track">
             <div [@listAnimation]="{value: word.length, params: GetRandomizedParams(currentStyle)}" class="flex whitespace-pre-wrap" [class.opacity-70]="!sentence.finalized" *ngFor="let word of sentence.valueNext; trackBy: trackWord">
-              <div *ngFor="let letter of word; trackBy: trackLetter">{{letter}}</div>
+              <div *ngFor="let letter of word; trackBy: trackLetter" [innerHTML]="letter"></div>
             </div>
           </ng-container>
           <div class="whitespace-pre-wrap" [innerHTML]="' '"></div> <!--Keep font height when text box is empty-->
