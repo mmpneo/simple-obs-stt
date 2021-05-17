@@ -9,6 +9,7 @@ import {SoundService}                       from "@store/sound/sound.service";
 import {SwUpdate}                           from "@angular/service-worker";
 import {environment}                        from "../environments/environment";
 import {HotToastService}                    from "@ngneat/hot-toast";
+import {EmotesService}                      from "@store/emotes/emotes.service";
 
 @Component({
   selector:        'app-root',
@@ -23,6 +24,7 @@ export class AppComponent {
     private _styleService: StyleService,
     private _fontsService: FontsService,
     private _soundService: SoundService,
+    private _emotesService: EmotesService,
     private router: Router,
     private toast: HotToastService,
     private updates: SwUpdate) {
@@ -30,9 +32,11 @@ export class AppComponent {
     console.log("[System] Is tauri:", IsTauri());
     !IsTauri() && this.CheckUpdate();
     let path = localStorage.getItem('path');
+    let path_fragment = localStorage.getItem('path-fragment');
     if (path) {
       localStorage.removeItem('path');
-      this.router.navigate([path.replace("simple-obs-stt", "")]);
+      localStorage.removeItem('path-fragment');
+      this.router.navigate([path.replace("simple-obs-stt", "")], {fragment: path_fragment || undefined});
     }
   }
 
