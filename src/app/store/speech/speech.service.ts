@@ -5,9 +5,10 @@ import {NetworkService}                                             from "@store
 import {arrayAdd, arrayUpdate, arrayUpsert, guid, transaction}      from "@datorama/akita";
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
-import {SPEECH_PLUGINS}                     from "@store/speech/plugins";
-import {from, Subject, Subscription, timer} from "rxjs";
-import {switchMap, take, takeUntil}         from "rxjs/operators";
+import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
+import {from, Subject, Subscription, timer}                         from "rxjs";
+import {switchMap, take, takeUntil}                                 from "rxjs/operators";
+import {EmotesQuery}                                                from "@store/emotes/emotes.query";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -15,6 +16,7 @@ export class SpeechService {
     private speechStore: SpeechStore,
     private styleQuery: StyleQuery,
     private speechQuery: SpeechQuery,
+    private emotesQuery: EmotesQuery,
     private networkService: NetworkService) {
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.speechStore.update({sentences: []});
@@ -69,17 +71,25 @@ export class SpeechService {
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
+    const emotesMap = this.emotesQuery.getValue().emotes;
     if (text === undefined)
       return;
     const words = (text).split(" ");
-    const value = words.map((word, i) => [...word.split(""), " "]);
+
+    const value = words.map((word, i) => {
+      const firstLetter = word[0];
+      const wordFiltered = word.replace(".","");
+      if (emotesMap[firstLetter]?.[wordFiltered])
+        return [`<img src="${emotesMap[firstLetter]?.[wordFiltered]}">`, " "]
+      return [...word.split(""), " "];
+    });
 
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
     let targetSentence: SpeechSentence;
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) // create new
-      targetSentence = {finalized, value: text, valueNext: value, id: guid(), type};
+      targetSentence = {finalized, valueNext: value, id: guid(), type};
     else // update last sentence
-      targetSentence = {...sentences[sentences.length - 1], finalized, value: text, valueNext: value};
+      targetSentence = {...sentences[sentences.length - 1], finalized, valueNext: value};
     this.UpsertSentence(targetSentence);
     this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence})
     this.TriggerShowTimer();
