@@ -35,6 +35,7 @@ jobs:
 
       - name: Build app
         run: |
+          node env_writer.js
           npx ng build --prod --build-optimizer --base-href=/simple-obs-stt/
           cp ./src/404.html ./dist/
 
