@@ -68,15 +68,9 @@ export class EmotesService {
 
   Login() {
     this.emotesStore.reset();
-    let url       = IsTauri() ? environment.localhostClientPath : environment.remoteClientPath;
-    const auth_link    = `https://id.twitch.tv/oauth2/authorize?client_id=${environment.tw_client}&redirect_uri=${url}/auth/twitch&response_type=token&scope=user_subscriptions`
+    const auth_link    = `https://id.twitch.tv/oauth2/authorize?client_id=${environment.tw_client}&redirect_uri=${environment.twitchAuthPath}&response_type=token&scope=user_subscriptions`
     const auth_window = window.open(auth_link, '', 'width=600,height=600');
     if (auth_window) auth_window.onbeforeunload = ev => this.Init()
-  }
-
-  ApplyAccessToken(token: string) {
-    localStorage.setItem('tw-key', token);
-    window.close();
   }
 
   private async Load_TWITCH_GLOBAL(id: string, app_id: string, auth_id: string) {
