@@ -3,10 +3,10 @@ import {ConnectionState} from "../../../utils/types";
 import {
   AudioConfig,
   AutoDetectSourceLanguageConfig,
-  CancellationErrorCode,
+  CancellationErrorCode, PropertyId,
   SpeechConfig,
   SpeechRecognizer
-}                        from "microsoft-cognitiveservices-speech-sdk";
+} from "microsoft-cognitiveservices-speech-sdk";
 
 export class SpeechPluginAzure extends BasePlugin {
   constructor() {
@@ -21,6 +21,10 @@ export class SpeechPluginAzure extends BasePlugin {
       await super.Start(language, data);
       const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
       const speechConfig = SpeechConfig.fromSubscription(data[0], data[1]);
+      speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs.toString(), "10000");
+      speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs.toString(), "20000");
+      speechConfig.enableDictation();
+
       const langConfig   = AutoDetectSourceLanguageConfig.fromLanguages([language]);
       SpeechRecognizer.FromConfig(speechConfig, langConfig, audioConfig)
       this.instance             = new SpeechRecognizer(speechConfig, audioConfig);
