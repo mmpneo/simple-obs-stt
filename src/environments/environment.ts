@@ -1,7 +1,9 @@
-export const environment = {
-  tw_client: '',
-  production: false,
-  localhostClientPath: 'http://localhost:4200',
-  remoteClientPath: 'https://mmpneo.github.io/simple-obs-stt'
+import {EnvType} from "./EnvType";
+
+export const environment: EnvType = {
+  tw_client:      '{{CLIENT_ID}}',
+  production:     false,
+  clientPath:     'http://localhost:4200/client',
+  twitchAuthPath: 'http://localhost:4200/auth/twitch'
 };
 
