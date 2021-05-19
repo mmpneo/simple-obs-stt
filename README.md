@@ -10,7 +10,7 @@ The current goal of this project is to help streamers with similar problems to m
 
 ## Features
 - <img src="https://cdn.betterttv.net/emote/5d38aaa592fc550c2d5996b8/1x" width="20" height="20"> **Web version**
-- <img src="https://cdn.betterttv.net/emote/5b490e73cf46791f8491f6f4/1x" width="20" height="20"> **Standalone version**
+- <img src="https://cdn.betterttv.net/emote/5b490e73cf46791f8491f6f4/1x" width="20" height="20"> **Standalone version** - experimental
 - <img src="https://cdn.betterttv.net/emote/5c857788f779543bcdf37124/1x" width="20" height="20"> **"No mic" mode** - works without microphone
 - <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> **Visual customization**
 - <img src="https://cdn.betterttv.net/emote/5ad22a7096065b6c6bddf7f3/1x" width="20" height="20"> **Google Fonts integration** - about 1000 free fonts
