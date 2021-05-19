@@ -77,7 +77,6 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
     const translationXMax = currentStyle.textStyle.translationXMax.value;
     const translationYMin = currentStyle.textStyle.translationYMin.value;
     const translationYMax = currentStyle.textStyle.translationYMax.value;
-    // console.log(this.GetRandomRange(durationMin, durationMax).toFixed(1))
     return {
       time: this.GetRandomRange(durationMin, durationMax).toFixed(1),
       scale: this.GetRandomRange(scaleMin, scaleMax).toFixed(1),
