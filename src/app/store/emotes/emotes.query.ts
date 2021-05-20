@@ -10,5 +10,8 @@ export class EmotesQuery extends Query<EmotesState> {
   }
 
   user$ = this.select('user');
+  bindings$ = this.select('bindings');
+
+  state$ = this.select();
 
 }

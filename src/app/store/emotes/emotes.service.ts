@@ -1,5 +1,5 @@
-import {Injectable}                         from '@angular/core';
-import {EmotesStore}                        from './emotes.store';
+import {Injectable}                from '@angular/core';
+import {EmotesStore}               from './emotes.store';
 import {
   BttvChannelResponse,
   BttvGlobalResponse,
@@ -8,9 +8,9 @@ import {
   FfzGlobalResponse,
   TwitchResponse,
   TwitchUserResponse
-}                                           from "@store/emotes/emotes.models";
-import {environment}                        from "../../../environments/environment";
-import {ClientType, GetClientType, IsTauri} from "../../utils/client_type";
+}                                  from "@store/emotes/emotes.models";
+import {environment}               from "../../../environments/environment";
+import {ClientType, GetClientType} from "../../utils/client_type";
 
 @Injectable({providedIn: 'root'})
 export class EmotesService {
@@ -18,12 +18,47 @@ export class EmotesService {
     GetClientType() === ClientType.host && this.Init();
   }
 
+  UpdateKeyword = ($event: string) => this.emotesStore.update({keyword: $event});
+  UpdateKeywordSecondary = ($event: string) => this.emotesStore.update({keyword_secondary: $event});
+  AddBinding    = () => this.emotesStore.update(state => {state.bindings.push(['', ''])});
+  RemoveBinding(index: number) {
+    this.emotesStore.update(state => {
+      state.bindings.splice(index, 1);
+    });
+    this.BuildCache();
+  }
+  UpdateBinding(index: number, valueIndex: number, value: string) {
+    this.emotesStore.update(state => {
+      state.bindings[index][valueIndex] = value;
+    });
+    this.BuildCache();
+  }
+
+  private BuildCache() {
+    const bindings = this.emotesStore.getValue().bindings;
+    const bindings_cache: any = {};
+    for (let i = 0; i < bindings.length; i++) {
+      const binding = bindings[i];
+      const emote = binding[0];
+      const emoteValue = binding[1].split(' ');
+      if (emoteValue.length === 1) emoteValue.push('')
+
+      if (bindings_cache[emoteValue[0]])
+        bindings_cache[emoteValue[0]][emoteValue[1]] = emote;
+      else
+        bindings_cache[emoteValue[0]] = {[emoteValue[1]]: emote}
+    }
+    this.emotesStore.update({bindings_cache})
+  }
+
   // load twitch user and emotes if auth'd
-  private async Init() {
+  async Init() {
+    this.BuildCache();
     const key = localStorage.getItem('tw-key')
     if (!key)
       return;
-    const request_user                          = await fetch('https://api.twitch.tv/helix/users', {headers: [
+    const request_user                          = await fetch('https://api.twitch.tv/helix/users', {
+      headers: [
         ['Accept', 'application/vnd.twitchtv.v5+json'],
         ['Client-ID', environment.tw_client],
         ['Authorization', `Bearer ${key}`],
@@ -50,13 +85,15 @@ export class EmotesService {
     ]);
 
     // merge all success request into one map
-    let filtered: { [key: string]: string } = request_all.reduce((sum, {status, value}: any) => status === "fulfilled" ? ({...sum, ...value}) : sum, {});
+    let filtered: { [key: string]: string } = request_all.reduce((sum, {
+      status,
+      value
+    }: any) => status === "fulfilled" ? ({...sum, ...value}) : sum, {});
     // split emotes into alphabet chunks
     this.emotesStore.update(state => {
       for (let key in filtered) if (state.emotes[key[0]])
         state.emotes[key[0]][key] = filtered[key]
     });
-
   }
 
   async LogOut() {
@@ -67,8 +104,8 @@ export class EmotesService {
   }
 
   Login() {
-    this.emotesStore.reset();
-    const auth_link    = `https://id.twitch.tv/oauth2/authorize?client_id=${environment.tw_client}&redirect_uri=${environment.twitchAuthPath}&response_type=token&scope=user_subscriptions`
+    this.emotesStore.update({user: null});
+    const auth_link   = `https://id.twitch.tv/oauth2/authorize?client_id=${environment.tw_client}&redirect_uri=${environment.twitchAuthPath}&response_type=token&scope=user_subscriptions`
     const auth_window = window.open(auth_link, '', 'width=600,height=600');
     if (auth_window) auth_window.onbeforeunload = ev => this.Init()
   }
@@ -131,7 +168,6 @@ export class EmotesService {
     const json_ffz_channel: FfzChannelResponse = await ffz_channel.json();
     return this.ParseFFz(json_ffz_channel);
   }
-
 }
 
 
