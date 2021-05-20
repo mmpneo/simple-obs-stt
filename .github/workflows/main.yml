@@ -40,7 +40,7 @@ jobs:
           cp ./src/404.html ./dist/
         env:
           TW_CLIENT: ${{ secrets.TW_CLIENT }}
-          BUIL_ENV: production
+          BUILD_ENV: production
 
       - name: Deploy Github pages
         uses: peaceiris/actions-gh-pages@v3
