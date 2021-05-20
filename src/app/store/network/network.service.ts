@@ -13,7 +13,8 @@ interface Message {
 
 @Injectable({providedIn: 'root'})
 export class NetworkService {
-  constructor(private networkStore: NetworkStore, private networkQuery: NetworkQuery) {}
+  constructor(private networkStore: NetworkStore, private networkQuery: NetworkQuery) {
+  }
 
   public messages$          = new Subject<Message>();
   public onClientConnected$ = new Subject();
@@ -53,11 +54,22 @@ export class NetworkService {
 
 
     return new Peer(id, mode === NetworkMode.localhost ? {
-      host: 'localhost',
-      path: 'ws',
+      host:   'localhost',
+      path:   'ws',
       secure: false,
-      port: 3030
-    } : undefined)
+      port:   3030,
+    } : {
+      debug: 3,
+      config: {
+        iceServers: [
+          // @ts-ignore
+          { url: "stun:stun.l.google.com:19302" },
+          { url: 'stun:stun1.l.google.com:19302' },
+          { url: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
+        ],
+        // iceTransportPolicy: "relay" // <- it means using only relay server (our free turn server in this case)
+      }
+    })
   }
 
   public SetClientNetworkMode(isLocal = false) {
@@ -79,8 +91,10 @@ export class NetworkService {
         // this.ResetClient(hostId);
       });
     });
-    this.peerInstance.on("disconnected", () => {})
+    this.peerInstance.on("disconnected", () => {
+    })
     this.peerInstance.on("error", error => {
+      console.log(error)
       this.ResetClient(hostId);
     });
   }
@@ -88,7 +102,7 @@ export class NetworkService {
   public async StartHost() {
 
     this.UpdateNetworkStatus(ConnectionState.Connecting);
-    const state = this.networkQuery.getValue();
+    const state  = this.networkQuery.getValue();
     const hostID = state.saveHost ? (state.hostID || uuid()) : uuid(); // reuse or create new id
 
     this.peerInstance = this.StartPeer(hostID);
