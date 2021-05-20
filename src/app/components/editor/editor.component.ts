@@ -1,18 +1,18 @@
 import {ChangeDetectionStrategy, Component, NgModule, OnInit} from '@angular/core';
-import {CommonModule}           from "@angular/common";
-import {StyleService}           from "@store/style/style.service";
-import {StyleQuery}             from "@store/style/style.query";
-import {RGBA}                   from "ngx-color";
-import {FormsModule}            from "@angular/forms";
-import {TippyModule}            from "@ngneat/helipopper";
-import {ColorSketchModule}      from "ngx-color/sketch";
-import {SimplebarAngularModule} from "simplebar-angular";
-import {ApplicationService}     from "@store/application/application.service";
-import {FontsService}           from "@store/fonts/fonts.service";
-import {EmotesService}          from "@store/emotes/emotes.service";
-import {EmotesQuery}            from "@store/emotes/emotes.query";
+import {CommonModule}                                         from "@angular/common";
+import {StyleService}                                         from "@store/style/style.service";
+import {StyleQuery}                                           from "@store/style/style.query";
+import {RGBA}                                                 from "ngx-color";
+import {FormsModule}                                          from "@angular/forms";
+import {TippyModule}                                          from "@ngneat/helipopper";
+import {ColorSketchModule}                                    from "ngx-color/sketch";
+import {SimplebarAngularModule}                               from "simplebar-angular";
+import {ApplicationService}                                   from "@store/application/application.service";
+import {FontsService}                                         from "@store/fonts/fonts.service";
+import {EmotesService}                                        from "@store/emotes/emotes.service";
+import {EmotesQuery}                                          from "@store/emotes/emotes.query";
 
-type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global';
+type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global' | 'emotes';
 
 @Component({
   selector:        'app-editor',
@@ -25,9 +25,9 @@ export class EditorComponent implements OnInit {
     public styleService: StyleService,
     public styleQuery: StyleQuery,
     public applicationService: ApplicationService,
-    public emotesService: EmotesService,
     public fontsService: FontsService,
-    public emotesQuery: EmotesQuery
+    public emotesService: EmotesService,
+    public emotesQuery: EmotesQuery,
   ) {
   }
 
@@ -35,7 +35,8 @@ export class EditorComponent implements OnInit {
 
   selectedFontLetter = 'a';
 
-  trackFonts = (index: number, obj: any) => obj.family;
+  trackBindings = (index: number, obj: any) => index;
+  trackFonts    = (index: number, obj: any) => obj.family;
 
   ChangeTab(value: EditorComponent["activeTab"]) {
     this.activeTab = value;
