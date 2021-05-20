@@ -25,7 +25,7 @@
     "@tauri-apps/api": "^1.0.0-beta.1",
     "@tauri-apps/cli": "^1.0.0-beta.1",
     "browser-fs-access": "^0.17.0",
-    "daisyui": "^0.27.1",
+    "daisyui": "^0.28.0",
     "deepmerge": "^4.2.2",
     "immer": "^9.0.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.17.0",
