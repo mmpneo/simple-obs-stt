@@ -17,6 +17,10 @@
     <a class="tab px-2 tab-bordered" tippy="Global" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
     </a>
+
+    <a class="tab px-2 tab-bordered" tippy="Emotes" [class.tab-active]="activeTab === 'emotes'" (click)="ChangeTab('emotes')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    </a>
   </div>
 
   <ng-template #fieldNumber let-value let-title="title" let-fn="fn" let-min="min" let-max="max" let-step="step">
@@ -193,19 +197,68 @@
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Hide on inactivity', $implicit: currentStyle.globalStyle.hideOnInactivity.value, fn: GetFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity.value, fn: GetFn('global', 'clearOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.inactivityTimer.value, fn: GetFn('global', 'inactivityTimer'), min: 100, max: 30000}"></ng-container>
-      <div class="divider"></div>
-      <div class="font-semibold">Twitch emotes</div>
-      <div class="flex items-center space-x-2" *ngIf="emotesQuery.user$ | async as user else twitchLoginTemplate">
-        <img class="rounded-full" [src]="user.avatar" height="40" width="40">
-        <div class="flex flex-col">
-          <b>{{user.name}}</b>
-          <a class="link link-accent" (click)="emotesService.LogOut()">Disconnect</a>
+    </ng-container>
+    <ng-container *ngSwitchCase="'emotes'">
+      <ng-container *ngIf="emotesQuery.state$ | async as emoteState">
+        <div class="font-semibold">Twitch account</div>
+        <div class="flex items-center space-x-2" *ngIf="emoteState.user else twitchLoginTemplate">
+          <img class="rounded-full" [src]="emoteState.user.avatar" height="40" width="40">
+          <div class="flex flex-col">
+            <b>{{emoteState.user.name}}</b>
+            <a class="link link-accent" (click)="emotesService.LogOut()">Disconnect</a>
+          </div>
         </div>
-      </div>
-      <ng-template #twitchLoginTemplate>
-        <div>Connect your twitch account to use twitch/bttv/ffz emotes</div>
-        <a class="link link-primary" (click)="emotesService.Login()">Connect twitch account</a>
-      </ng-template>
+        <ng-template #twitchLoginTemplate>
+          <div>Connect your twitch account to use twitch/bttv/ffz emotes</div>
+          <a class="link link-primary" (click)="emotesService.Login()">Connect twitch account</a>
+        </ng-template>
+        <div class="divider"></div>
+        <div class="font-semibold">Emote bindings keywords</div>
+        <div class="flex justify-between items-center">
+          <div>Keyword 1</div>
+          <input class="w-44 input input-bordered input-sm" placeholder="Keyword" [ngModel]="emoteState.keyword" (ngModelChange)="emotesService.UpdateKeyword($event)">
+        </div>
+        <div class="flex justify-between items-center">
+          <div>Keyword 2</div>
+          <input class="w-44 input input-bordered input-sm" placeholder="Keyword" [ngModel]="emoteState.keyword_secondary" (ngModelChange)="emotesService.UpdateKeyword($event)">
+        </div>
+        <div class="divider"></div>
+        <div class="flex space-x-2">
+          <div class="font-semibold flex-1">Emote</div>
+          <div class="font-semibold flex-1">Trigger</div>
+          <div class="w-8"></div>
+        </div>
+        <ng-container *ngFor="let binding of emoteState.bindings; trackBy:trackBindings; let index = index">
+          <div class="flex space-x-2">
+            <input [ngModel]="binding[0]" (ngModelChange)="emotesService.UpdateBinding(index, 0, $event)" class="min-w-0 flex-1 input input-bordered input-sm">
+            <input [ngModel]="binding[1]" (ngModelChange)="emotesService.UpdateBinding(index, 1, $event)" class="min-w-0 flex-1 input input-bordered input-sm">
+            <button class="btn btn-sm btn-circle btn-ghost" (click)="emotesService.RemoveBinding(index)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </ng-container>
+        <button class="btn btn-sm btn-neutral mb-2" (click)="emotesService.AddBinding()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add binding</button>
+        <div class="text-sm opacity-70">
+          <b>Example</b><br>
+          Keyword 1 = "emote"<br>
+          Keyword 2 = "em"<br>
+          Emote = "Kappa"<br>
+          Trigger = "smile"<br>
+          <span>"<b>emote smile</b>" or "<b>em smile</b>" will be recognized as Kappa emote</span>
+          <ul class="p-4 list-disc">
+            <li>Clear keywords to disable feature</li>
+            <li>Triggers can contain up to two words</li>
+            <li>Triggers can share first words (smile one, smile two) </li>
+          </ul>
+        </div>
+
+      </ng-container>
     </ng-container>
   </ng-container>
 </div>
@@ -223,7 +276,7 @@
 </ng-template>
 <ng-template #iconTextRight>
   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
   </svg>
 </ng-template>
 
