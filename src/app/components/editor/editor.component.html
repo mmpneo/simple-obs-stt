@@ -223,7 +223,7 @@
           <input class="w-44 input input-bordered input-sm" placeholder="Keyword" [ngModel]="emoteState.keyword_secondary" (ngModelChange)="emotesService.UpdateKeyword($event)">
         </div>
         <div class="divider"></div>
-        <div class="flex space-x-2">
+        <div class="flex space-x-2" *ngIf="emoteState.bindings?.length">
           <div class="font-semibold flex-1">Emote</div>
           <div class="font-semibold flex-1">Trigger</div>
           <div class="w-8"></div>
