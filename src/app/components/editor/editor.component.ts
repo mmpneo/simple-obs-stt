@@ -56,32 +56,26 @@ export class EditorComponent implements OnInit {
 
   GetFn(section: StyleSections, key: string) {
     switch (section) {
-      case 'text':
-        return (val: string) => this.styleService.UpdateTextStyle({[key]: val});
-      case 'box':
-        return (val: string) => this.styleService.UpdateBoxStyle({[key]: val});
-      case 'avatar':
-        return (val: string) => this.styleService.UpdateAvatarStyle({[key]: val});
-      case 'sound':
-        return (val: string) => this.styleService.UpdateSoundStyle({[key]: val});
-      case 'global':
-        return (val: string) => this.styleService.UpdateGlobalStyle({[key]: val});
-      default:
-        return (val: string) => null;
+      case 'text':    return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("textStyle", key,val, valueIndex);
+      case 'box':     return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("boxStyle", key,val, valueIndex);
+      case 'avatar':  return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("avatarStyle", key,val, valueIndex);
+      case 'sound':   return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("soundStyle", key,val, valueIndex);
+      case 'global':  return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("globalStyle", key,val, valueIndex);
+      default:        return (val: string, valueIndex: number) => null;
     }
   }
 
-  GetCompositeFn(section: 'txt' | 'box' | 'avatar' | 'global', objectKey: string, key: string) {
+  //Generate link switch function
+  GetSwFn(section: StyleSections, key: string) {
     switch (section) {
-      case 'txt':
-        return (val: string) => this.styleService.UpdateTextComposite(objectKey as any, {[key]: val});
-      case 'avatar':
-        return (val: string) => this.styleService.UpdateAvatarComposite(objectKey as any, {[key]: val});
-      default:
-        return (val: string) => null;
+      case 'text':    return () => this.styleService.UpdateLinkSwitch("textStyle", key);
+      case 'box':     return () => this.styleService.UpdateLinkSwitch("boxStyle", key);
+      case 'avatar':  return () => this.styleService.UpdateLinkSwitch("avatarStyle", key);
+      case 'sound':   return () => this.styleService.UpdateLinkSwitch("soundStyle", key);
+      case 'global':  return () => this.styleService.UpdateLinkSwitch("globalStyle", key);
+      default:        return () => null;
     }
   }
-
 
   ngOnInit(): void {
   }

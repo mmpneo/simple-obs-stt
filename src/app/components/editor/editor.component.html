@@ -206,7 +206,7 @@
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Keep only last sentence', $implicit: currentStyle.globalStyle.keepSingleSentence, fn: GetFn('global', 'keepSingleSentence'), fnLink: GetSwFn('global', 'keepSingleSentence')}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Inactivity</div>
-      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Hide on inactivity', $implicit: currentStyle.globalStyle.hideOnInactivity, fn: GetFn('global', 'hideOnInactivity'), fnLink: GetSwFn('global', 'hideOnInactivity')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Use inactivity style', $implicit: currentStyle.globalStyle.hideOnInactivity, fn: GetFn('global', 'hideOnInactivity'), fnLink: GetSwFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity, fn: GetFn('global', 'clearOnInactivity'), fnLink: GetSwFn('global', 'clearOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.inactivityTimer, fn: GetFn('global', 'inactivityTimer'), fnLink: GetSwFn('global', 'inactivityTimer'), min: 100, max: 30000, disableLink: true}"></ng-container>
     </ng-container>
