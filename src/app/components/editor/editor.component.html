@@ -232,7 +232,7 @@
         </div>
         <div class="flex justify-between items-center">
           <div>Keyword 2</div>
-          <input class="w-44 input input-bordered input-sm" placeholder="Keyword" [ngModel]="emoteState.keyword_secondary" (ngModelChange)="emotesService.UpdateKeyword($event)">
+          <input class="w-44 input input-bordered input-sm" placeholder="Keyword" [ngModel]="emoteState.keyword_secondary" (ngModelChange)="emotesService.UpdateKeywordSecondary($event)">
         </div>
         <div class="divider"></div>
         <div class="flex space-x-2" *ngIf="emoteState.bindings?.length">
