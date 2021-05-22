@@ -59,7 +59,6 @@ export class NetworkService {
       secure: false,
       port:   3030,
     } : {
-      debug: 3,
       config: {
         iceServers: [
           // @ts-ignore
