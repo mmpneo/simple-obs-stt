@@ -100,8 +100,10 @@
               <select tippy="Change host theme" class="select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
                 <option value="aqua">Aqua</option>
                 <option value="black">Black</option>
+                <option value="emerald">Emerald</option>
                 <option value="bumblebee">Bumblebee</option>
                 <option value="cupcake">Cupcake</option>
+                <option value="corporate">Corporate</option>
                 <option value="cyberpunk">Cyberpunk</option>
                 <option value="dark">Dark</option>
                 <option value="dracula">Dracula</option>
@@ -110,9 +112,11 @@
                 <option value="garden">Garden</option>
                 <option value="halloween">Halloween</option>
                 <option value="light">Light</option>
+                <option value="lofi">LoFi</option>
                 <option value="luxury">Luxury</option>
                 <option value="pastel">Pastel</option>
                 <option value="retro">Retro</option>
+                <option value="wireframe">Wireframe</option>
                 <option value="synthwave">Synthwave</option>
                 <option value="valentine">Valentine</option>
               </select>
@@ -136,7 +140,7 @@
             </div>
           </div>
           <div class="flex flex-col space-y-4">
-            <div class="flex justify-center relative h-48 border-dotted border-2 border-base-300 self-center rounded-md">
+            <div class="flex justify-center relative h-48 self-center rounded-md">
               <app-stt-renderer class="absolute bottom-0 self-center"></app-stt-renderer>
             </div>
             <div class="w-96 flex space-x-2">

@@ -7,13 +7,14 @@ import {
   NgModule,
   OnInit,
   ViewChild
-}                                                                 from '@angular/core';
-import {CommonModule}                                             from "@angular/common";
-import {SpeechQuery}                                              from "@store/speech/speech.query";
-import {StyleQuery}                                               from "@store/style/style.query";
-import {CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
-import {SpeechSentence}                                      from "@store/speech/speech.store";
-import {animate, query, stagger, style, transition, trigger} from "@angular/animations";
+}                                                                                  from '@angular/core';
+import {CommonModule}                                                              from "@angular/common";
+import {SpeechQuery}                                                               from "@store/speech/speech.query";
+import {StyleQuery}                                                                from "@store/style/style.query";
+import {BuildTypedValue, CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
+import {SpeechSentence}                                                            from "@store/speech/speech.store";
+import {animate, query, stagger, style, transition, trigger}                       from "@angular/animations";
+import {combineQueries}                                                            from "@datorama/akita";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -49,34 +50,20 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   trackWord       = (index: number, obj: string[]) => index;
   trackLetter       = (index: number, obj: string) => obj;
 
-  private BuildTypedValue(value: StyleValue): string | number {
-    switch (value.type) {
-      case StyleValueType.pixels: return value.value + 'px';
-      case StyleValueType.ms: return value.value + 'ms';
-      case StyleValueType.url: return `url(${value.value})`;
-      case StyleValueType.translateX: return `translateX(${value.value}px)`;
-      case StyleValueType.translateY: return `translateY(${value.value}px)`;
-      case StyleValueType.number: return value.value;
-      default: return value.value;
-    }
-  }
-
-  private GetRandomRange(min: number, max: number) {
-    return Math.random() * (max - min) + min
-  }
+  private GetRandomRange = (min: number, max: number) => Math.random() * (max - min) + min;
   public GetRandomizedParams(currentStyle: STTStyle) {
     //todo somehow triggering multiple time
 
-    const durationMin = currentStyle.textStyle.durationMin.value;
-    const durationMax = currentStyle.textStyle.durationMax.value;
-    const scaleMin = currentStyle.textStyle.scaleMin.value;
-    const scaleMax = currentStyle.textStyle.scaleMax.value;
-    const rotationMin = currentStyle.textStyle.rotationMin.value;
-    const rotationMax = currentStyle.textStyle.rotationMax.value;
-    const translationXMin = currentStyle.textStyle.translationXMin.value;
-    const translationXMax = currentStyle.textStyle.translationXMax.value;
-    const translationYMin = currentStyle.textStyle.translationYMin.value;
-    const translationYMax = currentStyle.textStyle.translationYMax.value;
+    const durationMin = currentStyle.textStyle.durationMin.value[0];
+    const durationMax = currentStyle.textStyle.durationMax.value[0];
+    const scaleMin = currentStyle.textStyle.scaleMin.value[0];
+    const scaleMax = currentStyle.textStyle.scaleMax.value[0];
+    const rotationMin = currentStyle.textStyle.rotationMin.value[0];
+    const rotationMax = currentStyle.textStyle.rotationMax.value[0];
+    const translationXMin = currentStyle.textStyle.translationXMin.value[0];
+    const translationXMax = currentStyle.textStyle.translationXMax.value[0];
+    const translationYMin = currentStyle.textStyle.translationYMin.value[0];
+    const translationYMax = currentStyle.textStyle.translationYMax.value[0];
     return {
       time: this.GetRandomRange(durationMin, durationMax).toFixed(1),
       scale: this.GetRandomRange(scaleMin, scaleMax).toFixed(1),
@@ -86,36 +73,30 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private ApplyElementStyleDAta(style: STTStyle, section: keyof STTStyle, element: any, styles: { [key: string]: StyleValue }) {
+  private ApplyElementStyleDAta(style: STTStyle, section: keyof Omit<STTStyle, 'version'>, element: any, styles: { [key: string]: StyleValue }, valueIndex: number) {
     for (const cssKey in styles) {
       const customLogic = CUSTOM_STYLE_LOGIC[section]?.[cssKey];
       if (styles[cssKey].type === StyleValueType.logic) {
-        !!customLogic && customLogic(style, element.style, this.BuildTypedValue(styles[cssKey]));
+        !!customLogic && customLogic(style, element.style, BuildTypedValue(styles[cssKey], valueIndex), valueIndex);
         continue;
       }
       if (!!customLogic)
-        customLogic(style, element.style, this.BuildTypedValue(styles[cssKey]))
+        customLogic(style, element.style, BuildTypedValue(styles[cssKey], valueIndex), valueIndex)
       else
-        element.style[cssKey] = this.BuildTypedValue(styles[cssKey]);
+        element.style[cssKey] = BuildTypedValue(styles[cssKey], valueIndex);
     }
   }
 
-  private ApplyCompositeElementStyleData(element: any, styles: { [styleKey: string]: { [partialKey: string]: StyleValue } }) {
-    for (const stylesKey in styles)
-      element.style[stylesKey] = Object.values(styles[stylesKey]).map(p => this.BuildTypedValue(p)).join(' ')
-  }
-
-  private ApplyStyles(style: STTStyle) {
-    this.ApplyElementStyleDAta(style, 'avatarStyle', this.avatarElement.nativeElement, style.avatarStyle);
-    this.ApplyElementStyleDAta(style, 'boxStyle', this.boxElement.nativeElement, style.boxStyle);
-    this.ApplyElementStyleDAta(style, 'textStyle', this.textElement.nativeElement, style.textStyle);
-
-    this.ApplyCompositeElementStyleData(this.textElement.nativeElement, style.textStyleComposite);
-    this.ApplyCompositeElementStyleData(this.avatarElement.nativeElement, style.avatarStyleComposite);
+  private ApplyStyles(style: STTStyle, valueIndex: number) {
+    this.ApplyElementStyleDAta(style, 'avatarStyle', this.avatarElement.nativeElement, style.avatarStyle, valueIndex);
+    this.ApplyElementStyleDAta(style, 'boxStyle', this.boxElement.nativeElement, style.boxStyle, valueIndex);
+    this.ApplyElementStyleDAta(style, 'textStyle', this.textElement.nativeElement, style.textStyle, valueIndex);
   }
 
   ngAfterViewInit(): void {
-    this.styleQuery.current$.subscribe(style => this.ApplyStyles(style))
+    combineQueries([this.styleQuery.current$, this.speechQuery.showBubble$]).subscribe(([style, show]) => {
+      this.ApplyStyles(style, show ? 0 : 1)
+    })
   }
 
   ngOnInit(): void {

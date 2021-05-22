@@ -30,7 +30,7 @@ export class FontsService {
 
       //Load font on style update
       this.styleQuery.current$.pipe(
-        map(current => current?.textStyle.fontFamily?.value),
+        map(current => current?.textStyle.fontFamily?.value[0]),
         distinctUntilChanged()
       ).subscribe(fontFamily => {
         this.SelectFont(fontFamily.toString() || '')

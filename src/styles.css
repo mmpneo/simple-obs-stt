@@ -21,6 +21,7 @@ app-root > *:not(router-outlet):not(.titlebar) {
     @apply flex;
     /*@apply shadow-xl;*/
 }
+
 [data-tippy-root].with-shadow {
     @apply shadow-lg;
 }
@@ -30,6 +31,7 @@ app-root > *:not(router-outlet):not(.titlebar) {
     @apply text-base-content;
     @apply rounded-md;
 }
+
 [role="popper"] .tippy-content > div {
     @apply flex;
     @apply max-h-full;
@@ -62,34 +64,32 @@ input[type=range].range::-webkit-slider-thumb {
 }
 
 @keyframes avatar-floating {
-    0%{transform: translateY(0);}
-    50%{transform: translateY(10px);}
-    0%{transform: translateY(0);}
-}
-
-.stt-container{
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .05s ease-in-out, transform .05s ease-in-out;
-}
-.stt-container.show{
-    opacity: 1;
-    transform: translateY(0);
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+    0% {
+        transform: translateY(0);
+    }
 }
 
 .stt-box-text {
     scrollbar-width: none;
 }
-.stt-box-text.host{
+
+.stt-box-text.host {
     @apply border;
     @apply border-dashed;
     border-color: rgba(68, 68, 68, 0.3);
 }
+
 .stt-box-text::-webkit-scrollbar {
     display: none;
 }
 
-.stt-box-text > span{
+.stt-box-text > span {
     vertical-align: bottom;
 }
 
@@ -110,6 +110,7 @@ input[type=range].range::-webkit-slider-thumb {
     left: 0;
     right: 0;
 }
+
 .titlebar-button {
     display: inline-flex;
     justify-content: center;
@@ -117,6 +118,12 @@ input[type=range].range::-webkit-slider-thumb {
     width: 30px;
     height: 30px;
 }
+
 .titlebar-button:hover {
     background: #5bbec3;
+}
+
+.stt-box-avatar, .stt-box-container, .stt-box-text{
+    @apply transition-all;
+    @apply duration-300;
 }

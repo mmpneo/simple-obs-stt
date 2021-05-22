@@ -16,7 +16,7 @@ export class SoundService {
   private typeClip = new Audio('assets/sounds/type_1.wav');
 
   Play() {
-    const volValue = parseFloat(this.styleQuery.getValue().currentStyle.soundStyle.volume.value);
+    const volValue = parseFloat(this.styleQuery.getValue().currentStyle.soundStyle.volume.value[0]);
     if (volValue === 0)
       return;
     this.typeClip.volume = volValue ?? 0.5;

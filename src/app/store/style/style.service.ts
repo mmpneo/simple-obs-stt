@@ -1,11 +1,10 @@
-import {Injectable}                       from '@angular/core';
-import {PatchStyle, STTStyle, StyleStore} from './style.store';
-import {NetworkService}                   from "@store/network/network.service";
-import {transaction}                      from "@datorama/akita";
-import {fileOpen, fileSave}               from "browser-fs-access";
-import {HotToastService}                  from "@ngneat/hot-toast";
-
-type StyleSectionObject<T extends keyof STTStyle> = Partial<STTStyle[T]>
+import {Injectable}           from '@angular/core';
+import {STTStyle, StyleStore} from './style.store';
+import {NetworkService}       from "@store/network/network.service";
+import {transaction}          from "@datorama/akita";
+import {fileOpen}             from "browser-fs-access";
+import {HotToastService}      from "@ngneat/hot-toast";
+import {migrate_style}        from "@store/style/style.migration";
 
 @Injectable({providedIn: 'root'})
 export class StyleService {
@@ -14,9 +13,10 @@ export class StyleService {
     private networkService: NetworkService,
     private toast: HotToastService
   ) {
-    networkService.messages$.subscribe(m => m.type === 'style' && this.ReceiveFullStyle(m.data))
-    networkService.messages$.subscribe(m => m.type === 'style:partial' && this.ReceivePartialStyle(m.data))
-    networkService.messages$.subscribe(m => m.type === 'style:com_partial' && this.ReceivePartialCompositeStyle(m.data))
+    networkService.messages$.subscribe(m => {
+      m.type === 'style' && this.ReceiveFullStyle(m.data);
+      m.type === 'style:partial' && this.ReceivePartialStyle(m.data);
+    });
     networkService.onClientConnected$.subscribe(_ => this.SendFullStyle());
   }
 
@@ -63,7 +63,7 @@ export class StyleService {
       const json: {name: string, value: STTStyle} = JSON.parse(txt);
       if (!json.name || !json.value)
         return;
-      const patch = {...json, value: PatchStyle(json.value)};
+      const patch = {...json, value: migrate_style(json.value)};
       this.styleStore.update(state => {state.templates.push(patch)});
       this.toast.success(`Template "${patch.name}" has been imported`)
       // this.SelectTemplate(this.styleStore.getValue().templates.length -1);
@@ -91,14 +91,9 @@ export class StyleService {
     this.networkService.SendMessage({type: 'style', data: this.styleStore.getValue().currentStyle})
   }
 
-  // [section, key, value]
-  private SendPartialStyle(data: [string, string, string]) {
+  // [section, key, value, valueIndex]
+  private SendPartialStyle(data: [string, string, [string, string]]) {
     this.networkService.SendMessage({type: 'style:partial', data})
-  }
-
-  // [section, key, key, value]
-  private SendPartialCompositeStyle(data: [string, string, string, string]) {
-    this.networkService.SendMessage({type: 'style:com_partial', data})
   }
 
   private ReceiveFullStyle(styleState: STTStyle) {
@@ -107,50 +102,43 @@ export class StyleService {
     });
   }
 
-  // [section, key, value]
-  private ReceivePartialStyle(data: [keyof STTStyle, keyof STTStyle[keyof STTStyle], string]) {
+  // [section, key, value, valueIndex]
+  private ReceivePartialStyle(data: [keyof STTStyle, keyof STTStyle[keyof STTStyle], [string, string]]) {
     this.styleStore.update(state => {// @ts-ignore
       state.currentStyle[data[0]][data[1]].value = data[2];
     });
   }
 
-  // [section, key, key, value]
-  private ReceivePartialCompositeStyle(data: [keyof STTStyle, keyof STTStyle[keyof STTStyle], string, string]) {
-    this.styleStore.update(state => { // @ts-ignore
-      state.currentStyle[data[0]][data[1]][data[2]].value = data[3];
-    });
-  }
-
   // endregion
 
-  @transaction()
-  private UpdateNormalStyles(styleSectionKey: string, style: any) {
+  UpdateNormalStyles(styleSectionKey: STTStyleKeys, styleKey: string, styleValue: string, valueIndex: number) {
     this.styleStore.update(state => {
-      for (let styleKey in style) { // @ts-ignore
-        state.currentStyle[styleSectionKey][styleKey].value = style[styleKey]
-        this.SendPartialStyle([styleSectionKey, styleKey, style[styleKey]]);
-      }
+      // @ts-ignore
+      if (state.currentStyle[styleSectionKey][styleKey].linked)
+      // @ts-ignore
+        state.currentStyle[styleSectionKey][styleKey].value = [styleValue, styleValue]
+      else
+      // @ts-ignore
+        state.currentStyle[styleSectionKey][styleKey].value[valueIndex] = styleValue
+      // @ts-ignore
+      this.SendPartialStyle([styleSectionKey, styleKey, state.currentStyle[styleSectionKey][styleKey].value]);
     });
     this.TryUpdateTemplate();
   }
 
-  @transaction()
-  private UpdateCompositeStyles(sectionKey: string, compositeKey: string, value: any) {
+  UpdateLinkSwitch(section: STTStyleKeys, styleKey: string) {
     this.styleStore.update(state => {
-      for (let styleKey in value) { // @ts-ignore
-        state.currentStyle[sectionKey][compositeKey][styleKey].value = value[styleKey];
-        this.SendPartialCompositeStyle([sectionKey, compositeKey, styleKey, value[styleKey]]);
-      }
+      // @ts-ignore
+      state.currentStyle[section][styleKey].linked = !state.currentStyle[section][styleKey].linked;
+      // @ts-ignore
+      if (!state.currentStyle[section][styleKey].linked)
+        return
+      // @ts-ignore
+        const v = state.currentStyle[section][styleKey].value[0];
+      // @ts-ignore
+      state.currentStyle[section][styleKey].value = [v,v];
     });
     this.TryUpdateTemplate();
   }
-
-  UpdateTextStyle   = (style: Partial<StyleSectionObject<"textStyle">>) => this.UpdateNormalStyles("textStyle", style);
-  UpdateBoxStyle    = (style: Partial<StyleSectionObject<"boxStyle">>) => this.UpdateNormalStyles("boxStyle", style);
-  UpdateAvatarStyle = (style: Partial<StyleSectionObject<"avatarStyle">>) => this.UpdateNormalStyles("avatarStyle", style);
-  UpdateSoundStyle = (style: Partial<StyleSectionObject<"soundStyle">>) => this.UpdateNormalStyles("soundStyle", style);
-  UpdateGlobalStyle = (style: Partial<StyleSectionObject<"globalStyle">>) => this.UpdateNormalStyles("globalStyle", style);
-
-  UpdateTextComposite   = (compositeKey: keyof STTStyle["textStyleComposite"], value: any) => this.UpdateCompositeStyles('textStyleComposite', compositeKey, value);
-  UpdateAvatarComposite = (compositeKey: keyof STTStyle["avatarStyleComposite"], value: any) => this.UpdateCompositeStyles('avatarStyleComposite', compositeKey, value);
 }
+type STTStyleKeys = keyof Omit<STTStyle, "version">

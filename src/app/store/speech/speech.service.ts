@@ -53,12 +53,12 @@ export class SpeechService {
   // Show text and start or restart countdown to hide it
   TriggerShowTimer() {
     const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
-    const targetTime   = parseInt(globalConfig.inactivityTimer?.value || '1000');
+    const targetTime   = parseInt(globalConfig.inactivityTimer?.value[0] || '1000');
     this.speechStore.update({show: true});
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
     this.timeout = timer(targetTime).subscribe(_ => {
       this.speechStore.update(state => {
-        if (globalConfig.clearOnInactivity?.value) state.sentences = state.sentences.filter(s => !s.finalized);
+        if (globalConfig.clearOnInactivity?.value[0]) state.sentences = state.sentences.filter(s => !s.finalized);
         state.show = false;
       });
     });
@@ -66,7 +66,7 @@ export class SpeechService {
 
   private UpsertSentence(sentence: SpeechSentence) {
     const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
-    this.speechStore.update(e => ({sentences: arrayUpsert(globalConfig.keepSingleSentence.value ? e.sentences.filter((s => !s.finalized)) : e.sentences, sentence.id, sentence)}));
+    this.speechStore.update(e => ({sentences: arrayUpsert(globalConfig.keepSingleSentence.value[0] ? e.sentences.filter((s => !s.finalized)) : e.sentences, sentence.id, sentence)}));
   }
 
   @transaction()
@@ -151,7 +151,7 @@ export class SpeechService {
 
   public InterimTextInput(event: any) {
     this.speechStore.update({textInput: event});
-    !!this.styleQuery.getValue().currentStyle.globalStyle.realtimeTyping.value && this.UpdateLastVoiceSentence(event, false, SpeechSentenceType.text);
+    !!this.styleQuery.getValue().currentStyle.globalStyle.realtimeTyping.value[0] && this.UpdateLastVoiceSentence(event, false, SpeechSentenceType.text);
   }
 
   public SendTextInput(event: any) {
