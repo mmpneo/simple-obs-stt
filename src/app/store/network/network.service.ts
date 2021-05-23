@@ -61,11 +61,9 @@ export class NetworkService {
       port:   3030,
     } : {
       host: environment.server_host,
-      port: 9000,
-      debug: 3,
       key: 'peerjs',
       path: 'server',
-      secure: false,
+      secure: true,
       config: {
         iceServers: [
           // @ts-ignore
