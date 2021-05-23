@@ -3,7 +3,7 @@ import {SpeechService}                      from "@store/speech/speech.service";
 import {NetworkService}                     from "@store/network/network.service";
 import {Router}                             from "@angular/router";
 import {StyleService}                       from "@store/style/style.service";
-import {IsTauri}                            from "./utils/client_type";
+import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
 import {FontsService}                       from "@store/fonts/fonts.service";
 import {SoundService}                       from "@store/sound/sound.service";
 import {SwUpdate}                           from "@angular/service-worker";
@@ -41,7 +41,7 @@ export class AppComponent {
   }
 
   CheckUpdate() {
-    if (IsTauri() || !environment.production)
+    if (GetClientType() === ClientType.client ||  IsTauri() || !environment.production)
       return;
     this.updates.available.subscribe(event => {
       this.updates.activateUpdate().then(_ => this.toast.success("Update available. Refresh page"))

@@ -5,6 +5,7 @@ import {ConnectionState}           from "../../utils/types";
 import {v4 as uuid}                from 'uuid';
 import Peer                        from "peerjs";
 import {Subject}                   from "rxjs";
+import {environment}               from "../../../environments/environment";
 
 interface Message {
   type: string,
@@ -59,6 +60,12 @@ export class NetworkService {
       secure: false,
       port:   3030,
     } : {
+      host: environment.server_host,
+      port: 9000,
+      debug: 3,
+      key: 'peerjs',
+      path: 'server',
+      secure: false,
       config: {
         iceServers: [
           // @ts-ignore

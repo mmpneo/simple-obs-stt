@@ -19,7 +19,7 @@ fn my_custom_command() {
 async fn main() {
     let context: Context<EmbeddedAssets> = tauri::generate_context!();
     start_asset_host(context.assets().clone());
-    tauri::Builder::default()
+    tauri::Builder::default(
         .invoke_handler(tauri::generate_handler![my_custom_command])
         .run(context)
         .expect("error while running tauri application")

@@ -41,6 +41,7 @@ jobs:
           cp ./src/oauth_twitch.html ./dist/
         env:
           TW_CLIENT: ${{ secrets.TW_CLIENT }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
           BUILD_ENV: production
 
       - name: Deploy Github pages
