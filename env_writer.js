@@ -4,7 +4,7 @@ fs.readFile(targetPath, 'utf8', (err, data) => {
   const rew = data
     .replace('{{CLIENT_ID}}', process.env.TW_CLIENT)
     .replace('{{SERVER_HOST}}', process.env.SERVER_HOST)
-  fs.writeFile(targetPath, data.replace('{{CLIENT_ID}}', process.env.TW_CLIENT), function (err) {
+  fs.writeFile(targetPath, rew, function (err) {
     if (err) {
       throw console.error(err);
     } else {
