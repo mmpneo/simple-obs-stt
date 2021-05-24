@@ -10,18 +10,19 @@ edition = "2018"
 build = "src/build.rs"
 
 [build-dependencies]
-tauri-build = { version = "1.0.0-beta.0" }
+tauri-build = "1.0.0-beta.0"
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { git = "https://github.com/tauri-apps/tauri/", branch = "dev", features =[]}
+tauri = { git = "https://github.com/tauri-apps/tauri/", branch = "dev", features = ["api-all"] }
 
 globset = "0.3"
 tokio = { version = "1", features = ["full"] }
 tokio-stream = "0.1.5"
 warp = "0.3.1"
 futures = { version = "0.3", default-features = false, features = ["alloc"] }
+raw-window-handle = "0.3.3"
 
 [features]
 default = [ "custom-protocol" ]

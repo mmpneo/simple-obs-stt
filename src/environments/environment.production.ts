@@ -5,5 +5,5 @@ export const environment: EnvType = {
   server_host:    '{{SERVER_HOST}}',
   production:     true,
   clientPath:     "https://mmpneo.github.io/simple-obs-stt/client",
-  twitchAuthPath: "https://mmpneo.github.io/simple-obs-stt/oauth_twitch.html",
+  twitchAuthPath: "https://mmpneo.github.io/simple-obs-stt/auth/twitch",
 };

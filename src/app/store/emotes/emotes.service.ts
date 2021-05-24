@@ -8,8 +8,8 @@ import {
   FfzGlobalResponse,
   TwitchResponse,
   TwitchUserResponse
-}                                  from "@store/emotes/emotes.models";
-import {environment}               from "../../../environments/environment";
+}                                           from "@store/emotes/emotes.models";
+import {environment}                        from "../../../environments/environment";
 import {ClientType, GetClientType} from "../../utils/client_type";
 
 @Injectable({providedIn: 'root'})
@@ -103,11 +103,25 @@ export class EmotesService {
     localStorage.setItem('tw-key', '');
   }
 
+  SetupTwitchAuth(access_token: string) {
+    access_token && window.postMessage(access_token, window.opener);
+    window.close();
+  }
+
+  private ApplyTwitchToken(m: MessageEvent<any>) {
+    m.data && localStorage.setItem('tw-key', m.data);
+    this.Init();
+  }
+
   Login() {
     this.emotesStore.update({user: null});
     const auth_link   = `https://id.twitch.tv/oauth2/authorize?client_id=${environment.tw_client}&redirect_uri=${environment.twitchAuthPath}&response_type=token&scope=user_subscriptions`
+
     const auth_window = window.open(auth_link, '', 'width=600,height=600');
-    if (auth_window) auth_window.onbeforeunload = ev => this.Init()
+    if (auth_window) {
+      auth_window.onbeforeunload = ev => auth_window.removeEventListener("message", m => this.ApplyTwitchToken(m), false);
+      auth_window.addEventListener("message", m => this.ApplyTwitchToken(m), false);
+    }
   }
 
   private async Load_TWITCH_GLOBAL(id: string, app_id: string, auth_id: string) {

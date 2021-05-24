@@ -5,5 +5,5 @@ export const environment: EnvType = {
   server_host:    '{{SERVER_HOST}}',
   production:     true,
   clientPath:     'http://localhost:3030/client',
-  twitchAuthPath: 'https://custom-protocol-taurilocalhost/oauth_twitch.html'
+  twitchAuthPath: 'http://localhost:3030/auth/twitch'
 };

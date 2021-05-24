@@ -1,3 +1,5 @@
+import {appWindow} from "@tauri-apps/api/window";
+
 export enum ClientType {
   host,
   client
@@ -14,5 +16,5 @@ export function GetClientType(): ClientType {
     ClientType.client;
 }
 export function IsTauri(): boolean {
-  return !!(<any>window).__TAURI__
+  return !!appWindow;
 }
