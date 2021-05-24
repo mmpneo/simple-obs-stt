@@ -38,7 +38,7 @@ jobs:
           node env_writer.js
           npx ng build --configuration=production --base-href=/simple-obs-stt/
           cp ./src/404.html ./dist/
-          cp ./src/oauth_twitch.html ./dist/
+#          cp ./src/oauth_twitch.html ./dist/
         env:
           TW_CLIENT: ${{ secrets.TW_CLIENT }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
