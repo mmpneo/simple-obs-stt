@@ -1,9 +1,8 @@
 import {Injectable}               from '@angular/core';
 import {combineQueries, Query}    from '@datorama/akita';
 import {SpeechState, SpeechStore} from './speech.store';
-import {StyleQuery}               from "@store/style/style.query";
-import {filter, map}              from "rxjs/operators";
-import {ConnectionState}          from "../../utils/types";
+import {StyleQuery}                        from "@store/style/style.query";
+import {distinctUntilChanged, filter, map} from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class SpeechQuery extends Query<SpeechState> {
@@ -15,9 +14,10 @@ export class SpeechQuery extends Query<SpeechState> {
     this.select(),
     this.styleQuery.globalConfig$
   ]).pipe(map(([speechState, config]) =>
-    // speechState.speechServiceState === ConnectionState.Connected || // if hosting
     !config.hideOnInactivity?.value[0] || // if should always show
-    (speechState.show && speechState.sentences.length > 0))); // if time to show and has anything to show
+    (speechState.show && speechState.sentences.length > 0)),
+    distinctUntilChanged()
+  ); // if time to show and has anything to show
 
   onSentenceUpdate$ = this.select("sentences").pipe(filter(v => v.length !== 0));
 
