@@ -104,12 +104,15 @@ export class EmotesService {
   }
 
   SetupTwitchAuth(access_token: string) {
-    access_token && window.postMessage(access_token, window.opener);
+    access_token && window.postMessage(`token:${access_token}`, window.opener);
     window.close();
   }
 
   private ApplyTwitchToken(m: MessageEvent<any>) {
-    m.data && localStorage.setItem('tw-key', m.data);
+    if (typeof m.data !== "string" || m.data.indexOf("token:") !== 0)
+      return;
+    const token = m.data.slice(6);
+    localStorage.setItem('tw-key', token);
     this.Init();
   }
 
