@@ -139,9 +139,8 @@ export class SpeechService {
     try {
       await this.activePlugin.Start(selectedDialect, selectedPluginData);
     } catch (error) {
-      await this.StopHost(); // clear on initialization fail
-      throw new Error(error.message);
-    }
+      this.StopHost(); // clear on initialization fail
+      throw error;}
   }
 
   public ClearSentences() {

@@ -41,9 +41,8 @@ export class ApplicationService {
         throw new Error(error.message);
       }
     } catch (error) {
-      this.toast.error(error.message, {position: "bottom-right"})
-      console.error(error);
-      throw new Error(error.message);
+      this.toast.error(error.message || error, {position: "bottom-right"})
+      throw new Error(error.message || error);
     }
   }
 

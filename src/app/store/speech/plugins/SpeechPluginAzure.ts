@@ -17,6 +17,9 @@ export class SpeechPluginAzure extends BasePlugin {
 
   async Start(language: string, data: string[]) {
     try {
+      console.log(data, !data[0] || !data[1])
+      if (!data[0] || !data[1])
+        throw new Error("[Azure] Invalid service key or location");
       await navigator.mediaDevices.getUserMedia({video: false, audio: true});
       await super.Start(language, data);
       const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
