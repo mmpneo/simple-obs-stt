@@ -9,6 +9,7 @@ import {SPEECH_PLUGINS}                                             from "@store
 import {from, Subject, Subscription, timer}                         from "rxjs";
 import {switchMap, take, takeUntil}                                 from "rxjs/operators";
 import {EmotesQuery}                                                from "@store/emotes/emotes.query";
+import {environment}                                                from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -71,37 +72,41 @@ export class SpeechService {
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
-    const emotesState = this.emotesQuery.getValue();
-    const emotesMap = emotesState.emotes;
-    const emotesBindings = emotesState.bindings_cache;
-    const emotesKeyword = emotesState.keyword.toLocaleLowerCase();
-    const emotesKeywordSecond = emotesState.keyword_secondary.toLocaleLowerCase();
+    let words = (text).split(" ");
+    let value = [];
     if (text === undefined)
       return;
-    let words = (text).split(" ");
+    if (environment.features.EMOTES) {
+      const emotesState = this.emotesQuery.getValue();
+      const emotesBindings = emotesState.bindings_cache;
+      const emotesKeyword = emotesState.keyword.toLocaleLowerCase();
+      const emotesKeywordSecond = emotesState.keyword_secondary.toLocaleLowerCase();
 
-    if (emotesKeyword || emotesKeywordSecond) {
-      for (let i = 0; i < words.length; i++) {
-        if (i+1 === words.length) break; // ignore if last word
-        const wLower = words[i].toLocaleLowerCase();
-        if (wLower === emotesKeyword || wLower === emotesKeywordSecond) {
-          const first_word = words[i+1]?.replace(".","").replace(",",""),
-                second_word = words[i+2]?.replace(".","").replace(",","");
-          if (emotesBindings[first_word]?.[second_word]) // replace two words
-            words.splice(i, 3, emotesBindings[first_word][second_word])
-          else if (emotesBindings[first_word]?.['']) // replace one word
-            words.splice(i, 2, emotesBindings[first_word]['']);
+      if (emotesKeyword || emotesKeywordSecond) {
+        for (let i = 0; i < words.length; i++) {
+          if (i+1 === words.length) break; // ignore if last word
+          const wLower = words[i].toLocaleLowerCase();
+          if (wLower === emotesKeyword || wLower === emotesKeywordSecond) {
+            const first_word = words[i+1]?.replace(".","").replace(",",""),
+                  second_word = words[i+2]?.replace(".","").replace(",","");
+            if (emotesBindings[first_word]?.[second_word]) // replace two words
+              words.splice(i, 3, emotesBindings[first_word][second_word])
+            else if (emotesBindings[first_word]?.['']) // replace one word
+              words.splice(i, 2, emotesBindings[first_word]['']);
+          }
         }
       }
-    }
 
-    const value = words.map((word, i) => {
-      const firstLetter = word[0];
-      const wordFiltered = word.replace(".","");
-      if (emotesMap[firstLetter]?.[wordFiltered])
-        return [`<img src="${emotesMap[firstLetter]?.[wordFiltered]}">`, " "]
-      return [...word.split(""), " "];
-    });
+      value = words.map((word, i) => {
+        const firstLetter = word[0];
+        const wordFiltered = word.replace(".","");
+        if (emotesState.emotes[firstLetter]?.[wordFiltered])
+          return [`<img src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
+        return [...word.split(""), " "];
+      });
+    }
+    else
+      value = words.map(word => [...word.split(""), " "]);
 
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
     let targetSentence: SpeechSentence;
