@@ -52,32 +52,15 @@ export class NetworkService {
 
   private StartPeer(id: string): Peer {
     const mode = this.networkStore.getValue().networkMode;
-
+    const config = environment.peerConfig.local;
 
     return new Peer(id, mode === NetworkMode.localhost ? {
-      host:   'localhost',
-      path:   'ws',
-      secure: false,
-      port:   3030,
+      ...config,
+      config: {iceServers: environment.peerConfig.local.ice as unknown as RTCIceServer[]}
     } : {
-      host: environment.server_host,
-      key: 'peerjs',
-      path: 'server',
-      secure: true,
-      config: {
-        iceServers: [
-          // @ts-ignore
-          { url: "stun:stun.l.google.com:19302" },
-          { url: 'stun:stun1.l.google.com:19302' },
-          { url: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
-        ],
-        // iceTransportPolicy: "relay" // <- it means using only relay server (our free turn server in this case)
-      }
+      ...config,
+      config: {iceServers: environment.peerConfig.remote.ice as unknown as RTCIceServer[]}
     })
-  }
-
-  public SetClientNetworkMode(isLocal = false) {
-    this.networkStore.update({networkMode: isLocal ? NetworkMode.localhost : NetworkMode.network});
   }
 
   public InitClient(hostId: string) {
