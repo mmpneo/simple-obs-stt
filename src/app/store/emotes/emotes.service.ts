@@ -53,6 +53,8 @@ export class EmotesService {
 
   // load twitch user and emotes if auth'd
   async Init() {
+    if (!environment.features.EMOTES)
+      return;
     this.BuildCache();
     const key = localStorage.getItem('tw-key')
     if (!key)
@@ -104,7 +106,7 @@ export class EmotesService {
   }
 
   SetupTwitchAuth(access_token: string) {
-    access_token && window.postMessage(`token:${access_token}`, window.opener);
+    access_token && window.opener.postMessage(`token:${access_token}`, '*');
     window.close();
   }
 
@@ -122,8 +124,8 @@ export class EmotesService {
 
     const auth_window = window.open(auth_link, '', 'width=600,height=600');
     if (auth_window) {
-      auth_window.onbeforeunload = ev => auth_window.removeEventListener("message", m => this.ApplyTwitchToken(m), false);
-      auth_window.addEventListener("message", m => this.ApplyTwitchToken(m), false);
+      auth_window.onbeforeunload = ev => window.removeEventListener("message", m => this.ApplyTwitchToken(m), false);
+      window.addEventListener("message", m => this.ApplyTwitchToken(m), false);
     }
   }
 
