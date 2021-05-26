@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "simple-obs-stt",
+    "productName": "Simple STT",
     "version": "0.1.0"
   },
   "build": {
@@ -14,7 +14,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.simple.stt",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -25,7 +25,7 @@
       "resources": [],
       "externalBin": [],
       "copyright": "",
-      "category": "DeveloperTool",
+      "category": "Entertainment",
       "shortDescription": "",
       "longDescription": "",
       "deb": {
@@ -55,10 +55,10 @@
     "windows": [
       {
         "title": "Simple STT",
-        "width": 500,
-        "height": 400,
-        "minWidth": 500,
-        "minHeight": 500,
+        "width": 1024,
+        "height": 600,
+        "minWidth": 750,
+        "minHeight": 600,
         "resizable": true,
         "fullscreen": false,
         "decorations": true
