@@ -1,24 +1,22 @@
 use std::sync::Arc;
 use globset::Glob;
+use serde::Deserialize;
 use tauri::api::assets::EmbeddedAssets;
 use tauri::Assets;
 use tokio::sync::{mpsc, RwLock};
 use warp::{Filter, Rejection, Reply};
 use warp::http::{HeaderValue, Response, StatusCode};
-use warp::http::header::ACCEPT_RANGES;
+use warp::http::header::{ACCEPT_RANGES, ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_SECURITY_POLICY, ORIGIN, X_FRAME_OPTIONS};
 use warp::path::{FullPath, param};
-
-use serde::{Deserialize};
 
 use crate::ws_handler::{user_connected, Users};
 
 #[derive(Deserialize)]
 struct WsQueryData {
-    id: String
+    id: String,
 }
 
 pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
-
     let users = Users::default();
     let users = warp::any().map(move || users.clone());
 
@@ -29,7 +27,7 @@ pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
         .and(users)
         .and(warp::query::<WsQueryData>())
         .map(|ws: warp::ws::Ws, users, q: WsQueryData| {
-            ws.on_upgrade(move |socket| user_connected(q.id,socket, users))
+            ws.on_upgrade(move |socket| user_connected(q.id, socket, users))
         });
 
     tokio::spawn(warp::serve(ws_path.or(full)).run(([127, 0, 0, 1], 3030)));
@@ -46,6 +44,9 @@ async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<im
 
             .status(StatusCode::OK)
             .header(ACCEPT_RANGES, HeaderValue::from_static("bytes"))
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"))
+            .header(CONTENT_SECURITY_POLICY, HeaderValue::from_static("frame-ancestors *"))
+            .header(X_FRAME_OPTIONS, HeaderValue::from_static("ALLOW-FROM *"))
             .body(asset.to_vec()));
     }
 
@@ -55,6 +56,9 @@ async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<im
         Ok(Response::builder()
             .status(StatusCode::OK)
             .header(ACCEPT_RANGES, HeaderValue::from_static("bytes"))
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"))
+            .header(CONTENT_SECURITY_POLICY, HeaderValue::from_static("frame-ancestors *"))
+            .header(X_FRAME_OPTIONS, HeaderValue::from_static("ALLOW-FROM *"))
             .body(vv.to_vec()))
     } else {
         Err(warp::reject::not_found())
