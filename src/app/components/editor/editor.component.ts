@@ -11,6 +11,7 @@ import {ApplicationService}                                   from "@store/appli
 import {FontsService}                                         from "@store/fonts/fonts.service";
 import {EmotesService}                                        from "@store/emotes/emotes.service";
 import {EmotesQuery}                                          from "@store/emotes/emotes.query";
+import {environment}                                          from 'src/environments/environment';
 
 type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global' | 'emotes';
 
@@ -31,6 +32,7 @@ export class EditorComponent implements OnInit {
   ) {
   }
 
+  environment = environment;
   activeTab: StyleSections = 'text';
 
   selectedFontLetter = 'a';
