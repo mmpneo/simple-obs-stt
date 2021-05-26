@@ -83,7 +83,7 @@
           </div>
 
           <div class="flex flex-col space-y-2 pl-5">
-            <div class="text-xs opacity-50"><b>STT plugin - {{plugins[speechState.selectedPlugin[0]].name}}</b> - {{connectionState[speechState.speechServiceState]}}</div>
+            <div class="text-xs opacity-50"><b>STT plugin - {{plugins[speechState.selectedPlugin[0]]?.name}}</b> - {{connectionState[speechState.speechServiceState]}}</div>
             <div class="text-xs opacity-50"><b>Network</b> - {{connectionState[networkState.peerConnectionState]}}</div>
           </div>
         </div>
