@@ -5,6 +5,7 @@ export const environment: EnvType = {
   peerConfig: {
     local:  {
       host:   '{{SERVER_HOST}}',
+      clientHost: 'https://mmpneo.github.io/simple-obs-stt/client',
       port:   443,
       key:    'peerjs',
       path:   'server',
@@ -17,6 +18,7 @@ export const environment: EnvType = {
     },
     remote: {
       host:   '{{SERVER_HOST}}',
+      clientHost: 'https://mmpneo.github.io/simple-obs-stt/client',
       port:   443,
       key:    'peerjs',
       path:   'server',

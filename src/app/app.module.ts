@@ -10,7 +10,6 @@ import {popper_max_size}                                from "./utils/popper_max
 import maxSize                                          from "popper-max-size-modifier";
 import {HotToastModule}                                 from '@ngneat/hot-toast';
 import {ServiceWorkerModule}                            from '@angular/service-worker';
-import {IsTauri}                                        from "./utils/client_type";
 import {InitializeApplication}                          from "./app.init";
 import {BrowserAnimationsModule}                        from "@angular/platform-browser/animations";
 
@@ -23,8 +22,8 @@ import {BrowserAnimationsModule}                        from "@angular/platform-
     BrowserAnimationsModule,
     AppRoutingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled:              !IsTauri() && environment.production,
+    environment.platform !== "web" ? [] : ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled:              environment.production,
       registrationStrategy: 'registerWhenStable:30000'
     }),
     TippyModule.forRoot({

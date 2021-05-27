@@ -24,7 +24,7 @@ export class ApplicationService {
 
   public CopyLink() {
     const isLocal = this.networkQuery.getValue().networkMode === NetworkMode.localhost;
-    const url           = `${environment.clientPath}/${this.networkService?.getPeerId()}/${isLocal ? 'local' : ''}`
+    const url           = `${isLocal ? environment.peerConfig.local.clientHost : environment.peerConfig.remote.clientHost}/${this.networkService?.getPeerId()}/${isLocal ? 'local' : ''}`
     navigator.clipboard.writeText(url);
   }
 

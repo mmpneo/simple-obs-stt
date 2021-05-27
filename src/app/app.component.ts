@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {SpeechService}                      from "@store/speech/speech.service";
+import {ChangeDetectionStrategy, Component, Optional} from '@angular/core';
+import {SpeechService}                                from "@store/speech/speech.service";
 import {NetworkService}                     from "@store/network/network.service";
 import {Router}                             from "@angular/router";
 import {StyleService}                       from "@store/style/style.service";
-import {ClientType, GetClientType, IsTauri} from "./utils/client_type";
+import {ClientType, GetClientType}          from "./utils/client_type";
 import {FontsService}                       from "@store/fonts/fonts.service";
 import {SoundService}                       from "@store/sound/sound.service";
 import {SwUpdate}                           from "@angular/service-worker";
@@ -27,11 +27,11 @@ export class AppComponent {
     private _emotesService: EmotesService,
     private router: Router,
     private toast: HotToastService,
-    private updates: SwUpdate) {
+    @Optional() private updates: SwUpdate) {
 
-    console.log("[System] Is tauri:", IsTauri());
-    !IsTauri() && this.CheckUpdate();
-    let path = localStorage.getItem('path');
+    console.log("[System] platform:", environment.platform);
+    (environment.platform === "web") && this.CheckUpdate();
+    let path          = localStorage.getItem('path');
     let path_fragment = localStorage.getItem('path-fragment');
     if (path) {
       localStorage.removeItem('path');
@@ -41,7 +41,7 @@ export class AppComponent {
   }
 
   CheckUpdate() {
-    if (GetClientType() === ClientType.client ||  IsTauri() || !environment.production)
+    if (GetClientType() === ClientType.client || environment.platform === "app" || !environment.production)
       return;
     this.updates.available.subscribe(event => {
       this.updates.activateUpdate().then(_ => this.toast.success("Update available. Refresh page"))

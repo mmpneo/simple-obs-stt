@@ -10,6 +10,7 @@ interface PeerConfig {
   path: string;
   secure: boolean;
   ice: IceConfig[];
+  clientHost: string;
 }
 export interface EnvType {
   platform: 'app' | 'web';

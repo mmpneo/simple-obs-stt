@@ -2,7 +2,7 @@ import {SpeechPluginNative} from "@store/speech/plugins/SpeechPluginNative";
 import {BasePlugin}         from "@store/speech/plugins/BasePlugin";
 import {SpeechPluginAzure}  from "@store/speech/plugins/SpeechPluginAzure";
 import {SpeechPluginNoop}   from "@store/speech/plugins/SpeechPluginNoop";
-import {IsTauri}            from "../../../utils/client_type";
+import {environment}        from "../../../../environments/environment";
 
 export type SpeechPluginDescriptor = {
   [pluginName: string]: {
@@ -22,7 +22,7 @@ export const SPEECH_PLUGINS: SpeechPluginDescriptor = {
     hastDataInput:  false,
     plugin:         SpeechPluginNative,
     pluginDataFields: [],
-    platformValidate: () => !IsTauri()
+    platformValidate: () => environment.platform === "web"
   },
   "noop": {
     name:           'Noop (Text input only)',

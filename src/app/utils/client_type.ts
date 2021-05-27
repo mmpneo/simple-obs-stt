@@ -13,6 +13,3 @@ export function GetClientType(): ClientType {
     ClientType.host :
     ClientType.client;
 }
-export function IsTauri(): boolean {
-  return !!(<any>window).__TAURI__
-}

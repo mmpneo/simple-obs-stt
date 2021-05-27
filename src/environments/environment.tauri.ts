@@ -1,10 +1,11 @@
 import {EnvType} from "./EnvType";
 
 export const environment: EnvType = {
-  platform:   'web',
+  platform:   'app',
   peerConfig: {
     local:  {
       host:   'localhost',
+      clientHost: 'http://localhost:3030/client',
       port:   3030,
       key:    '',
       path:   'ws',
@@ -13,6 +14,7 @@ export const environment: EnvType = {
     },
     remote: {
       host:   '{{SERVER_HOST}}',
+      clientHost: 'https://mmpneo.github.io/simple-obs-stt/client',
       port:   443,
       key:    'peerjs',
       path:   'server',

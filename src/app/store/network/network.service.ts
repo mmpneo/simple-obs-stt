@@ -52,7 +52,7 @@ export class NetworkService {
 
   private StartPeer(id: string): Peer {
     const mode = this.networkStore.getValue().networkMode;
-    const config = environment.peerConfig.local;
+    const config = mode === NetworkMode.localhost ? environment.peerConfig.local : environment.peerConfig.remote;
 
     return new Peer(id, mode === NetworkMode.localhost ? {
       ...config,
@@ -111,5 +111,9 @@ export class NetworkService {
 
   SwitchSaveHost() {
     this.networkStore.update(e => ({saveHost: !e.saveHost}))
+  }
+
+  SwitchNetworkMode() {
+    this.networkStore.update(e => ({networkMode: e.networkMode === NetworkMode.localhost ? NetworkMode.network : NetworkMode.localhost}))
   }
 }
