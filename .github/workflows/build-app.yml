@@ -2,8 +2,8 @@ name: Build app
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -48,6 +48,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
           body: "Test"
