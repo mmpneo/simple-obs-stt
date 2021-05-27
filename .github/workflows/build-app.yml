@@ -7,8 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -16,6 +15,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -36,16 +36,19 @@ jobs:
       - name: Build app
         run: |
           node env_writer.js
-          npx ng build --configuration=production --base-href=/simple-obs-stt/
-          cp ./src/404.html ./dist/
-#          cp ./src/oauth_twitch.html ./dist/
+          npx ng build --configuration=tauri
         env:
           TW_CLIENT: ${{ secrets.TW_CLIENT }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          BUILD_ENV: production
+          BUILD_ENV: tauri
 
-      - name: Deploy Github pages
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: "Desktop v__VERSION__"
+          body: "Desktop version."
+          draft: true
+          prerelease: false
+

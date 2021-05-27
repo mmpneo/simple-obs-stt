@@ -1,0 +1,46 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm i
+
+      - name: Build app
+        run: |
+          node env_writer.js
+          npx ng build --configuration=production --base-href=/simple-obs-stt/
+          cp ./src/404.html ./dist/
+        env:
+          TW_CLIENT: ${{ secrets.TW_CLIENT }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          BUILD_ENV: production
+
+      - name: Deploy Github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
