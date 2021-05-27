@@ -29,28 +29,28 @@ jobs:
 #          restore-keys: |
 #            ${{ runner.os }}-node-
 
-      - name: Install Dependencies
-#        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm i
-
-      - name: Build app
-        run: |
-          node env_writer.js
-          npx ng build --configuration=production,tauri
-        env:
-          TW_CLIENT: ${{ secrets.TW_CLIENT }}
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          BUILD_ENV: tauri
-
-      - uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Install Dependencies
+##        if: steps.cache.outputs.cache-hit != 'true'
+#        run: npm i
+#
+#      - name: Build app
+#        run: |
+#          node env_writer.js
+#          npx ng build --configuration=production,tauri
+#        env:
+#          TW_CLIENT: ${{ secrets.TW_CLIENT }}
+#          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+#          BUILD_ENV: tauri
+#
+#      - uses: tauri-apps/tauri-action@v0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           files: |
-            .src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/icon/*.png
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
