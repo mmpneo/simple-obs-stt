@@ -51,6 +51,6 @@ jobs:
         with:
           draft: true
           files: |
-            .src-tauri/target/release/bundle/*.msi
+            .src-tauri/target/release/bundle/msi/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
