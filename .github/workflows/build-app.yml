@@ -36,7 +36,7 @@ jobs:
       - name: Build app
         run: |
           node env_writer.js
-          npx ng build --configuration=tauri
+          npx ng build --configuration=production,tauri
         env:
           TW_CLIENT: ${{ secrets.TW_CLIENT }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
