@@ -27,7 +27,7 @@ export const environment: EnvType = {
     }
   },
 
-  tw_client: 'u93n4exg8mhj8m1my8ko8pf2fxpqmw',
+  tw_client: '{{CLIENT_ID}}',
 
   production:     true,
   clientPath:     'http://localhost:3030/client',
