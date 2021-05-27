@@ -48,7 +48,7 @@ jobs:
         with:
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: "Desktop v__VERSION__"
-          body: "Desktop version."
-          draft: true
+          releaseBody: "Desktop version."
+          releaseDraft: true
           prerelease: false
 
