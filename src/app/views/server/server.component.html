@@ -5,7 +5,7 @@
       <div class="relative flex flex-col items-center justify-center drawer-content">
         <div class="absolute top-2 left-2 right-5 flex flex-col space-y-2">
           <div class="flex space-x-2 items-center">
-            <div tippy="Create style template">
+            <div tippy="Create new template from current style">
               <button [tippy]="newTemplate" variation="popper" placement="bottom" class="btn btn-circle btn-ghost">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -18,12 +18,12 @@
                 <option [ngValue]="null" selected disabled>Select template</option>
                 <option *ngFor="let template of state.templates; let index = index" [ngValue]="index">{{template.name}}</option>
               </select>
-              <button *ngIf="state.currentTemplate !== null" tippy="Delete current template" (click)="styleService.DeleteTemplate()" class="btn btn-circle btn-ghost">
+              <button *ngIf="state.currentTemplate !== null" tippy="Delete template (current style won't be reset)" (click)="styleService.DeleteTemplate()" class="btn btn-circle btn-ghost">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </button>
-              <button *ngIf="state.currentTemplate !== null" tippy="Save current template to file" (click)="styleService.ExportTemplate()" class="btn btn-circle btn-ghost">
+              <button *ngIf="state.currentTemplate !== null" tippy="Export template" (click)="styleService.ExportTemplate()" class="btn btn-circle btn-ghost">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                 </svg>
@@ -60,7 +60,13 @@
               <option value="valentine">Valentine</option>
             </select>
 
-            <button [ngSwitch]="appState.value" [tippy]="severView" className="with-shadow" [ngClass]="appState.value === 2 ? 'animate-pulse btn-error' : 'btn-primary'" variation="popper" placement="bottom" class="w-24 btn btn-sm">
+            <button [disabled]="appState.value !== 2" tippy="Copy client link" (click)="applicationService.CopyLink()" class="btn btn-ghost btn-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+              </svg>
+            </button>
+
+            <button [ngSwitch]="appState.value" [tippy]="severView" className="with-shadow" [ngClass]="appState.value === 2 ? 'btn-error' : 'btn-primary'" variation="popper" placement="bottom" class="w-24 btn btn-sm">
               <ng-container *ngSwitchCase="0">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
@@ -152,7 +158,23 @@
                 </div>
               </label>
             </div>
+
+            <div class="form-control" *ngIf="environment.platform === 'app'">
+              <label class="cursor-pointer label font-semibold">
+                <div class="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" tippy="Allow other people to see your subtitles. Keep in mind that client link will be different even with 'remember source' option being toggled.">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+                  </svg>
+                  <span class="label-text">Shared</span>
+                </div>
+                <div>
+                  <input type="checkbox" checked="checked" class="toggle" [ngModel]="networkState.networkMode === 1" (ngModelChange)="networkService.SwitchNetworkMode()">
+                  <span class="toggle-mark"></span>
+                </div>
+              </label>
+            </div>
           </div>
+
 
           <ng-container [ngSwitch]="appState.value">
             <button *ngSwitchCase="0" class="btn btn-primary" (click)="applicationService.StartHost()">
