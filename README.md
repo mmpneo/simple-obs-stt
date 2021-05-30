@@ -7,7 +7,7 @@
 ## Features
 - <img src="https://cdn.betterttv.net/emote/5d38aaa592fc550c2d5996b8/1x" width="20" height="20"> **Web version**
 - <img src="https://cdn.betterttv.net/emote/5b490e73cf46791f8491f6f4/1x" width="20" height="20"> **Standalone version**
-- <img src="https://cdn.betterttv.net/emote/5c857788f779543bcdf37124/1x" width="20" height="20"> **"Keyboard only mode**
+- <img src="https://cdn.betterttv.net/emote/5c857788f779543bcdf37124/1x" width="20" height="20"> **Keyboard only mode**
 - <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> **Visual customization**
 - <img src="https://cdn.betterttv.net/emote/5ad22a7096065b6c6bddf7f3/1x" width="20" height="20"> **Google Fonts integration** - about 1000 free fonts
 - <img src="https://cdn.betterttv.net/emote/6086e99a39b5010444d069fc/1x" width="20" height="20"> **Simple OBS integration**
@@ -22,11 +22,11 @@
 
 ## How to start
 1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
-2. Select stt plugin
-2. Select language to recognize
+2. Press "Host" button on the top-right
+2. Select stt plugin and language
 3. Start
 4. Copy client link
-5. Create browser source and past link
+5. Create browser source in OBS and past link
 
 <img src=".github/images/howto/stt_ui.gif">
 <img src=".github/images/howto/obs_ui.gif">
@@ -40,12 +40,12 @@
 <img src=".github/images/examples/ex-4.jpg">
 
 ## Planned
+- [x] Twitch emotes integration
 - [x] Fonts - Google fonts integration
 - [x] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
 - [ ] Sounds - typing sounds
 - [ ] Text animation - different text typing animations
 - [ ] Custom background for host preview
-- [ ] Twitch emotes integration
 
 ## Standalone version
 Experimental, WebView2(Edge) based, electron-like app.  
