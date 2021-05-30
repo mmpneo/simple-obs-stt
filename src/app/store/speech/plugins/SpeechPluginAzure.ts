@@ -22,19 +22,18 @@ export class SpeechPluginAzure extends BasePlugin {
     await super.Start(language, data);
     const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
     const speechConfig = SpeechConfig.fromSubscription(data[0], data[1]);
-    speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs.toString(), "10000");
+    speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs.toString(), "0");
     speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs.toString(), "20000");
     speechConfig.enableDictation();
 
     const langConfig   = AutoDetectSourceLanguageConfig.fromLanguages([language]);
-    SpeechRecognizer.FromConfig(speechConfig, langConfig, audioConfig)
-    this.instance             = new SpeechRecognizer(speechConfig, audioConfig);
+    this.instance             = SpeechRecognizer.FromConfig(speechConfig, langConfig, audioConfig);
     this.instance.recognizing = (s, e) => this.onInter$.next(e.result.text);
     this.instance.recognized  = (s, e) => this.onFinal$.next(e.result.text);
     this.onStatusChanged$.next(ConnectionState.Connecting);
 
     this.instance.sessionStopped = (s, e) => {
-      console.log("[Azure] Session stopped", e)
+      console.log("[Azure] Session stopped")
     }
     this.instance.sessionStarted = (s, e) => {
       console.log("[Azure] Session started")

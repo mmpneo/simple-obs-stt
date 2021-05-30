@@ -30,10 +30,10 @@ export class SpeechPluginNative extends BasePlugin {
     await navigator.mediaDevices.getUserMedia({video: false, audio: true});
     await super.Start(language, data);
     if (!(<any>window).webkitSpeechRecognition)
-      throw new Error("[Native] Native STT is not supported");
+      return this.onPluginCrashed$.next("[Native] Native STT is not supported");
     this.instance = new ((<any>window).webkitSpeechRecognition);
     if (!this.instance)
-      throw new Error("[Native] Cannot spawn native instance");
+      return this.onPluginCrashed$.next("[Native] Cannot spawn native instance");
     this.instance.lang           = language;
     this.instance.continuous     = true;
     this.instance.interimResults = true;
@@ -46,8 +46,13 @@ export class SpeechPluginNative extends BasePlugin {
     })
     this.instance.addEventListener("end", event => {
       if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-      console.log(`[Native] Stopped`, event)
-      this.onPluginCrashed$.next("end");
+      console.log(`[Native] Stopped`)
+      if (event.type === 'end') {
+        (<SpeechRecognition>event.target)?.stop()
+        setTimeout(() => (<SpeechRecognition>event.target)?.start(), 100);
+      }
+      else
+        this.onPluginCrashed$.next("end");
     }) // auto restart after silence
 
     this.instance.start();
