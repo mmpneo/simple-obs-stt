@@ -26,11 +26,11 @@
 
 ## Quick start
 1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
-2. Press "Host" button on the top-right
+2. Open "Host" menu on the top-right
 3. Start captions server
-4. Select STT plugin and start it, if required
-5. Copy client link on the left of "Host" button
-6. Create browser source in OBS and past link
+5. Copy client link
+6. Create browser source in OBS and past the link
+4. Additionally, select STT plugin and start it, if required
 
 ## Examples
 <img src=".github/images/examples/ex-1.gif">
