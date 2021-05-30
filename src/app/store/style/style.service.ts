@@ -1,7 +1,6 @@
 import {Injectable}           from '@angular/core';
 import {STTStyle, StyleStore} from './style.store';
 import {NetworkService}       from "@store/network/network.service";
-import {transaction}          from "@datorama/akita";
 import {fileOpen}             from "browser-fs-access";
 import {HotToastService}      from "@ngneat/hot-toast";
 import {migrate_style}        from "@store/style/style.migration";
@@ -11,7 +10,7 @@ export class StyleService {
   constructor(
     private styleStore: StyleStore,
     private networkService: NetworkService,
-    private toast: HotToastService
+    private toastService: HotToastService
   ) {
     networkService.messages$.subscribe(m => {
       m.type === 'style' && this.ReceiveFullStyle(m.data);
@@ -65,7 +64,7 @@ export class StyleService {
         return;
       const patch = {...json, value: migrate_style(json.value)};
       this.styleStore.update(state => {state.templates.push(patch)});
-      this.toast.success(`Template "${patch.name}" has been imported`)
+      this.toastService.success(`Imported: ${patch.name}`, {theme: 'snackbar', position: 'bottom-right'})
       // this.SelectTemplate(this.styleStore.getValue().templates.length -1);
     } catch (error) {throw new Error(error);}
   }
@@ -83,6 +82,8 @@ export class StyleService {
     a.download = `${template.name}.json`
     a.click();
     URL.revokeObjectURL(blobUrl);
+    this.toastService.success(`Exported: ${template.name}`, {theme: 'snackbar', position: 'bottom-right'})
+
   }
   // endregion
 
