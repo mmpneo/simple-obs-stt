@@ -6,6 +6,7 @@ import {v4 as uuid}                from 'uuid';
 import Peer                        from "peerjs";
 import {Subject}                   from "rxjs";
 import {environment}               from "../../../environments/environment";
+import {HotToastService}           from "@ngneat/hot-toast";
 
 interface Message {
   type: string,
@@ -14,7 +15,10 @@ interface Message {
 
 @Injectable({providedIn: 'root'})
 export class NetworkService {
-  constructor(private networkStore: NetworkStore, private networkQuery: NetworkQuery) {
+  constructor(
+    private networkStore: NetworkStore,
+    private networkQuery: NetworkQuery,
+    private toastService: HotToastService) {
   }
 
   public messages$          = new Subject<Message>();
@@ -24,6 +28,12 @@ export class NetworkService {
   public getPeerId            = () => this.peerInstance?.id;
   private connInstance?: Peer.DataConnection; // client connection
   private UpdateNetworkStatus = (peerConnectionState: ConnectionState) => this.networkStore.update({peerConnectionState})
+
+  public CopyLink() {
+    const isLocal = this.networkQuery.getValue().networkMode === NetworkMode.localhost;
+    const url     = `${isLocal ? environment.peerConfig.local.clientHost : environment.peerConfig.remote.clientHost}/${this?.getPeerId()}/${isLocal ? 'local' : ''}`
+    navigator.clipboard.writeText(url);
+  }
 
   public SendMessage(message: Message) {
     if (this.peerInstance?.disconnected)
@@ -45,7 +55,7 @@ export class NetworkService {
     }, 2000);
   }
 
-  Stop() {
+  StopHost() {
     this.UpdateNetworkStatus(ConnectionState.Disconnected);
     !this.peerInstance?.destroyed && this.peerInstance?.destroy();
   }
@@ -86,26 +96,23 @@ export class NetworkService {
     });
   }
 
-  public async StartHost() {
-
+  public StartHost() {
     this.UpdateNetworkStatus(ConnectionState.Connecting);
     const state  = this.networkQuery.getValue();
     const hostID = state.saveHost ? (state.hostID || uuid()) : uuid(); // reuse or create new id
 
     this.peerInstance = this.StartPeer(hostID);
-    try {
-      await new Promise((res, rej) => {
-        this.peerInstance?.on("open", res);
-        this.peerInstance?.on("error", rej);
-      });
-      this.UpdateNetworkStatus(ConnectionState.Connected)
-    } catch (error) {
-      this.UpdateNetworkStatus(ConnectionState.Disconnected)
-      throw new Error(error.message);
-    }
-    this.networkStore.update({hostID: this.peerInstance?.id});
-    this.peerInstance?.on("connection", _peerConnection => {
-      _peerConnection.on("open", () => this.onClientConnected$.next(null))
+    this.peerInstance?.on("error", (error: Error) => {
+      this.toastService.error(error.message, {theme: "snackbar", position: "bottom-right"});
+      this.StopHost();
+    });
+
+    this.peerInstance?.on("open", () => {
+      this.networkStore.update({hostID: this.peerInstance?.id});
+      this.peerInstance?.on("connection", _peerConnection => {
+        _peerConnection.on("open", () => this.onClientConnected$.next(null))
+      })
+      this.UpdateNetworkStatus(ConnectionState.Connected);
     })
   }
 

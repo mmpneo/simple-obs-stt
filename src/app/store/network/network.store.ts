@@ -7,6 +7,7 @@ export interface NetworkState {
   saveHost: boolean;
   networkMode: NetworkMode,
   peerConnectionState: ConnectionState;
+  crashError: string
 }
 
 export enum NetworkMode {
@@ -19,7 +20,8 @@ export function createInitialState(): NetworkState {
     hostID:              '',
     saveHost:            false,
     networkMode:         NetworkMode.localhost,
-    peerConnectionState: ConnectionState.Disconnected
+    peerConnectionState: ConnectionState.Disconnected,
+    crashError: ''
   };
 }
 
