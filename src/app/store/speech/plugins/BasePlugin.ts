@@ -9,6 +9,7 @@ export class BasePlugin {
   public readonly onStatusChanged$: BehaviorSubject<ConnectionState> = new BehaviorSubject<ConnectionState>(ConnectionState.Disconnected);
 
   async Start(language: string, data: string[]) {
+    this.onStatusChanged$.next(ConnectionState.Connecting);
     console.log(`[Base speech] Start ${language}`);
   };
 

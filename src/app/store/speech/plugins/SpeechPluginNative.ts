@@ -38,51 +38,28 @@ export class SpeechPluginNative extends BasePlugin {
     this.instance.continuous     = true;
     this.instance.interimResults = true;
 
-    try {
-      this.instance.addEventListener("error", (error) => { // listener for active connection
-        if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-        if (error.error === "no-speech") console.log("no speech")
-        else if (error.error === "network")
-          this.onPluginCrashed$.next("network drop");
-        console.error(error)
-      })
-      this.instance.addEventListener("end", event => {
-        if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-        console.log(`[Native] Stopped`, event)
-        this.onPluginCrashed$.next("end");
-      }) // auto restart after silence
+    this.instance.addEventListener("error", (error) => { // listener for active connection
+      if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
+      if (error.error === "no-speech") console.log("no speech")
+      else if (error.error !== "bad-grammar")
+        this.onPluginCrashed$.next("[Native] Lost connection");
+    })
+    this.instance.addEventListener("end", event => {
+      if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
+      console.log(`[Native] Stopped`, event)
+      this.onPluginCrashed$.next("end");
+    }) // auto restart after silence
 
-      //region initialization
-      const errorTimeoutPromise = new Promise<false>((res) => setTimeout(() => res(false), 500));
-      const listenErrorPromise = new Promise<string>((res, rej) => {
-        if (!this.instance) return rej("[Native] Cannot spawn native instance");
-        this.instance.onerror = (e) => {
-          if (this.instance) this.instance.onerror = null;
-          res(e.error);
-        };
-      });
-      this.instance.start();
+    this.instance.start();
 
-      const hasError: false | string = await Promise.race([errorTimeoutPromise, listenErrorPromise]); // wait for initial error
+    this.onStatusChanged$.next(ConnectionState.Connected);
+    console.log("[Native] Started");
 
-      if (hasError !== false) {
-        this.instance.abort();
-        throw new Error(hasError);
-      }
-
-      //endregion
-      this.onStatusChanged$.next(ConnectionState.Connected);
-      console.log("[Native] Started");
-
-      window.addEventListener("beforeunload", () => { // temp fix for browser freezing on page reload
-        if (this.onStatusChanged$.value === ConnectionState.Connected)
-          this.instance?.stop();
-      });
-      this.BindSpeech();
-    } catch (error) {
-      this.onStatusChanged$.next(ConnectionState.Disconnected);
-      throw new Error(error);
-    }
+    window.addEventListener("beforeunload", () => { // temp fix for browser freezing on page reload
+      if (this.onStatusChanged$.value === ConnectionState.Connected)
+        this.instance?.stop();
+    });
+    this.BindSpeech();
   }
 
   async Stop() {

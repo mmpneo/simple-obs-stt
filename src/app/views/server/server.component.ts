@@ -12,6 +12,9 @@ import {NetworkService}                         from "@store/network/network.ser
 import {SPEECH_PLUGINS, SpeechPluginDescriptor} from "@store/speech/plugins";
 import {ConnectionState}                        from "../../utils/types";
 import {environment}                            from "../../../environments/environment";
+import {VOICE_PLUGINS, VoicePluginDescriptor}   from "@store/voice/plugins";
+import {VoiceService}                           from "@store/voice/voice.service";
+import {VoiceQuery}                             from "@store/voice/voice.query";
 
 @Component({
   selector:        'app-server',
@@ -28,7 +31,9 @@ export class ServerComponent implements OnInit {
     public speechService: SpeechService,
     public speechQuery: SpeechQuery,
     public styleService: StyleService,
-    public styleQuery: StyleQuery
+    public styleQuery: StyleQuery,
+    public voiceService: VoiceService,
+    public voiceQuery: VoiceQuery,
   ) {
   }
 
@@ -36,19 +41,28 @@ export class ServerComponent implements OnInit {
 
   connectionState = ConnectionState;
 
-  plugins: SpeechPluginDescriptor = {};
-  langs                           = languages;
+  speechPlugins: SpeechPluginDescriptor = {};
+  voicePlugins: VoicePluginDescriptor = {};
+  langs                                 = languages;
 
   RgbaToString(rgba: RGBA) {
     return `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
   }
 
+  stt_start = () => this.speechService.StartHost();
+  stt_stop = () => this.speechService.StopHost();
+  network_start = () => this.networkService.StartHost();
+  network_stop = () => this.networkService.StopHost();
+  voice_start = () => this.voiceService.StartHost();
+  voice_stop = () => this.voiceService.StopHost();
+
   ngOnInit(): void {
-    this.plugins = Object.keys(SPEECH_PLUGINS).reduce((sum, pluginKey) => {
-      if (SPEECH_PLUGINS[pluginKey].platformValidate())
-        return {...sum, [pluginKey]: SPEECH_PLUGINS[pluginKey]}
-      return sum;
-    }, {});
+    this.speechPlugins = Object
+      .keys(SPEECH_PLUGINS)
+      .reduce((sum, pluginKey) => SPEECH_PLUGINS[pluginKey].platformValidate() ? {...sum, [pluginKey]: SPEECH_PLUGINS[pluginKey]} : sum, {});
+    this.voicePlugins = Object
+      .keys(VOICE_PLUGINS)
+      .reduce((sum, pluginKey) => VOICE_PLUGINS[pluginKey].platformValidate() ? {...sum, [pluginKey]: VOICE_PLUGINS[pluginKey]} : sum, {});
   }
 
 }

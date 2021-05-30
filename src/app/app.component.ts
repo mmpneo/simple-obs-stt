@@ -1,15 +1,16 @@
 import {ChangeDetectionStrategy, Component, Optional} from '@angular/core';
-import {SpeechService}                                from "@store/speech/speech.service";
-import {NetworkService}                     from "@store/network/network.service";
-import {Router}                             from "@angular/router";
-import {StyleService}                       from "@store/style/style.service";
-import {ClientType, GetClientType}          from "./utils/client_type";
-import {FontsService}                       from "@store/fonts/fonts.service";
-import {SoundService}                       from "@store/sound/sound.service";
-import {SwUpdate}                           from "@angular/service-worker";
-import {environment}                        from "../environments/environment";
-import {HotToastService}                    from "@ngneat/hot-toast";
-import {EmotesService}                      from "@store/emotes/emotes.service";
+import {SpeechService}             from "@store/speech/speech.service";
+import {NetworkService}            from "@store/network/network.service";
+import {Router}                    from "@angular/router";
+import {StyleService}              from "@store/style/style.service";
+import {ClientType, GetClientType} from "./utils/client_type";
+import {FontsService}              from "@store/fonts/fonts.service";
+import {SoundService}              from "@store/sound/sound.service";
+import {SwUpdate}                  from "@angular/service-worker";
+import {environment}               from "../environments/environment";
+import {HotToastService}           from "@ngneat/hot-toast";
+import {EmotesService}             from "@store/emotes/emotes.service";
+import {VoiceService}              from "@store/voice/voice.service";
 
 @Component({
   selector:        'app-root',
@@ -20,6 +21,7 @@ import {EmotesService}                      from "@store/emotes/emotes.service";
 export class AppComponent {
   constructor(
     private _speechService: SpeechService,
+    private _voiceService: VoiceService,
     private _networkService: NetworkService,
     private _styleService: StyleService,
     private _fontsService: FontsService,
@@ -28,6 +30,9 @@ export class AppComponent {
     private router: Router,
     private toast: HotToastService,
     @Optional() private updates: SwUpdate) {
+    window.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    }, false);
 
     console.log("[System] platform:", environment.platform);
     (environment.platform === "web") && this.CheckUpdate();

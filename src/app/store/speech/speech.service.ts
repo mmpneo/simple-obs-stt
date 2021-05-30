@@ -2,14 +2,15 @@ import {Injectable}                                                 from '@angul
 import {languages, SpeechSentence, SpeechSentenceType, SpeechStore} from './speech.store';
 import {SpeechQuery}                                                from "@store/speech/speech.query";
 import {NetworkService}                                             from "@store/network/network.service";
-import {arrayAdd, arrayUpdate, arrayUpsert, guid, transaction}      from "@datorama/akita";
+import {arrayUpsert, guid, transaction}                             from "@datorama/akita";
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
 import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
-import {from, Subject, Subscription, timer}                         from "rxjs";
-import {switchMap, take, takeUntil}                                 from "rxjs/operators";
+import {Subscription, timer}                                        from "rxjs";
+import {take}                                                       from "rxjs/operators";
 import {EmotesQuery}                                                from "@store/emotes/emotes.query";
 import {environment}                                                from "../../../environments/environment";
+import {HotToastService}                                            from "@ngneat/hot-toast";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -18,7 +19,9 @@ export class SpeechService {
     private styleQuery: StyleQuery,
     private speechQuery: SpeechQuery,
     private emotesQuery: EmotesQuery,
-    private networkService: NetworkService) {
+    private networkService: NetworkService,
+    private toastService: HotToastService
+    ) {
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.speechStore.update({sentences: []});
       if (m.type === 'stt:updatesentence') {
@@ -29,7 +32,6 @@ export class SpeechService {
   }
 
   private activePlugin?: BasePlugin;
-  private stopEvent$ = new Subject();
 
   public SelectPlugin     = (key: string) => {
     this.speechStore.update(e => ({
@@ -44,7 +46,6 @@ export class SpeechService {
   public SelectDialect    = (index: string) => this.speechStore.update(e => ({selectedLanguage: [e.selectedLanguage[0], parseInt(index)]}));
 
   public async StopHost() {
-    this.stopEvent$.next(null);
     await this.activePlugin?.Stop();
     this.activePlugin = undefined;
   }
@@ -119,15 +120,7 @@ export class SpeechService {
     this.TriggerShowTimer();
   }
 
-  private async RestartLoop() {
-    await this.StopHost();
-    timer(1500).pipe(
-      takeUntil(this.stopEvent$),
-      switchMap(_ => from(this.StartHost()))
-    ).subscribe({error: error => this.RestartLoop()})
-  }
-
-  async StartHost() {
+  public StartHost() {
     const plugin             = SPEECH_PLUGINS[this.speechQuery.getValue().selectedPlugin[0]];
     const pluginInstance     = new plugin.plugin();
     const selected           = this.speechQuery.getValue().selectedLanguage;
@@ -137,15 +130,11 @@ export class SpeechService {
     this.activePlugin.onInter$.subscribe(value => this.UpdateLastVoiceSentence(value))
     this.activePlugin.onFinal$.subscribe(value => this.UpdateLastVoiceSentence(value, true))
     this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({speechServiceState: value}))
-    this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(_value => { // restart plugin
-      console.log("[Speech] Plugin crashed", _value);
-      this.RestartLoop();
+    this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
+      this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
+      this.StopHost();
     });
-    try {
-      await this.activePlugin.Start(selectedDialect, selectedPluginData);
-    } catch (error) {
-      this.StopHost(); // clear on initialization fail
-      throw error;}
+    this.activePlugin.Start(selectedDialect, selectedPluginData);
   }
 
   public ClearSentences() {

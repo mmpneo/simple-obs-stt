@@ -16,47 +16,36 @@ export class SpeechPluginAzure extends BasePlugin {
   private instance!: SpeechRecognizer;
 
   async Start(language: string, data: string[]) {
-    try {
-      console.log(data, !data[0] || !data[1])
-      if (!data[0] || !data[1])
-        throw new Error("[Azure] Invalid service key or location");
-      await navigator.mediaDevices.getUserMedia({video: false, audio: true});
-      await super.Start(language, data);
-      const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
-      const speechConfig = SpeechConfig.fromSubscription(data[0], data[1]);
-      speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs.toString(), "10000");
-      speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs.toString(), "20000");
-      speechConfig.enableDictation();
+    if (!data[0] || !data[1])
+      throw new Error("[Azure] Invalid service key or location");
+    await navigator.mediaDevices.getUserMedia({video: false, audio: true});
+    await super.Start(language, data);
+    const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
+    const speechConfig = SpeechConfig.fromSubscription(data[0], data[1]);
+    speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs.toString(), "10000");
+    speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs.toString(), "20000");
+    speechConfig.enableDictation();
 
-      const langConfig   = AutoDetectSourceLanguageConfig.fromLanguages([language]);
-      SpeechRecognizer.FromConfig(speechConfig, langConfig, audioConfig)
-      this.instance             = new SpeechRecognizer(speechConfig, audioConfig);
-      this.instance.recognizing = (s, e) => this.onInter$.next(e.result.text);
-      this.instance.recognized  = (s, e) => this.onFinal$.next(e.result.text);
-      this.onStatusChanged$.next(ConnectionState.Connecting);
+    const langConfig   = AutoDetectSourceLanguageConfig.fromLanguages([language]);
+    SpeechRecognizer.FromConfig(speechConfig, langConfig, audioConfig)
+    this.instance             = new SpeechRecognizer(speechConfig, audioConfig);
+    this.instance.recognizing = (s, e) => this.onInter$.next(e.result.text);
+    this.instance.recognized  = (s, e) => this.onFinal$.next(e.result.text);
+    this.onStatusChanged$.next(ConnectionState.Connecting);
 
-      this.instance.sessionStopped = (s, e) => {
-        console.log("[Azure] Session stopped", e)
-      }
-      this.instance.sessionStarted = (s, e) => {
-        console.log("[Azure] Session started")
-        this.onStatusChanged$.next(ConnectionState.Connected);
-      }
-
-      await new Promise((res, rej) => {
-        this.instance.canceled = (r, e) => rej(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
-        this.instance.startContinuousRecognitionAsync(() => res(null), rej);
-      });
-      this.instance.canceled = (r, e) => {
-        console.log(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
-        this.onStatusChanged$.next(ConnectionState.Disconnected);
-        if (CancellationErrorCode.ConnectionFailure || CancellationErrorCode.ServiceTimeout)
-          this.onPluginCrashed$.next(CancellationErrorCode[e.errorCode]);
-      };
-    } catch (error) {
-      this.onStatusChanged$.next(ConnectionState.Disconnected);
-      throw new Error(error);
+    this.instance.sessionStopped = (s, e) => {
+      console.log("[Azure] Session stopped", e)
     }
+    this.instance.sessionStarted = (s, e) => {
+      console.log("[Azure] Session started")
+      this.onStatusChanged$.next(ConnectionState.Connected);
+    }
+    this.instance.canceled = (r, e) => {
+      console.log(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
+      if (!CancellationErrorCode.NoError)
+        this.onPluginCrashed$.next(`[Azure] ${CancellationErrorCode[e.errorCode]}`);
+    };
+    this.instance.startContinuousRecognitionAsync(undefined, e => this.onPluginCrashed$.next(e));
   }
 
   async Stop() {

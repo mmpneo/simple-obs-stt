@@ -23,4 +23,5 @@ export class SpeechQuery extends Query<SpeechState> {
 
   sentences$ = this.select("sentences");
   state$     = this.select();
+  connectionState$     = this.select("speechServiceState");
 }

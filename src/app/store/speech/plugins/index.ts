@@ -7,8 +7,6 @@ import {environment}        from "../../../../environments/environment";
 export type SpeechPluginDescriptor = {
   [pluginName: string]: {
     name: string,
-    dataInputLabel: string,
-    hastDataInput: boolean
     plugin: { new(): BasePlugin },
     pluginDataFields: string[],
     platformValidate: () => boolean
@@ -17,25 +15,19 @@ export type SpeechPluginDescriptor = {
 
 export const SPEECH_PLUGINS: SpeechPluginDescriptor = {
   "native": {
-    name:           'Native (Only Chrome and Edge)',
-    dataInputLabel: '',
-    hastDataInput:  false,
+    name:           'Native (Chrome and Edge)',
     plugin:         SpeechPluginNative,
     pluginDataFields: [],
     platformValidate: () => environment.platform === "web"
   },
   "noop": {
-    name:           'Noop (Text input only)',
-    dataInputLabel: '',
-    hastDataInput:  false,
+    name:           'Noop (Keyboard input only)',
     plugin:         SpeechPluginNoop,
     pluginDataFields: [],
     platformValidate: () => true
   },
   "azure":  {
     name:           "Azure Cognitive Services",
-    dataInputLabel: 'Service key',
-    hastDataInput:  true,
     plugin:         SpeechPluginAzure,
     pluginDataFields: ["Service key", "Service location"],
     platformValidate: () => true

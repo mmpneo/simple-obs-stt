@@ -7,8 +7,8 @@ export class SpeechPluginNoop extends BasePlugin {
   }
 
   async Start(language: string, data: string[]) {
+    super.Start(language, data);
     this.onStatusChanged$.next(ConnectionState.Connected);
-    await super.Start(language, data);
   }
 
   async Stop() {
