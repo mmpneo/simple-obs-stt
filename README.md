@@ -16,6 +16,9 @@
 - <img src="https://cdn.betterttv.net/emote/5b35cae2f3a33e2b6f0058ef/1x" width="20" height="20"> **Style changes applied on the fly**
 - <img src="https://cdn.frankerfacez.com/emoticon/145916/1" width="20" height="20"> **Share captions with multiple browser sources over the network**
 
+## Main view
+<img src=".github/images/screenshots/screenshot-1.png" width="100%"/>
+
 ## STT Plugins
 - <img src=".github/images/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality speech recognition, has free tier with 5 hours of audio per month, setup is kinda complicated
 - <img src=".github/images/browsers/chrome.png" height=20><img src=".github/images/browsers/edge.png" height=20> [Browser native](https://caniuse.com/speech-recognition) - browser integrated api. Not available in desktop version
