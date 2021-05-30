@@ -8,7 +8,8 @@
 - <img src="https://cdn.betterttv.net/emote/5d38aaa592fc550c2d5996b8/1x" width="20" height="20"> **Web version**
 - <img src="https://cdn.betterttv.net/emote/5b490e73cf46791f8491f6f4/1x" width="20" height="20"> **Standalone version**
 - <img src="https://cdn.betterttv.net/emote/5c857788f779543bcdf37124/1x" width="20" height="20"> **Keyboard only mode**
-- <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> **Visual customization**
+- <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> **Deep visual customization**
+- <img src="https://cdn.betterttv.net/emote/5cf69d7767398f2d6a1f9726/1x" width="20" height="20"> **Twitch/BTTV/FFZ emotes integration**
 - <img src="https://cdn.betterttv.net/emote/5ad22a7096065b6c6bddf7f3/1x" width="20" height="20"> **Google Fonts integration** - about 1000 free fonts
 - <img src="https://cdn.betterttv.net/emote/6086e99a39b5010444d069fc/1x" width="20" height="20"> **Simple OBS integration**
 - <img src="https://cdn.betterttv.net/emote/587fc95dafc2ff756c3f3012/1x" width="20" height="20"> **Auto saves styles and configuration**
@@ -20,16 +21,13 @@
 - <img src=".github/images/browsers/chrome.png" height=20><img src=".github/images/browsers/edge.png" height=20> [Browser native](https://caniuse.com/speech-recognition) - browser integrated api. Not available in desktop version
 - <img src=".github/images/browsers/desktop_main.png" height=20> Noop - keyboard input only
 
-## How to start
+## Quick start
 1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
 2. Press "Host" button on the top-right
-2. Select stt plugin and language
-3. Start
-4. Copy client link
-5. Create browser source in OBS and past link
-
-<img src=".github/images/howto/stt_ui.gif">
-<img src=".github/images/howto/obs_ui.gif">
+3. Start captions server
+4. Select STT plugin and start it, if required
+5. Copy client link on the left of "Host" button
+6. Create browser source in OBS and past link
 
 ## Examples
 <img src=".github/images/examples/ex-1.gif">
@@ -44,7 +42,7 @@
 - [x] Fonts - Google fonts integration
 - [x] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
 - [ ] Sounds - typing sounds
-- [ ] Text animation - different text typing animations
+- [ ] Text animation - simple appearing animation
 - [ ] Custom background for host preview
 
 ## Standalone version
