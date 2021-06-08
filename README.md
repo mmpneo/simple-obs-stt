@@ -42,19 +42,6 @@
 - [x] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
 - [x] Text animation - simple appearing animation
 
-## Standalone version
-Experimental, WebView2(Edge) based, electron-like app.  
-Works offline (Still requires connection for STT).
-
-**How to build**  
-*Tested on windows.*  
-*Node 14 and Rust stable required.*
-1. Clone repo
-2. ``` npm i ```
-3. ``` npx ng build --configuration=tauri ```
-4. ```npx tauri build```
-5. Build will be available at *./src-tauri/target/release/*
-
 <img src="https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt">
 
 ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x) DO DO DO ![](https://cdn.betterttv.net/emote/603bef907c74605395f3604a/1x)
