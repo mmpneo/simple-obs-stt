@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Store, StoreConfig } from '@datorama/akita';
+import {Injectable}         from '@angular/core';
+import {Store, StoreConfig} from '@datorama/akita';
 
 export interface SoundState {
-   key: string;
+  isVoicePlaying: boolean
 }
 
 export function createInitialState(): SoundState {
   return {
-    key: ''
+    isVoicePlaying: false
   };
 }
 
-@Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'sound' })
+@Injectable({providedIn: 'root'})
+@StoreConfig({name: 'sound'})
 export class SoundStore extends Store<SoundState> {
 
   constructor() {

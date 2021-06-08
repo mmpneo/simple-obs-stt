@@ -22,7 +22,7 @@ if (GetClientType() === ClientType.host) { //add persistent for host
       if (storeName === 'speech')
         return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
       if (storeName === 'voice')
-        return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
+        return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage, mute: state.mute}
       return state;
     }
   });

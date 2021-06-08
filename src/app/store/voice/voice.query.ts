@@ -9,4 +9,5 @@ export class VoiceQuery extends Query<VoiceState> {
   }
 
   state$ = this.select();
+  mute$ = this.select("mute");
 }

@@ -36,5 +36,5 @@ export const environment: EnvType = {
   production:     true,
   clientPath:     "https://mmpneo.github.io/simple-obs-stt/client",
   twitchAuthPath: "https://mmpneo.github.io/simple-obs-stt/auth/twitch",
-  features:       {EMOTES: true, SHAREABLE: false}
+  features:       {EMOTES: true, SHAREABLE: false, TTS: true}
 };

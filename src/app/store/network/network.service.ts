@@ -36,6 +36,10 @@ export class NetworkService {
     this.toastService.success("Copied!", {theme: "snackbar", position: "bottom-right"})
   }
 
+  public SendAudio(buffer: ArrayBuffer) {
+    this.SendMessage({type: 'tts:play', data: buffer});
+  }
+
   public SendMessage(message: Message) {
     if (this.peerInstance?.disconnected)
       return;

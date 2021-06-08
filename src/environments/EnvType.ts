@@ -26,6 +26,7 @@ export interface EnvType {
   twitchAuthPath: string;
   features: {
     EMOTES: boolean,
-    SHAREABLE: boolean
+    SHAREABLE: boolean,
+    TTS: boolean,
   }
 }

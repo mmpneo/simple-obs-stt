@@ -1,32 +1,27 @@
-import { Injectable }         from '@angular/core';
-import { Store, StoreConfig } from '@datorama/akita';
-import {ConnectionState}      from "../../utils/types";
-import {SpeechSentence}       from "@store/speech/speech.store";
+import {Injectable}         from '@angular/core';
+import {Store, StoreConfig} from '@datorama/akita';
+import {ConnectionState}    from "../../utils/types";
+import produce              from "immer";
 
 export interface VoiceState {
-  selectedPlugin: [string, any],
+  // plugin index, language index, voice index
+  selectedPlugin: [number, number, number],
   selectedPluginData: string[],
-  selectedLanguage: [number, number],
   connectionState: ConnectionState,
-  sentences: SpeechSentence[],
-  textInput: string;
-  show: boolean
+  mute: boolean
 }
 
 export function createInitialState(): VoiceState {
   return {
-    selectedPlugin:     ["native", null],
+    selectedPlugin:     [0, 0, 0],
     selectedPluginData: [],
-    selectedLanguage:   [0, 0],
     connectionState:    ConnectionState.Disconnected,
-    sentences:          [],
-    textInput:          "",
-    show:               false
+    mute:               true,
   };
 }
 
-@Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'voice' })
+@Injectable({providedIn: 'root'})
+@StoreConfig({name: 'voice', producerFn: produce})
 export class VoiceStore extends Store<VoiceState> {
 
   constructor() {

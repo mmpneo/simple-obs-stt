@@ -60,7 +60,7 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
   },
   boxStyle:    {
     // based on boxStyle.heightMode keep height fixed or minimized with max height
-    height:  (state, elementStyle, calculatedValue, valueIndex) => {
+    height:     (state, elementStyle, calculatedValue, valueIndex) => {
       if (state.boxStyle.heightMode.value[0] === 'grow') {
         elementStyle.maxHeight = calculatedValue;
         elementStyle.height    = 'auto';
@@ -73,7 +73,7 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
     transformY: (state, elementStyle, calculatedValue, valueIndex) => {
       elementStyle.transform = `translateX(${state.boxStyle.transformX.value[valueIndex]}px) translateY(${state.boxStyle.transformY.value[valueIndex]}px)`
     },
-    bgStyle: (state, elementStyle, calculatedValue, valueIndex) => {
+    bgStyle:    (state, elementStyle, calculatedValue, valueIndex) => {
       //  normal | sliced
 
       elementStyle.borderImage     = null;
@@ -173,7 +173,8 @@ export interface STTStyle {
     opacity: StyleValue<StyleValueType.number>;
   },
   soundStyle: {
-    volume: StyleValue<StyleValueType.string>
+    volume: StyleValue<StyleValueType.string>;
+    voiceVolume: StyleValue<StyleValueType.string>;
   },
   globalStyle: {
     hideOnInactivity: StyleValue<StyleValueType.bool>;
@@ -191,7 +192,7 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     2,
+  version:     3,
   boxStyle:    {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
@@ -256,7 +257,8 @@ export const STYLE_TEMPLATE: STTStyle = {
     opacity:           {type: StyleValueType.number, value: [1, 1], linked: true},
   },
   soundStyle:  {
-    volume: {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
+    volume:      {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
+    voiceVolume: {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
   },
   globalStyle: {
     hideOnInactivity:   {type: StyleValueType.bool, value: ['', ''], linked: true},

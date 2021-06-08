@@ -198,7 +198,8 @@
     </ng-container>
     <ng-container *ngSwitchCase="'sound'">
       <div class="font-semibold">Sound</div>
-      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Volume', $implicit: currentStyle.soundStyle.volume, fn: GetFn('sound', 'volume'), fnLink: GetSwFn('sound', 'volume'), min: 0, max: 1, step: '0.1'}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Typing Volume', $implicit: currentStyle.soundStyle.volume, fn: GetFn('sound', 'volume'), fnLink: GetSwFn('sound', 'volume'), min: 0, max: 1, step: '0.1'}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Voice Volume', $implicit: currentStyle.soundStyle.voiceVolume, fn: GetFn('sound', 'voiceVolume'), fnLink: GetSwFn('sound', 'voiceVolume'), min: 0, max: 1, step: '0.1'}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
       <div class="font-semibold">Text input</div>

@@ -32,5 +32,5 @@ export const environment: EnvType = {
   production:     true,
   clientPath:     'http://localhost:3030/client',
   twitchAuthPath: 'http://localhost:3030/auth/twitch',
-  features:       {EMOTES: true, SHAREABLE: false}
+  features:       {EMOTES: true, SHAREABLE: false, TTS: true}
 };

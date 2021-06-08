@@ -1,12 +1,15 @@
-import {STTStyle, STYLE_TEMPLATE, StyleValueType} from "@store/style/style.store";
-import deepmerge                                  from "deepmerge";
+import {STTStyle, STYLE_TEMPLATE} from "@store/style/style.store";
+import deepmerge                  from "deepmerge";
 
 const migrations = [
   migrate_1,
-  migrate_2
+  migrate_2,
+  migrate_3
 ]
 
 export function migrate_style(style: STTStyle): STTStyle {
+  if (style.version === STYLE_TEMPLATE.version)
+    return style;
   let styleClone = {...style};
   console.log("[Migrate] from", style.version);
   for (let i = style.version || 0; i < STYLE_TEMPLATE.version; i++) {
@@ -16,7 +19,7 @@ export function migrate_style(style: STTStyle): STTStyle {
   return styleClone;
 }
 
-function migrate_1(style: STTStyle): STTStyle{
+function migrate_1(style: STTStyle): STTStyle {
   console.log("migrate 0 -> 1");
   return style;
 }
@@ -87,27 +90,35 @@ function migrate_2(style: STTStyle): STTStyle {
   //   x: {type: StyleValueType.translateX, value: ['0', '0'], linked: true},
   //   y: {type: StyleValueType.translateY, value: ['0', '0'], linked: true},
   // }
-  if(currentStyle.avatarStyleComposite) {
-    const transformX = currentStyle.avatarStyleComposite?.transform?.x?.value;
-    const transformY = currentStyle.avatarStyleComposite?.transform?.y?.value;
-    currentStyle.avatarStyle.transformX.value = transformX ? [transformX, transformX] : [0,0];
-    currentStyle.avatarStyle.transformY.value = transformX ? [transformY, transformY] : [0,0];
+  if (currentStyle.avatarStyleComposite) {
+    const transformX                          = currentStyle.avatarStyleComposite?.transform?.x?.value;
+    const transformY                          = currentStyle.avatarStyleComposite?.transform?.y?.value;
+    currentStyle.avatarStyle.transformX.value = transformX ? [transformX, transformX] : [0, 0];
+    currentStyle.avatarStyle.transformY.value = transformX ? [transformY, transformY] : [0, 0];
     console.log(currentStyle.avatarStyle.transformX, currentStyle.avatarStyle.transformY)
     delete currentStyle.avatarStyleComposite;
   }
 
   if (currentStyle.textStyleComposite) {
-    const x = currentStyle.textStyleComposite?.textShadow?.x?.value;
-    const y = currentStyle.textStyleComposite?.textShadow?.y?.value;
-    const b = currentStyle.textStyleComposite?.textShadow?.b?.value;
+    const x     = currentStyle.textStyleComposite?.textShadow?.x?.value;
+    const y     = currentStyle.textStyleComposite?.textShadow?.y?.value;
+    const b     = currentStyle.textStyleComposite?.textShadow?.b?.value;
     const color = currentStyle.textStyleComposite?.textShadow?.color?.value;
 
-    currentStyle.textStyle.shadowX.value = x ? [x, x] : ['0', '0']
-    currentStyle.textStyle.shadowY.value = y ? [y, y] : ['0', '0']
-    currentStyle.textStyle.shadowB.value = b ? [b, b] : ['0', '0']
+    currentStyle.textStyle.shadowX.value     = x ? [x, x] : ['0', '0']
+    currentStyle.textStyle.shadowY.value     = y ? [y, y] : ['0', '0']
+    currentStyle.textStyle.shadowB.value     = b ? [b, b] : ['0', '0']
     currentStyle.textStyle.shadowColor.value = color ? [color, color] : ['black', 'black']
   }
 
-  currentStyle.version    = 2
+  currentStyle.version = 2
   return currentStyle;
+}
+
+
+function migrate_3(style: STTStyle): STTStyle {
+  console.log("migrate 2 -> 3");
+  const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
+  s.version = 3;
+  return s;
 }

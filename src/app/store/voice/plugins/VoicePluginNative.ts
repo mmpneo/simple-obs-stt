@@ -1,48 +1,43 @@
-import {BaseVoicePlugin} from "@store/voice/plugins/BaseVoicePlugin";
+import {BaseVoicePlugin}                              from "@store/voice/plugins/BaseVoicePlugin";
 import {
-  AudioConfig,
+  AudioConfig, SpeakerAudioDestination,
   SpeechConfig,
-  SpeechSynthesisOutputFormat,
-  SpeechSynthesisResult,
   SpeechSynthesizer
-}                        from "microsoft-cognitiveservices-speech-sdk";
+} from "microsoft-cognitiveservices-speech-sdk";
+import {ConnectionState}                              from "../../../utils/types";
 
 export class VoicePluginNative extends BaseVoicePlugin {
   constructor() {
     super();
   }
 
+  private instance!: SpeechSynthesizer;
 
-  async Start(language: string, data: string[]): Promise<void> {
-    super.Start(language, data);
-    const speechConfig                       = SpeechConfig.fromSubscription('096b84e66cf548eb9fa4d76f830b9854', 'westeurope');
-    const audioConfig                        = AudioConfig.fromSpeakerOutput();
-    speechConfig.speechSynthesisOutputFormat = SpeechSynthesisOutputFormat.Riff16Khz16BitMonoPcm;
-    speechConfig.speechSynthesisLanguage     = "en-Us";
-    speechConfig.speechSynthesisVoiceName    = "en-US-AriaNeural";
-    const ss                                 = new SpeechSynthesizer(speechConfig, audioConfig);
-    // ss.synthesisCompleted                    = (s, e) => {
-    //   e.result.audioData
-    // }
-    ss.speakTextAsync("hello world 1.", (result: SpeechSynthesisResult): void => {
-      console.info("speaking finished, turn 1", result.audioData);
-      const a = new Audio();
-      const blob = new Blob([result.audioData], { type: "audio/wav" });
-      a.src = window.URL.createObjectURL(blob);
-      a.play();
-      a.onended = () => window.URL.revokeObjectURL(a.src);
-    }, (e: string): void => {
-      console.error(e);
-    });
+  RequestPlay(text: string) {
+    this.instance.speakTextAsync(text, e => {
+      this.onFinal$.next(e.audioData);
+    }, e => {console.log(e)});
+  }
 
-    // const s = window.speechSynthesis;
-    // s.addEventListener("voiceschanged", (e) => {
-    //   const voices = speechSynthesis.getVoices()
-    //   console.log(voices);
-    //   var utterThis = new SpeechSynthesisUtterance(voices[0].name);
-    //   utterThis.text = "Standardss subscribed with Prime Gaming. They've subscribed for 13 months!";
-    //   s.speak(utterThis)
-    // });
+  async Start(language: string, voice: string, data: string[]): Promise<void> {
+    try {
+      super.Start(language, voice, data);
+      const player = new SpeakerAudioDestination();
+      this.onStatusChanged$.next(ConnectionState.Connecting);
+      const speechConfig                    = SpeechConfig.fromSubscription('096b84e66cf548eb9fa4d76f830b9854', 'westeurope');
+      // const audioConfig                     = AudioConfig.fromSpeakerOutput(player);
+      speechConfig.speechSynthesisLanguage  = language;
+      speechConfig.speechSynthesisVoiceName = voice;
+      this.instance                         = new SpeechSynthesizer(speechConfig, null as any);
+      this.onStatusChanged$.next(ConnectionState.Connected);
+    } catch (error) {
+      this.onPluginCrashed$.next(error.message || error);
+    }
+  }
+
+  async Stop(): Promise<void> {
+    this.instance?.close()
+    super.Stop();
 
   }
 }

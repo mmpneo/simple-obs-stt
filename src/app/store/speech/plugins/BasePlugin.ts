@@ -4,7 +4,6 @@ import {ConnectionState}          from "../../../utils/types";
 export class BasePlugin {
   public readonly onFinal$: Subject<string>                          = new Subject<string>();
   public readonly onInter$: Subject<string>                          = new Subject<string>();
-  public readonly onNotification$: Subject<string>                   = new Subject<string>();
   public readonly onPluginCrashed$: Subject<string>                  = new Subject<string>();
   public readonly onStatusChanged$: BehaviorSubject<ConnectionState> = new BehaviorSubject<ConnectionState>(ConnectionState.Disconnected);
 
@@ -18,7 +17,6 @@ export class BasePlugin {
     this.onStatusChanged$.next(ConnectionState.Disconnected);
     this.onFinal$.complete();
     this.onInter$.complete();
-    this.onNotification$.complete();
     this.onPluginCrashed$.complete();
   };
 }
