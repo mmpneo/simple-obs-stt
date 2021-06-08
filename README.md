@@ -1,7 +1,7 @@
 <h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
   Speech-to-text and keyboard input captions for OBS.<br>
-  <a href="#examples">See examples</a><br>
+  <a href="https://github.com/mmpneo/simple-obs-stt/wiki/Quick-Start">Quick start</a> | <a href="#examples">See examples</a><br>
 </p>
 
 ## Features
@@ -27,14 +27,6 @@
 
 ## TTS Plugins
 - <img src=".github/images/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality voice synth, if you are using azure stt, just copy paste credentials. 0.5 million characters available on free tier.
-
-## Quick start
-1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
-2. Open "Host" menu on the top-right
-3. Start captions server
-5. Copy client link
-6. Create browser source in OBS and past the link
-4. Additionally, select STT plugin and start it, if required
 
 ## Examples
 <img src=".github/images/examples/ex-1.gif">
