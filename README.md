@@ -7,6 +7,7 @@
 ## Features
 - <img src="https://cdn.betterttv.net/emote/5d38aaa592fc550c2d5996b8/1x" width="20" height="20"> **Web version**
 - <img src="https://cdn.betterttv.net/emote/5b490e73cf46791f8491f6f4/1x" width="20" height="20"> **Standalone version**
+- <img src="https://cdn.betterttv.net/emote/5e0abc799e2cd00d968d72b7/1x" width="20" height="20"> **Text to Speech** - yes, you can do speech-to-text-to-text-to-speech
 - <img src="https://cdn.betterttv.net/emote/5c857788f779543bcdf37124/1x" width="20" height="20"> **Keyboard only mode**
 - <img src="https://cdn.betterttv.net/emote/601b35be4e3ab965ef7684b2/1x" width="20" height="20"> **Deep visual customization**
 - <img src="https://cdn.betterttv.net/emote/5cf69d7767398f2d6a1f9726/1x" width="20" height="20"> **Twitch/BTTV/FFZ emotes integration**
@@ -23,6 +24,9 @@
 - <img src=".github/images/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality speech recognition, has free tier with 5 hours of audio per month, setup is kinda complicated
 - <img src=".github/images/browsers/chrome.png" height=20><img src=".github/images/browsers/edge.png" height=20> [Browser native](https://caniuse.com/speech-recognition) - browser integrated api. Not available in desktop version
 - <img src=".github/images/browsers/desktop_main.png" height=20> Noop - keyboard input only
+
+## TTS Plugins
+- <img src=".github/images/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality voice synth, if you are using azure stt, just copy paste credentials. 0.5 million characters available on free tier.
 
 ## Quick start
 1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
