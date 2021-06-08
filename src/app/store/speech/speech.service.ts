@@ -73,10 +73,10 @@ export class SpeechService {
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
-    let words = (text).split(" ");
-    let value = [];
     if (text === undefined)
       return;
+    let words = (text).split(" ");
+    let value = [];
     if (environment.features.EMOTES) {
       const emotesState = this.emotesQuery.getValue();
       const emotesBindings = emotesState.bindings_cache;
@@ -129,7 +129,7 @@ export class SpeechService {
     this.activePlugin        = pluginInstance;
     this.activePlugin.onInter$.subscribe(value => this.UpdateLastVoiceSentence(value))
     this.activePlugin.onFinal$.subscribe(value => this.UpdateLastVoiceSentence(value, true))
-    this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({speechServiceState: value}))
+    this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({connectionState: value}))
     this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
       this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
       this.StopHost();

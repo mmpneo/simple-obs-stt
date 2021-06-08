@@ -41,7 +41,7 @@
           Copy link
         </button>
 
-        <button [tippy]="severView" className="with-shadow" variation="popper" placement="bottom" class="w-24 btn btn-sm btn-primary">
+        <button [tippy]="hostMenu" className="with-shadow" variation="popper" placement="bottom" class="w-24 btn btn-sm btn-primary">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
           </svg>
@@ -51,7 +51,7 @@
 
       <div class="flex flex-col space-y-2 pl-5">
         <div class="text-xs opacity-50" *ngIf="networkQuery.state$ | async as state"><b>Network</b> - {{connectionState[state.peerConnectionState]}}</div>
-        <div class="text-xs opacity-50" *ngIf="speechQuery.state$ | async as state"><b>STT plugin - {{speechPlugins[state.selectedPlugin[0]]?.name}}</b> - {{connectionState[state.speechServiceState]}}</div>
+        <div class="text-xs opacity-50" *ngIf="speechQuery.state$ | async as state"><b>STT plugin - {{speechPlugins[state.selectedPlugin[0]]?.name}}</b> - {{connectionState[state.connectionState]}}</div>
       </div>
     </div>
     <div class="flex flex-col space-y-4">
@@ -65,9 +65,24 @@
           </svg>
         </button>
         <input class="flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="(speechQuery.state$ | async)?.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
+
+        <ng-container [ngSwitch]="voiceQuery.mute$ | async">
+          <button *ngSwitchCase="true" tippy="Unmute voice on this page" (click)="voiceService.SwitchMute()" class="btn btn-circle btn-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+            </svg>
+          </button>
+          <button *ngSwitchDefault="" tippy="Mute voice on this page" (click)="voiceService.SwitchMute()" class="btn btn-circle btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          </button>
+        </ng-container>
       </div>
     </div>
     <div class="absolute bottom-2 left-2 right-5 flex justify-end items-center space-x-2">
+      <img class="mb-4 object-contain h-16 self-start" src="assets/logo.png">
       <select tippy="Change theme" class="opacity-60 w-36 select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
         <option value="aqua">Aqua</option>
         <option value="black">Black</option>
@@ -104,10 +119,9 @@
     </ngx-simplebar>
   </div>
 
-  <ng-template #severView>
-    <div class="flex flex-col space-y-2">
-      <img class="mb-4 object-contain h-24" src="assets/logo.png">
-      <div class="flex flex-col">
+  <ng-template #hostMenu>
+    <ngx-simplebar class="w-96 h-full">
+      <div class="tippy-scroll-content flex flex-col">
         <div class="flex flex-col space-y-2" *ngIf="networkQuery.state$ | async as networkState">
           <div class="font-semibold opacity-50">Captions server</div>
           <div class="flex flex-col space-y-2 transition-opacity" [class.pointer-events-none]="networkState.peerConnectionState !== 0" [class.opacity-40]="networkState.peerConnectionState !== 0">
@@ -137,10 +151,9 @@
         </div>
 
         <div class="divider"></div>
-
         <div class="flex flex-col space-y-2" *ngIf="speechQuery.state$ | async as speechState">
           <div class="font-semibold opacity-50">Speech to Text</div>
-          <div class="flex flex-col space-y-2 transition-opacity" [class.pointer-events-none]="speechState.speechServiceState !== 0" [class.opacity-40]="speechState.speechServiceState !== 0">
+          <div class="flex flex-col space-y-2 transition-opacity" [class.pointer-events-none]="speechState.connectionState !== 0" [class.opacity-40]="speechState.connectionState !== 0">
             <div class="flex items-center">
               <label class="font-semibold w-24 flex-shrink-0"><span class="label-text">STT Plugin</span></label>
               <select class="select select-sm select-bordered flex-auto w-full" [ngModel]="speechState.selectedPlugin[0]" (ngModelChange)="speechService.SelectPlugin($event)">
@@ -154,8 +167,8 @@
                 <input type="password" class="w-44 input input-bordered input-sm" [ngModel]="speechState.selectedPluginData[index]" (ngModelChange)="speechService.UpdatePluginData(index, $event)">
               </div>
             </ng-container>
-            <div class="flex">
-              <label class="font-semibold w-24 flex-shrink-0"><span class="label-text">Language</span></label>
+            <div class="flex items-center">
+              <label class="font-semibold w-24 flex-shrink-0">Language</label>
               <select class="select select-sm select-bordered w-full flex-1" [ngModel]="speechState.selectedLanguage[0]" (ngModelChange)="speechService.SelectLanguage($event)">
                 <option [disabled]="true">Choose your language</option>
                 <option [value]="index" *ngFor="let lang of langs; let index = index">{{lang[0]}}</option>
@@ -166,43 +179,41 @@
               </select>
             </div>
           </div>
-          <ng-container *ngTemplateOutlet="stateButton; context: {$implicit: speechState.speechServiceState, start: stt_start, stop: stt_stop}"></ng-container>
+          <ng-container *ngTemplateOutlet="stateButton; context: {$implicit: speechState.connectionState, start: stt_start, stop: stt_stop}"></ng-container>
         </div>
+        <div class="divider"></div>
+        <div class="flex flex-col space-y-2" *ngIf="voiceQuery.state$ | async as voiceState">
+          <div class="font-semibold opacity-50">Text to Speech</div>
+          <div class="flex flex-col space-y-2 transition-opacity" [class.pointer-events-none]="voiceState.connectionState !== 0" [class.opacity-40]="voiceState.connectionState !== 0">
+            <div class="flex items-center">
+              <label class="font-semibold w-24 flex-shrink-0"><span class="label-text">TTS Plugin</span></label>
+              <select class="select select-sm select-bordered flex-auto w-full" [ngModel]="voiceState.selectedPlugin[0]" (ngModelChange)="voiceService.SelectPlugin($event)">
+                <option [ngValue]="index" *ngFor="let lang of voicePlugins; let index = index">{{lang.name}}</option>
+              </select>
+            </div>
 
-<!--        <div class="divider"></div>-->
-
-<!--        <div class="flex flex-col space-y-2" *ngIf="voiceQuery.state$ | async as voiceState">-->
-<!--          <div class="font-semibold opacity-50">Text to Speech</div>-->
-<!--          <div class="flex flex-col space-y-2 transition-opacity" [class.pointer-events-none]="voiceState.connectionState !== 0" [class.opacity-40]="voiceState.connectionState !== 0">-->
-<!--            <div class="flex items-center">-->
-<!--              <label class="font-semibold w-24 flex-shrink-0"><span class="label-text">STT Plugin</span></label>-->
-<!--              <select class="select select-sm select-bordered flex-auto w-full" [ngModel]="voiceState.selectedPlugin[0]" (ngModelChange)="voiceService.SelectPlugin($event)">-->
-<!--                <option [value]="lang.key" *ngFor="let lang of voicePlugins| keyvalue; let index = index">{{lang.value.name}}</option>-->
-<!--              </select>-->
-<!--            </div>-->
-
-<!--            <ng-container *ngFor="let pluginField of voicePlugins[voiceState.selectedPlugin[0]]?.pluginDataFields; let index = index">-->
-<!--              <div class="flex items-center justify-between items-center mb-2">-->
-<!--                <label><span class="label-text">{{pluginField}}</span></label>-->
-<!--                <input type="password" class="w-44 input input-bordered input-sm" [ngModel]="voiceState.selectedPluginData[index]" (ngModelChange)="voiceService.UpdatePluginData(index, $event)">-->
-<!--              </div>-->
-<!--            </ng-container>-->
-<!--            <div class="flex">-->
-<!--              <label class="font-semibold w-24 flex-shrink-0"><span class="label-text">Language</span></label>-->
-<!--              <select class="select select-sm select-bordered w-full flex-1" [ngModel]="voiceState.selectedLanguage[0]" (ngModelChange)="voiceService.SelectLanguage($event)">-->
-<!--                <option [disabled]="true">Choose your language</option>-->
-<!--                <option [value]="index" *ngFor="let lang of langs; let index = index">{{lang[0]}}</option>-->
-<!--              </select>-->
-<!--              <select *ngIf="langs[voiceState.selectedLanguage[0]].length > 2" class="select select-sm select-bordered w-full flex-1 ml-2" [ngModel]="voiceState.selectedLanguage[1]" (ngModelChange)="voiceService.SelectDialect($event)">-->
-<!--                <option [disabled]="true">Choose your Dialect</option>-->
-<!--                <option [value]="index" *ngFor="let lang of langs[voiceState.selectedLanguage[0]] | slice:1; let index = index">{{lang[1]}}</option>-->
-<!--              </select>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <ng-container *ngTemplateOutlet="stateButton; context: {$implicit: voiceState.connectionState, start: voice_start, stop: voice_stop}"></ng-container>-->
-<!--        </div>-->
+            <ng-container *ngFor="let pluginField of voicePlugins[voiceState.selectedPlugin[0]]?.pluginDataFields; let index = index">
+              <div class="flex items-center justify-between items-center mb-2">
+                <label><span class="label-text">{{pluginField}}</span></label>
+                <input type="password" class="w-44 input input-bordered input-sm" [ngModel]="voiceState.selectedPluginData[index]" (ngModelChange)="voiceService.UpdatePluginData(index, $event)">
+              </div>
+            </ng-container>
+            <div class="flex items-center">
+              <label class="font-semibold w-24 flex-shrink-0"><span class="label-text">Voice</span></label>
+              <select class="select select-sm select-bordered w-full flex-1" [ngModel]="voiceState.selectedPlugin[1]" (ngModelChange)="voiceService.SelectLanguage($event)">
+                <option [disabled]="true">Choose your language</option>
+                <option [ngValue]="index" *ngFor="let lang of voicePluginLanguages; let index = index">{{lang[0]}}</option>
+              </select>
+              <select class="select select-sm select-bordered w-full flex-1 ml-2" [ngModel]="voiceState.selectedPlugin[2]" (ngModelChange)="voiceService.SelectVoice($event)">
+                <option [disabled]="true">Choose your Voice</option>
+                <option [ngValue]="index" *ngFor="let lang of voicePluginVoices; let index = index">{{lang[0]}}</option>
+              </select>
+            </div>
+          </div>
+          <ng-container *ngTemplateOutlet="stateButton; context: {$implicit: voiceState.connectionState, start: voice_start, stop: voice_stop}"></ng-container>
+        </div>
       </div>
-    </div>
+    </ngx-simplebar>
   </ng-template>
 
   <ng-template #stateButton let-state let-start="start" let-stop="stop">

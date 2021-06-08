@@ -19,7 +19,7 @@ export interface SpeechState {
   selectedPlugin: [string, any],
   selectedPluginData: string[],
   selectedLanguage: [number, number],
-  speechServiceState: ConnectionState,
+  connectionState: ConnectionState,
   sentences: SpeechSentence[],
   textInput: string;
   show: boolean
@@ -30,7 +30,7 @@ export function createInitialState(): SpeechState {
     selectedPlugin:     ["native", null],
     selectedPluginData: [],
     selectedLanguage:   [0, 0],
-    speechServiceState: ConnectionState.Disconnected,
+    connectionState:    ConnectionState.Disconnected,
     sentences:          [],
     textInput:          "",
     show:               false

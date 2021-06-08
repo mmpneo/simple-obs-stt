@@ -3,7 +3,7 @@
     <div class="flex stt-container flex items-end relative">
       <div #avatarElement [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value[0]" class="stt-box-avatar pointer-events-none z-50 w-36 h-36 bg-contain bg-center bg-no-repeat" style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
       <div #boxElement class="stt-box-container relative stt-box flex flex-col bg-cover bg-center">
-        <div #textElement [class.host]="speechState.speechServiceState === 2" class="stt-box-text inset-0 flex flex-wrap break-words min-h-8 overflow-y-scroll overflow-x-hidden">
+        <div #textElement [class.host]="speechState.connectionState === 2" class="stt-box-text inset-0 flex flex-wrap break-words min-h-8 overflow-y-scroll overflow-x-hidden">
           <ng-container *ngFor="let sentence of speechState.sentences; trackBy: track">
             <div [@listAnimation]="{value: word.length, params: GetRandomizedParams(currentStyle)}" class="flex whitespace-pre-wrap" [class.opacity-70]="!sentence.finalized" *ngFor="let word of sentence.valueNext; trackBy: trackWord">
               <div *ngFor="let letter of word; trackBy: trackLetter" [innerHTML]="letter"></div>

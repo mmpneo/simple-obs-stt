@@ -33,8 +33,16 @@ app-root > *:not(router-outlet):not(.titlebar) {
 }
 
 [role="popper"] .tippy-content > div {
-    @apply flex;
-    @apply max-h-full;
+    @apply flex flex-col;
+    @apply h-full;
+    @apply p-4;
+}
+[role="popper"] .tippy-content > div > ngx-simplebar {
+    @apply -m-4;
+    @apply flex-grow;
+}
+[role="popper"] .tippy-scroll-content {
+    @apply p-4;
 }
 
 .tippy-box[role="popper"] {
@@ -44,7 +52,7 @@ app-root > *:not(router-outlet):not(.titlebar) {
 
 /*#TIPPY*/
 [role="popper"] .tippy-content {
-    @apply p-4;
+    @apply p-0
 }
 
 [role="popper"][data-theme="raw"] .tippy-content {
@@ -53,6 +61,10 @@ app-root > *:not(router-outlet):not(.titlebar) {
 
 [role="popper"] .tippy-arrow:before {
     @apply text-base-100;
+}
+
+input[type=range]{
+    @apply px-0;
 }
 
 input[type=range].range::-webkit-slider-thumb {
