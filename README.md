@@ -48,9 +48,7 @@
 - [x] Twitch emotes integration
 - [x] Fonts - Google fonts integration
 - [x] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
-- [ ] Sounds - typing sounds
-- [ ] Text animation - simple appearing animation
-- [ ] Custom background for host preview
+- [x] Text animation - simple appearing animation
 
 ## Standalone version
 Experimental, WebView2(Edge) based, electron-like app.  
