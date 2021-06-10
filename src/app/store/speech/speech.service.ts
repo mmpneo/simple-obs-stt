@@ -73,7 +73,7 @@ export class SpeechService {
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
-    if (text === undefined)
+    if (text === undefined || text === "")
       return;
     let words = (text).split(" ");
     let value = [];
