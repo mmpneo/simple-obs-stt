@@ -18,12 +18,15 @@ export class SpeechPluginAzure extends BasePlugin {
   async Start(language: string, data: string[]) {
     if (!data[0] || !data[1])
       throw new Error("[Azure] Invalid service key or location");
+    let idleTime = parseInt(data[2]) || 20;
+    idleTime = Math.abs(idleTime)
+    idleTime *= 1000;
     await navigator.mediaDevices.getUserMedia({video: false, audio: true});
     await super.Start(language, data);
     const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
     const speechConfig = SpeechConfig.fromSubscription(data[0], data[1]);
-    speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs.toString(), "0");
-    speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs.toString(), "20000");
+    speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs as any, "60000");
+    speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs as any, idleTime.toString());
     speechConfig.enableDictation();
 
     const langConfig   = AutoDetectSourceLanguageConfig.fromLanguages([language]);
