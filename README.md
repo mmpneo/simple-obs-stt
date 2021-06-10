@@ -1,7 +1,7 @@
 <h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
   Speech-to-text and keyboard input captions for OBS.<br>
-  <a href="#examples">See examples</a><br>
+  <a href="https://github.com/mmpneo/simple-obs-stt/wiki/Quick-Start">Quick start</a> | <a href="#examples">See examples</a><br>
 </p>
 
 ## Features
@@ -28,14 +28,6 @@
 ## TTS Plugins
 - <img src=".github/images/browsers/desktop_main.png" height=20> [Azure Speech Services](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/) - high quality voice synth, if you are using azure stt, just copy paste credentials. 0.5 million characters available on free tier.
 
-## Quick start
-1. Open [host page](https://mmpneo.github.io/simple-obs-stt)
-2. Open "Host" menu on the top-right
-3. Start captions server
-5. Copy client link
-6. Create browser source in OBS and past the link
-4. Additionally, select STT plugin and start it, if required
-
 ## Examples
 <img src=".github/images/examples/ex-1.gif">
 <img src=".github/images/examples/ex-1.png">
@@ -49,19 +41,6 @@
 - [x] Fonts - Google fonts integration
 - [x] Style Templates - Instant switching between styles. For ex: Swappable styles for different games
 - [x] Text animation - simple appearing animation
-
-## Standalone version
-Experimental, WebView2(Edge) based, electron-like app.  
-Works offline (Still requires connection for STT).
-
-**How to build**  
-*Tested on windows.*  
-*Node 14 and Rust stable required.*
-1. Clone repo
-2. ``` npm i ```
-3. ``` npx ng build --configuration=tauri ```
-4. ```npx tauri build```
-5. Build will be available at *./src-tauri/target/release/*
 
 <img src="https://visitor-badge.glitch.me/badge?page_id=mmpneo.simple-obs-stt">
 
