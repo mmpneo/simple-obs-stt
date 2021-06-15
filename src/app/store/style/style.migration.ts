@@ -4,7 +4,8 @@ import deepmerge                  from "deepmerge";
 const migrations = [
   migrate_1,
   migrate_2,
-  migrate_3
+  migrate_3,
+  migrate_4,
 ]
 
 export function migrate_style(style: STTStyle): STTStyle {
@@ -120,5 +121,13 @@ function migrate_3(style: STTStyle): STTStyle {
   console.log("migrate 2 -> 3");
   const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
   s.version = 3;
+  return s;
+}
+
+// add text-stroke
+function migrate_4(style: STTStyle): STTStyle {
+  console.log("migrate 3 -> 4");
+  const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
+  s.version = 4;
   return s;
 }

@@ -59,6 +59,9 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
     }
   },
   boxStyle:    {
+    shadowColor: (state, elementStyle, value, valueIndex) => {
+      elementStyle.boxShadow = `${state.boxStyle.shadowX.value[valueIndex]}px ${state.boxStyle.shadowY.value[valueIndex]}px ${state.boxStyle.shadowB.value[valueIndex]}px ${state.boxStyle.shadowSpread.value[valueIndex]}px ${state.boxStyle.shadowColor.value[valueIndex]}`
+    },
     // based on boxStyle.heightMode keep height fixed or minimized with max height
     height:     (state, elementStyle, calculatedValue, valueIndex) => {
       if (state.boxStyle.heightMode.value[0] === 'grow') {
@@ -71,7 +74,7 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
       }
     },
     transformY: (state, elementStyle, calculatedValue, valueIndex) => {
-      elementStyle.transform = `translateX(${state.boxStyle.transformX.value[valueIndex]}px) translateY(${state.boxStyle.transformY.value[valueIndex]}px)`
+      elementStyle.transform = `translateX(${state.boxStyle.transformX.value[valueIndex]}px) translateY(${state.boxStyle.transformY.value[valueIndex]}px) scale(${state.boxStyle.scale.value[valueIndex]})`
     },
     bgStyle:    (state, elementStyle, calculatedValue, valueIndex) => {
       //  normal | sliced
@@ -107,6 +110,7 @@ export interface STTStyle {
     height: StyleValue<StyleValueType.pixels>;
     transformX: StyleValue<StyleValueType.number>;
     transformY: StyleValue<StyleValueType.number>;
+    scale: StyleValue<StyleValueType.number>;
     heightMode: StyleValue<StyleValueType.logic, 'grow' | 'fixed'>;
     backgroundImage: StyleValue<StyleValueType.logic>; // apply it later in [bgStyle]
     backgroundColor: StyleValue<StyleValueType.string>;
@@ -123,6 +127,11 @@ export interface STTStyle {
 
     bgStyle: StyleValue<StyleValueType.logic>;
 
+    shadowX: StyleValue<StyleValueType.pixels>;
+    shadowY: StyleValue<StyleValueType.pixels>;
+    shadowB: StyleValue<StyleValueType.pixels>;
+    shadowSpread: StyleValue<StyleValueType.pixels>;
+    shadowColor: StyleValue<StyleValueType.string>;
 
     [key: string]: any
   };
@@ -160,6 +169,10 @@ export interface STTStyle {
     shadowY: StyleValue<StyleValueType.pixels>;
     shadowB: StyleValue<StyleValueType.pixels>;
     shadowColor: StyleValue<StyleValueType.string>;
+
+    webkitTextStrokeWidth: StyleValue<StyleValueType.pixels>;
+    webkitTextStrokeColor: StyleValue<StyleValueType.string>;
+
   };
   avatarStyle: {
     order: StyleValue<StyleValueType.string>;
@@ -192,12 +205,13 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     3,
+  version:     4,
   boxStyle:    {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
     transformX:        {type: StyleValueType.number, value: [0, 0], linked: true},
     transformY:        {type: StyleValueType.number, value: [0, 0], linked: true},
+    scale:             {type: StyleValueType.number, value: [1, 1], linked: true},
     heightMode:        {type: StyleValueType.logic, value: ['fixed', 'fixed'], linked: true},
     backgroundImage:   {type: StyleValueType.logic, value: ['', ''], linked: true},
     backgroundColor:   {type: StyleValueType.string, value: ['transparent', 'transparent'], linked: true},
@@ -210,6 +224,12 @@ export const STYLE_TEMPLATE: STTStyle = {
     borderWidthLeft:   {type: StyleValueType.logic, value: ['0', '0'], linked: true},
     bgStyle:           {type: StyleValueType.logic, value: ['normal', 'normal'], linked: true},
     opacity:           {type: StyleValueType.number, value: [1, 1], linked: true},
+
+    shadowX:      {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
+    shadowY:      {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
+    shadowB:      {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
+    shadowSpread: {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
+    shadowColor:  {type: StyleValueType.string, value: ['transparent', 'transparent'], linked: true},
   },
   textStyle:   {
     fontFamily:     {type: StyleValueType.string, value: ['Roboto', 'Roboto'], linked: true},
@@ -242,8 +262,11 @@ export const STYLE_TEMPLATE: STTStyle = {
 
     shadowX:     {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
     shadowY:     {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
-    shadowB:     {type: StyleValueType.pixels, value: ['2', '2'], linked: true},
-    shadowColor: {type: StyleValueType.string, value: ['black', 'black'], linked: true},
+    shadowB:     {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
+    shadowColor: {type: StyleValueType.string, value: ['transparent', 'transparent'], linked: true},
+
+    webkitTextStrokeWidth: {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
+    webkitTextStrokeColor: {type: StyleValueType.string, value: ['black', 'black'], linked: true}
   },
   avatarStyle: {
     order:             {type: StyleValueType.string, value: ['0', '0'], linked: true},
