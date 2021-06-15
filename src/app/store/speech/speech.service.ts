@@ -21,7 +21,7 @@ export class SpeechService {
     private emotesQuery: EmotesQuery,
     private networkService: NetworkService,
     private toastService: HotToastService
-    ) {
+  ) {
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.speechStore.update({sentences: []});
       if (m.type === 'stt:updatesentence') {
@@ -34,10 +34,13 @@ export class SpeechService {
   private activePlugin?: BasePlugin;
 
   public SelectPlugin     = (key: string) => {
-    this.speechStore.update(e => ({
-      selectedPluginData: new Array(SPEECH_PLUGINS[key].pluginDataFields.length).fill(null),
-      selectedPlugin:     [key, e.selectedPlugin[1]]
-    }));
+    const plugin = SPEECH_PLUGINS[key];
+    this.speechStore.update(e => {
+      e.selectedPluginData = new Array(plugin.dataFields.length).fill(null);
+      for (let i = 0; i < plugin.dataFields.length; i++)
+        e.selectedPluginData[i] = plugin.dataFields[i].defaultValue;
+      e.selectedPlugin = [key, e.selectedPlugin[1]];
+    });
   };
   public UpdatePluginData = (index: number, data: string) => this.speechStore.update(e => {
     e.selectedPluginData[index] = data
@@ -78,18 +81,18 @@ export class SpeechService {
     let words = (text).split(" ");
     let value = [];
     if (environment.features.EMOTES) {
-      const emotesState = this.emotesQuery.getValue();
-      const emotesBindings = emotesState.bindings_cache;
-      const emotesKeyword = emotesState.keyword.toLocaleLowerCase();
+      const emotesState         = this.emotesQuery.getValue();
+      const emotesBindings      = emotesState.bindings_cache;
+      const emotesKeyword       = emotesState.keyword.toLocaleLowerCase();
       const emotesKeywordSecond = emotesState.keyword_secondary.toLocaleLowerCase();
 
       if (emotesKeyword || emotesKeywordSecond) {
         for (let i = 0; i < words.length; i++) {
-          if (i+1 === words.length) break; // ignore if last word
+          if (i + 1 === words.length) break; // ignore if last word
           const wLower = words[i].toLocaleLowerCase();
           if (wLower === emotesKeyword || wLower === emotesKeywordSecond) {
-            const first_word = words[i+1]?.replace(".","").replace(",",""),
-                  second_word = words[i+2]?.replace(".","").replace(",","");
+            const first_word  = words[i + 1]?.replace(".", "").replace(",", ""),
+                  second_word = words[i + 2]?.replace(".", "").replace(",", "");
             if (emotesBindings[first_word]?.[second_word]) // replace two words
               words.splice(i, 3, emotesBindings[first_word][second_word])
             else if (emotesBindings[first_word]?.['']) // replace one word
@@ -99,8 +102,8 @@ export class SpeechService {
       }
 
       value = words.map((word, i) => {
-        const firstLetter = word[0];
-        const wordFiltered = word.replace(".","");
+        const firstLetter  = word[0];
+        const wordFiltered = word.replace(".", "");
         if (emotesState.emotes[firstLetter]?.[wordFiltered])
           return [`<img src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
         return [...word.split(""), " "];
@@ -121,20 +124,22 @@ export class SpeechService {
   }
 
   public StartHost() {
-    const plugin             = SPEECH_PLUGINS[this.speechQuery.getValue().selectedPlugin[0]];
-    const pluginInstance     = new plugin.plugin();
-    const selected           = this.speechQuery.getValue().selectedLanguage;
-    const selectedPluginData = this.speechQuery.getValue().selectedPluginData;
-    const selectedDialect    = languages[selected[0]][selected[1] + 1][0];
-    this.activePlugin        = pluginInstance;
-    this.activePlugin.onInter$.subscribe(value => this.UpdateLastVoiceSentence(value))
-    this.activePlugin.onFinal$.subscribe(value => this.UpdateLastVoiceSentence(value, true))
-    this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({connectionState: value}))
-    this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
-      this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
-      this.StopHost();
-    });
-    this.activePlugin.Start(selectedDialect, selectedPluginData);
+      const plugin             = SPEECH_PLUGINS[this.speechQuery.getValue().selectedPlugin[0]];
+      const pluginInstance     = new plugin.plugin();
+      const selected           = this.speechQuery.getValue().selectedLanguage;
+      const selectedPluginData = this.speechQuery.getValue().selectedPluginData;
+      const selectedDialect    = languages[selected[0]][selected[1] + 1][0];
+      this.activePlugin        = pluginInstance;
+      this.activePlugin.onInter$.subscribe(value => this.UpdateLastVoiceSentence(value))
+      this.activePlugin.onFinal$.subscribe(value => this.UpdateLastVoiceSentence(value, true))
+      this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({connectionState: value}))
+      this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
+        this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
+        this.StopHost();
+      });
+
+      this.activePlugin.Start(selectedDialect, selectedPluginData)
+          .catch(error => this.toastService.error(error.message, {theme: "snackbar", position: "bottom-right"}));
   }
 
   public ClearSentences() {
