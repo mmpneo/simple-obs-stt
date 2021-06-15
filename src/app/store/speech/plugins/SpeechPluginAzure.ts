@@ -16,8 +16,8 @@ export class SpeechPluginAzure extends BasePlugin {
   private instance!: SpeechRecognizer;
 
   async Start(language: string, data: string[]) {
-    if (!data[0] || !data[1])
-      throw new Error("[Azure] Invalid service key or location");
+    if (!data[0] || !data[1] || !data[2] || !data[3])
+      throw new Error("[Azure] Invalid configuration");
     let idleTime = parseInt(data[2]) || 20;
     idleTime = Math.abs(idleTime)
     idleTime *= 1000;
@@ -25,6 +25,7 @@ export class SpeechPluginAzure extends BasePlugin {
     await super.Start(language, data);
     const audioConfig  = AudioConfig.fromDefaultMicrophoneInput();
     const speechConfig = SpeechConfig.fromSubscription(data[0], data[1]);
+    speechConfig.setProperty(PropertyId.SpeechServiceResponse_ProfanityOption as any, data[3]);
     speechConfig.setProperty(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs as any, "60000");
     speechConfig.setProperty(PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs as any, idleTime.toString());
     speechConfig.enableDictation();
