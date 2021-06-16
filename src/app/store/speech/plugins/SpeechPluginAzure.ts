@@ -32,8 +32,8 @@ export class SpeechPluginAzure extends BasePlugin {
 
     const langConfig   = AutoDetectSourceLanguageConfig.fromLanguages([language]);
     this.instance             = SpeechRecognizer.FromConfig(speechConfig, langConfig, audioConfig);
-    this.instance.recognizing = (s, e) => this.onInter$.next(e.result.text);
-    this.instance.recognized  = (s, e) => this.onFinal$.next(e.result.text);
+    this.instance.recognizing = (s, e) => !!e.result.text && this.onInter$.next(e.result.text);
+    this.instance.recognized  = (s, e) => {this.onFinal$.next(e.result.text);};
     this.onStatusChanged$.next(ConnectionState.Connecting);
 
     this.instance.sessionStopped = (s, e) => {

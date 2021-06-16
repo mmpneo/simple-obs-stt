@@ -76,8 +76,26 @@ export class SpeechService {
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
-    if (text === undefined || text === "")
+    if (text === undefined)
       return;
+
+    console.log(text, finalized)
+    const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
+
+    if (text === "" && finalized) { // azure fix for empty finalized strings
+      // try confirm last sentence
+      console.log("fix empty finalized")
+      const lastUnconfirmed = sentences.findIndex(s => !s.finalized)
+      if (lastUnconfirmed === -1)
+        return;
+      const targetSentence = {...sentences[lastUnconfirmed], finalized: true};
+      this.UpsertSentence(targetSentence);
+      this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence});
+      this.TriggerShowTimer();
+      return;
+    }
+
+
     let words = (text).split(" ");
     let value = [];
     if (environment.features.EMOTES) {
@@ -112,7 +130,6 @@ export class SpeechService {
     else
       value = words.map(word => [...word.split(""), " "]);
 
-    const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
     let targetSentence: SpeechSentence;
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) // create new
       targetSentence = {finalized, valueNext: value, id: guid(), type};
@@ -154,6 +171,8 @@ export class SpeechService {
 
   public SendTextInput(event: any) {
     const value: string = event.target?.value;
+    if (value === "")
+      return;
     this.speechStore.update({textInput: ""})
     this.UpdateLastVoiceSentence(value + ".", true, SpeechSentenceType.text);
   }
