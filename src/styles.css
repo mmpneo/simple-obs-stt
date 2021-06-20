@@ -105,6 +105,11 @@ input[type=range].range::-webkit-slider-thumb {
     vertical-align: bottom;
 }
 
+.stt-box-text .emote {
+    object-fit: contain;
+    height: 100%;
+}
+
 .progress-ring__circle {
     transition: stroke-dasharray 0.05s;
     transform: rotate(-90deg);
