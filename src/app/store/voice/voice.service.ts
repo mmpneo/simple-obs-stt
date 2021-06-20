@@ -18,7 +18,7 @@ export class VoiceService {
     private networkService: NetworkService,
     private soundService: SoundService) {
     if (GetClientType() === ClientType.host)
-      speechQuery.onNewLastSentence$.subscribe(a => this.Enqueue(a?.valueNext.flat().join("")))
+      speechQuery.onNewLastSentence$.subscribe(a => this.Enqueue(a?.ttsValue))
     networkService.messages$.subscribe(m => {
       if (m.type === 'tts:play')
         soundService.PlaySpeech(m.data);

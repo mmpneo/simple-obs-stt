@@ -12,7 +12,8 @@ export interface SpeechSentence {
   id: ID;
   type: SpeechSentenceType;
   finalized: boolean;
-  valueNext: string[][]
+  valueNext: string[][],
+  ttsValue: string
 }
 
 export interface SpeechState {

@@ -79,12 +79,10 @@ export class SpeechService {
     if (text === undefined)
       return;
 
-    console.log(text, finalized)
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
 
     if (text === "" && finalized) { // azure fix for empty finalized strings
       // try confirm last sentence
-      console.log("fix empty finalized")
       const lastUnconfirmed = sentences.findIndex(s => !s.finalized)
       if (lastUnconfirmed === -1)
         return;
@@ -96,6 +94,7 @@ export class SpeechService {
     }
 
 
+    let ttsValue = text;
     let words = (text).split(" ");
     let value = [];
     if (environment.features.EMOTES) {
@@ -119,11 +118,12 @@ export class SpeechService {
         }
       }
 
+      ttsValue = words.join(" "); // join mutated words to send clean version to tts
       value = words.map((word, i) => {
         const firstLetter  = word[0];
         const wordFiltered = word.replace(".", "");
         if (emotesState.emotes[firstLetter]?.[wordFiltered])
-          return [`<img src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
+          return [`<img class="emote" src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
         return [...word.split(""), " "];
       });
     }
@@ -132,9 +132,9 @@ export class SpeechService {
 
     let targetSentence: SpeechSentence;
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) // create new
-      targetSentence = {finalized, valueNext: value, id: guid(), type};
+      targetSentence = {finalized, valueNext: value, id: guid(), type, ttsValue};
     else // update last sentence
-      targetSentence = {...sentences[sentences.length - 1], finalized, valueNext: value};
+      targetSentence = {...sentences[sentences.length - 1], finalized, valueNext: value, ttsValue};
     this.UpsertSentence(targetSentence);
     this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence})
     this.TriggerShowTimer();
