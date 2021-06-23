@@ -13,7 +13,7 @@ if (environment.production) {
 }
 if (GetClientType() === ClientType.host) { //add persistent for host
   const storage_main = persistState({
-    include: ['application', 'network', 'speech', 'voice', 'style', 'emotes'],
+    include: ['application', 'network', 'speech', 'sound', 'voice', 'style', 'emotes'],
     preStorageUpdate(storeName: string, state: any): any {
       if (storeName === 'emotes')
         return {bindings: state.bindings, keyword: state.keyword}
@@ -22,7 +22,9 @@ if (GetClientType() === ClientType.host) { //add persistent for host
       if (storeName === 'speech')
         return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
       if (storeName === 'voice')
-        return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage, mute: state.mute}
+        return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
+      if (storeName === 'sound')
+        return {mute: state.mute}
       return state;
     }
   });

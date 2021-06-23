@@ -1,9 +1,9 @@
-import {Injectable}           from '@angular/core';
-import {STTStyle, StyleStore} from './style.store';
-import {NetworkService}       from "@store/network/network.service";
-import {fileOpen}             from "browser-fs-access";
-import {HotToastService}      from "@ngneat/hot-toast";
-import {migrate_style}        from "@store/style/style.migration";
+import {Injectable}               from '@angular/core';
+import {STTStyle, StyleStore}     from './style.store';
+import {NetworkService}           from "@store/network/network.service";
+import {fileOpen, FileWithHandle} from "browser-fs-access";
+import {HotToastService}          from "@ngneat/hot-toast";
+import {migrate_style}            from "@store/style/style.migration";
 
 @Injectable({providedIn: 'root'})
 export class StyleService {
@@ -56,8 +56,11 @@ export class StyleService {
   }
 
   async ImportTemplate() {
+    let resp: FileWithHandle | null = null;
     try {
-      const resp = await fileOpen({mimeTypes: ['application/json'], extensions: ['.json']});
+      resp = await fileOpen({mimeTypes: ['application/json'], extensions: ['.json']});
+    } catch (error) {}
+    if (resp) try {
       const txt = await resp.text();
       const json: {name: string, value: STTStyle} = JSON.parse(txt);
       if (!json.name || !json.value)
@@ -65,8 +68,40 @@ export class StyleService {
       const patch = {...json, value: migrate_style(json.value)};
       this.styleStore.update(state => {state.templates.push(patch)});
       this.toastService.success(`Imported: ${patch.name}`, {theme: 'snackbar', position: 'bottom-right'})
-      // this.SelectTemplate(this.styleStore.getValue().templates.length -1);
     } catch (error) {throw new Error(error);}
+  }
+
+  async ImportAudio() {
+    let resp: FileWithHandle | null = null;
+    try {
+      resp = await fileOpen({mimeTypes: ['application/audio'], extensions: ['.wav', '.mp3', '.ogg']});
+    } catch (e) {console.log(e)}
+    if (resp) try {
+      if (resp.size > 20000){
+        this.toastService.error('Audio file is too large', {theme: 'snackbar', position: 'bottom-right'})
+        return;
+      }
+      const buffer  = await resp.arrayBuffer();
+      const blob    = new Blob([buffer], {type: resp.type});
+      var reader = new FileReader()
+      reader.onload = v => {
+        let str = v.target?.result;
+        if (typeof str !== "string")
+          return;
+        const [meta, data] = str.split("base64,");
+        // str = data;
+        const arr: [string, string] = [data, 'base64'];
+        this.styleStore.update(state => {
+          state.currentStyle.soundStyle.typeClip.value = arr;
+        });
+        this.SendPartialStyle(['soundStyle', 'typeClip', arr]);
+        this.toastService.success('Typing audio updated', {theme: 'snackbar', position: 'bottom-right'})
+      }
+      reader.readAsDataURL(blob)
+    } catch (error) {
+      throw new Error(error);
+    }
+
   }
 
   ExportTemplate() {

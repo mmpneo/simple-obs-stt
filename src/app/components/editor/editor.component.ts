@@ -1,17 +1,18 @@
 import {ChangeDetectionStrategy, Component, NgModule, OnInit} from '@angular/core';
 import {CommonModule}                                         from "@angular/common";
 import {StyleService}                                         from "@store/style/style.service";
-import {StyleQuery}                                           from "@store/style/style.query";
-import {RGBA}                                                 from "ngx-color";
-import {FormsModule}                                          from "@angular/forms";
-import {TippyModule}                                          from "@ngneat/helipopper";
-import {ColorSketchModule}                                    from "ngx-color/sketch";
-import {SimplebarAngularModule}                               from "simplebar-angular";
-import {ApplicationService}                                   from "@store/application/application.service";
-import {FontsService}                                         from "@store/fonts/fonts.service";
-import {EmotesService}                                        from "@store/emotes/emotes.service";
-import {EmotesQuery}                                          from "@store/emotes/emotes.query";
-import {environment}                                          from 'src/environments/environment';
+import {StyleQuery}             from "@store/style/style.query";
+import {RGBA}                   from "ngx-color";
+import {FormsModule}            from "@angular/forms";
+import {TippyModule}            from "@ngneat/helipopper";
+import {ColorSketchModule}      from "ngx-color/sketch";
+import {SimplebarAngularModule} from "simplebar-angular";
+import {ApplicationService}     from "@store/application/application.service";
+import {FontsService}           from "@store/fonts/fonts.service";
+import {EmotesService}          from "@store/emotes/emotes.service";
+import {EmotesQuery}            from "@store/emotes/emotes.query";
+import {environment}            from 'src/environments/environment';
+import {SoundService}           from "@store/sound/sound.service";
 
 type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global' | 'emotes';
 
@@ -29,6 +30,7 @@ export class EditorComponent implements OnInit {
     public fontsService: FontsService,
     public emotesService: EmotesService,
     public emotesQuery: EmotesQuery,
+    public soundService: SoundService
   ) {
   }
 

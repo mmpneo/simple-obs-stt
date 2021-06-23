@@ -14,6 +14,7 @@ export enum StyleValueType {
   scale,
   logic,// system type for stt-renderer
   number,
+  audioFile
 }
 
 export function BuildTypedValue(v: StyleValue, valueIndex: number): string | number {
@@ -187,6 +188,7 @@ export interface STTStyle {
   },
   soundStyle: {
     volume: StyleValue<StyleValueType.string>;
+    typeClip: StyleValue<StyleValueType.audioFile>;
     voiceVolume: StyleValue<StyleValueType.string>;
   },
   globalStyle: {
@@ -205,7 +207,7 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     4,
+  version:     5,
   boxStyle:    {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
@@ -281,6 +283,7 @@ export const STYLE_TEMPLATE: STTStyle = {
   },
   soundStyle:  {
     volume:      {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
+    typeClip:    {type: StyleValueType.audioFile, value: ['assets/sounds/type_1.wav', 'url'], linked: true},
     voiceVolume: {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
   },
   globalStyle: {

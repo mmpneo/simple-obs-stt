@@ -209,9 +209,27 @@
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Opacity', $implicit: currentStyle.avatarStyle.opacity, fn: GetFn('avatar', 'opacity'), fnLink: GetSwFn('avatar', 'opacity'), min: 0, max: 1, step: 0.1}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'sound'">
-      <div class="font-semibold">Sound</div>
+      <div class="font-semibold">Volume</div>
       <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Typing Volume', $implicit: currentStyle.soundStyle.volume, fn: GetFn('sound', 'volume'), fnLink: GetSwFn('sound', 'volume'), min: 0, max: 1, step: '0.1'}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldSlider; context: {title: 'Voice Volume', $implicit: currentStyle.soundStyle.voiceVolume, fn: GetFn('sound', 'voiceVolume'), fnLink: GetSwFn('sound', 'voiceVolume'), min: 0, max: 1, step: '0.1'}"></ng-container>
+      <div class="divider"></div>
+      <div class="font-semibold">Typing sound effect</div>
+      <button class="btn btn-sm btn-primary btn-outline" (click)="styleService.ImportAudio()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
+        </svg>
+        Change audio file</button>
+      <small class="opacity-70">mp3, wav, ogg audio only. Max file size is 20kb.</small>
+      <div class="flex space-x-2 items-center">
+        <div class="flex-grow">Preview type sound</div>
+        <button tippy="Preview" class="btn btn-circle btn-sm btn-ghost" (click)="soundService.Play()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+      </div>
+
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
       <div class="font-semibold">Text input</div>
