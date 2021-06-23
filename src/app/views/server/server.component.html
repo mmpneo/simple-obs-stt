@@ -66,14 +66,14 @@
         </button>
         <input class="flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="(speechQuery.state$ | async)?.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
 
-        <ng-container [ngSwitch]="voiceQuery.mute$ | async">
-          <button *ngSwitchCase="true" tippy="Unmute voice on this page" (click)="voiceService.SwitchMute()" class="btn btn-circle btn-error">
+        <ng-container [ngSwitch]="soundQuery.mute$ | async">
+          <button *ngSwitchCase="true" tippy="Unmute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-circle btn-error">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
             </svg>
           </button>
-          <button *ngSwitchDefault="" tippy="Mute voice on this page" (click)="voiceService.SwitchMute()" class="btn btn-circle btn-ghost">
+          <button *ngSwitchDefault="" tippy="Mute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-circle btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
             </svg>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="absolute bottom-2 left-2 right-5 flex justify-end items-center space-x-2">
-      <img class="mb-4 object-contain h-16 self-start" src="assets/logo.png">
+      <img class="pointer-events-none mb-4 object-contain h-16 self-start" src="assets/logo.png">
       <select tippy="Change theme" class="opacity-60 w-36 select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
         <option value="aqua">Aqua</option>
         <option value="black">Black</option>
@@ -248,9 +248,6 @@
     </ng-container>
   </ng-template>
 </div>
-
-
-
 
 <ng-template #newTemplate let-hide>
   <div class="form-control">
