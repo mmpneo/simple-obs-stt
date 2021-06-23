@@ -10,34 +10,51 @@ export class SoundService {
     private speechQuery: SpeechQuery,
     private styleQuery: StyleQuery
   ) {
+    this.SoundGraphInit();
     speechQuery.onSentenceUpdate$.subscribe(_ => this.Play());
-    this.VoiceInit();
+    styleQuery.soundClip$.subscribe(clip => this.ResolveTypeAudio(clip.value))
   }
 
-  private typeClip = new Audio('assets/sounds/type_1.wav');
+  private audioContext!: AudioContext;
+
+  private typeGainNode!: GainNode;
+  private typeAudioBuffer!: AudioBuffer;
+
+  private voiceGainNode!: GainNode;
+  private queue: AudioBuffer[] = [];
+
+  private async ResolveTypeAudio(value: [string, string]) {
+    if (value[1] === 'base64')
+      this.typeAudioBuffer = await this.audioContext.decodeAudioData(this.base64ToArrayBuffer(value[0]))
+    else  {
+      const resp = await fetch(value[0]);
+      const buffer = await resp.arrayBuffer();
+      this.typeAudioBuffer = await this.audioContext.decodeAudioData(buffer);
+    }
+  }
+
+
+  private base64ToArrayBuffer = (base64: string) => Uint8Array.from(atob(base64), c => c.charCodeAt(0)).buffer;
+  private SoundGraphInit() {
+    this.audioContext = new AudioContext();
+    this.typeGainNode = this.audioContext.createGain();
+    this.typeGainNode.connect(this.audioContext.destination);
+    this.voiceGainNode = this.audioContext.createGain();
+    this.voiceGainNode.connect(this.audioContext.destination);
+  }
 
   Play() {
+    if (this.soundStore.getValue().mute)
+      return;
     const volValue = parseFloat(this.styleQuery.getValue().currentStyle.soundStyle.volume.value[0]);
     if (volValue === 0)
       return;
-    this.typeClip.volume = volValue ?? 0.5;
-    (this.typeClip.currentTime !== 0) && this.typeClip.pause();
-    this.typeClip.currentTime = 0;
-    this.typeClip?.play();
-  }
+    this.typeGainNode.gain.setValueAtTime(volValue ?? 0.5, this.audioContext.currentTime);
 
-  private voiceAudio!: HTMLAudioElement;
-  private queue: ArrayBuffer[] = [];
-
-  private VoiceInit() {
-    this.voiceAudio = new Audio();
-    this.voiceAudio.onplay = () => {
-      this.soundStore.update({isVoicePlaying: true});
-    }
-    this.voiceAudio.onended = () => {
-      this.soundStore.update({isVoicePlaying: false});
-      this.TryPlayFromQueue();
-    }
+    const source = this.audioContext.createBufferSource();
+    source.buffer = this.typeAudioBuffer;
+    source.connect(this.typeGainNode);
+    source.start();
   }
 
   TryPlayFromQueue() {
@@ -47,14 +64,26 @@ export class SoundService {
     if (!clip)
       return;
     const volValue = parseFloat(this.styleQuery.getValue().currentStyle.soundStyle.voiceVolume.value[0]);
-    this.voiceAudio.volume       = volValue ?? 1;
-    const blob     = new Blob([clip], {type: "audio/wav"});
-    this.voiceAudio.src          = window.URL.createObjectURL(blob);
-    this.voiceAudio.play();
+    this.typeGainNode.gain.setValueAtTime(volValue ?? 0.5, this.audioContext.currentTime);
+
+    const source = this.audioContext.createBufferSource();
+    source.buffer = clip;
+    source.connect(this.typeGainNode);
+    source.start();
+    this.soundStore.update({isVoicePlaying: true});
+    source.onended = () => {
+      this.soundStore.update({isVoicePlaying: false});
+      this.TryPlayFromQueue();
+    };
   }
 
-  PlaySpeech(data: ArrayBuffer) {
-    this.queue.unshift(data);
+  async PlaySpeech(data: ArrayBuffer) {
+    const b = await this.audioContext.decodeAudioData(data);
+    this.queue.unshift(b)
     this.TryPlayFromQueue();
+  }
+
+  SwitchMute() {
+    this.soundStore.update(state => {state.mute = !state.mute;})
   }
 }
