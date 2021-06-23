@@ -63,16 +63,47 @@ app-root > *:not(router-outlet):not(.titlebar) {
     @apply text-base-100;
 }
 
-input[type=range]{
-    @apply px-0;
+input[type="range"].input-range{
+    @apply px-0 border-none h-8;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
-input[type=range].range::-webkit-slider-thumb {
-    pointer-events: all;
-    width: 24px;
-    height: 24px;
+input[type="range"].input-range::-webkit-slider-thumb{
     -webkit-appearance: none;
-    /* @apply w-6 h-6 appearance-none pointer-events-auto; */
+    appearance: none;
+    pointer-events: all;
+    @apply w-4 h-4 rounded-full bg-primary cursor-pointer;
+    margin-top: -5px;
+    /*margin: -7px; !* alignment fix for Chrome *!*/
+}
+input[type="range"].input-range::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: all;
+    @apply w-4 h-4 rounded-full bg-primary cursor-pointer;
+    margin-top: -5px;
+    /*margin: -7px; !* alignment fix for Chrome *!*/
+}
+input[type="range"]::-ms-thumb {
+    margin: 0; /* Reset margin in Edge since it supports -webkit-slider-thumb as well */
+}
+
+input[type="range"].input-range::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    @apply h-2 bg-neutral rounded-full;
+    cursor: pointer;
+    border: none;
+}
+input[type="range"].input-range::-moz-range-track {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    @apply h-2 bg-neutral rounded-full;
+    cursor: pointer;
+    border: none;
 }
 
 @keyframes avatar-floating {
