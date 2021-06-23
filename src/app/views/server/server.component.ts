@@ -4,17 +4,19 @@ import {SpeechQuery}                                from "@store/speech/speech.q
 import {SpeechService}                              from "@store/speech/speech.service";
 import {ApplicationQuery}                           from "@store/application/application.query";
 import {ApplicationService}                         from "@store/application/application.service";
-import {languages}                                  from "@store/speech/speech.store";
-import {StyleService}                               from "@store/style/style.service";
-import {StyleQuery}                                 from "@store/style/style.query";
-import {RGBA}                                       from "ngx-color";
-import {NetworkService}                             from "@store/network/network.service";
-import {SPEECH_PLUGINS, SpeechPluginDescriptor}     from "@store/speech/plugins";
-import {ConnectionState}                            from "../../utils/types";
-import {environment}                                from "../../../environments/environment";
-import {VOICE_PLUGINS, VoicePluginDescriptor}       from "@store/voice/plugins";
-import {VoiceService}                               from "@store/voice/voice.service";
-import {VoiceQuery}                                 from "@store/voice/voice.query";
+import {languages}                              from "@store/speech/speech.store";
+import {StyleService}                           from "@store/style/style.service";
+import {StyleQuery}                             from "@store/style/style.query";
+import {RGBA}                                   from "ngx-color";
+import {NetworkService}                         from "@store/network/network.service";
+import {SPEECH_PLUGINS, SpeechPluginDescriptor} from "@store/speech/plugins";
+import {ConnectionState}                        from "../../utils/types";
+import {environment}                            from "../../../environments/environment";
+import {VOICE_PLUGINS, VoicePluginDescriptor}   from "@store/voice/plugins";
+import {VoiceService}                           from "@store/voice/voice.service";
+import {VoiceQuery}                             from "@store/voice/voice.query";
+import {SoundQuery}                             from "@store/sound/sound.query";
+import {SoundService}                           from "@store/sound/sound.service";
 
 @Component({
   selector:        'app-server',
@@ -34,6 +36,8 @@ export class ServerComponent implements OnInit {
     public styleQuery: StyleQuery,
     public voiceService: VoiceService,
     public voiceQuery: VoiceQuery,
+    public soundService: SoundService,
+    public soundQuery: SoundQuery
   ) {
   }
 

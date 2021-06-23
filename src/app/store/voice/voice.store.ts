@@ -8,15 +8,13 @@ export interface VoiceState {
   selectedPlugin: [number, number, number],
   selectedPluginData: string[],
   connectionState: ConnectionState,
-  mute: boolean
 }
 
 export function createInitialState(): VoiceState {
   return {
     selectedPlugin:     [0, 0, 0],
     selectedPluginData: [],
-    connectionState:    ConnectionState.Disconnected,
-    mute:               true,
+    connectionState:    ConnectionState.Disconnected
   };
 }
 

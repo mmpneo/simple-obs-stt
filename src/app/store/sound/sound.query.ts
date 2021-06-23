@@ -8,6 +8,7 @@ export class SoundQuery extends Query<SoundState> {
     super(store);
   }
 
-  isVoicePlaying$ = this.select("isVoicePlaying")
+  isVoicePlaying$ = this.select("isVoicePlaying");
+  mute$ = this.select("mute");
 
 }

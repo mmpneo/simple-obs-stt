@@ -8,6 +8,7 @@ import {take}                      from "rxjs/operators";
 import {HotToastService}           from "@ngneat/hot-toast";
 import {NetworkService}            from "@store/network/network.service";
 import {SoundService}              from "@store/sound/sound.service";
+import {SoundQuery}                from "@store/sound/sound.query";
 
 @Injectable({providedIn: 'root'})
 export class VoiceService {
@@ -16,7 +17,9 @@ export class VoiceService {
     private speechQuery: SpeechQuery,
     private toastService: HotToastService,
     private networkService: NetworkService,
-    private soundService: SoundService) {
+    private soundService: SoundService,
+    private soundQuery: SoundQuery
+    ) {
     if (GetClientType() === ClientType.host)
       speechQuery.onNewLastSentence$.subscribe(a => this.Enqueue(a?.ttsValue))
     networkService.messages$.subscribe(m => {
@@ -61,7 +64,7 @@ export class VoiceService {
       if (!data?.byteLength)
         return;
       this.networkService.SendAudio(data);
-      !this.voiceStore.getValue().mute && this.soundService.PlaySpeech(data);
+      !this.soundQuery.getValue().mute && this.soundService.PlaySpeech(data);
     })
 
     this.pluginInstance.Start(languageCode, voiceCode, state.selectedPluginData);
@@ -70,9 +73,5 @@ export class VoiceService {
   public async StopHost() {
     await this.pluginInstance?.Stop();
     this.pluginInstance = undefined;
-  }
-
-  SwitchMute() {
-    this.voiceStore.update(state => {state.mute = !state.mute;})
   }
 }
