@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1624464636904,
+  "timestamp": 1625275539372,
   "index": "/simple-obs-stt/index.html",
   "assetGroups": [
     {
@@ -26,7 +26,7 @@
         "/simple-obs-stt/973.7e6e5c5b3d8610b39fc2.js",
         "/simple-obs-stt/favicon.ico",
         "/simple-obs-stt/index.html",
-        "/simple-obs-stt/main.eb99090e8069bfaedf7a.js",
+        "/simple-obs-stt/main.d325f1a16077b6791825.js",
         "/simple-obs-stt/manifest.webmanifest",
         "/simple-obs-stt/polyfills.a203592b9332c138e12c.js",
         "/simple-obs-stt/runtime.2dcc7136c86b3862ba35.js",
@@ -90,8 +90,8 @@
     "/simple-obs-stt/assets/logo.png": "c837672495924a1abbe73c17be1918d1cdc347c3",
     "/simple-obs-stt/assets/sounds/type_1.wav": "bedbabda43cce5765d4a7b3b2622b6a8f4042485",
     "/simple-obs-stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple-obs-stt/index.html": "6dd0793fe9adb992a7cb90ea47b13fea73c75304",
-    "/simple-obs-stt/main.eb99090e8069bfaedf7a.js": "2eb5d74ef9dbccafbae3a421c40fd988360aed19",
+    "/simple-obs-stt/index.html": "31996fd2f01ee40798d37cab5158e6d7be41af9b",
+    "/simple-obs-stt/main.d325f1a16077b6791825.js": "7268da2655d3e7e7be595a96bcd6d0f2368c2449",
     "/simple-obs-stt/manifest.webmanifest": "61ecbfba1e0195fba72febfae8497c20f45ce0d9",
     "/simple-obs-stt/polyfills.a203592b9332c138e12c.js": "e30a305279901b357751f54f09a745391ed7e7b9",
     "/simple-obs-stt/runtime.2dcc7136c86b3862ba35.js": "0acacd8f860d91c3aabba987ae30dc640cd67f46",
