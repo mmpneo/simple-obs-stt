@@ -20,12 +20,14 @@ export class VoicePluginNative extends BaseVoicePlugin {
   }
 
   async Start(language: string, voice: string, data: string[]): Promise<void> {
+    if (!data[0] || !data[1])
+      throw new Error("[Azure] Invalid voice configuration");
     try {
       super.Start(language, voice, data);
-      const player = new SpeakerAudioDestination();
-      this.onStatusChanged$.next(ConnectionState.Connecting);
-      const speechConfig                    = SpeechConfig.fromSubscription('096b84e66cf548eb9fa4d76f830b9854', 'westeurope');
+      // const player = new SpeakerAudioDestination();
       // const audioConfig                     = AudioConfig.fromSpeakerOutput(player);
+      this.onStatusChanged$.next(ConnectionState.Connecting);
+      const speechConfig                    = SpeechConfig.fromSubscription(data[0], data[1]);
       speechConfig.speechSynthesisLanguage  = language;
       speechConfig.speechSynthesisVoiceName = voice;
       this.instance                         = new SpeechSynthesizer(speechConfig, null as any);
