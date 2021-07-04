@@ -4,13 +4,15 @@ import produce              from "immer";
 
 export interface SoundState {
   isVoicePlaying: boolean,
-  mute: boolean
+  mute: boolean,
+  muteClient: boolean
 }
 
 export function createInitialState(): SoundState {
   return {
     isVoicePlaying: false,
-    mute: false
+    mute: false,
+    muteClient: false
   };
 }
 

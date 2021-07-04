@@ -58,7 +58,7 @@
       <div class="flex justify-center relative h-48 self-center rounded-md">
         <app-stt-renderer class="absolute bottom-0 self-center"></app-stt-renderer>
       </div>
-      <div class="w-96 flex space-x-2">
+      <div class="w-96 flex items-center space-x-2">
         <button tippy="Clear text box" (click)="speechService.ClearSentences()" class="btn btn-circle btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -67,14 +67,28 @@
         <input class="flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="(speechQuery.state$ | async)?.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
 
         <ng-container [ngSwitch]="soundQuery.mute$ | async">
-          <button *ngSwitchCase="true" tippy="Unmute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-circle btn-error">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button *ngSwitchCase="true" tippy="Unmute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-sm btn-circle btn-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
             </svg>
           </button>
-          <button *ngSwitchDefault="" tippy="Mute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button *ngSwitchDefault="" tippy="Mute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-sm btn-circle btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          </button>
+        </ng-container>
+
+        <ng-container [ngSwitch]="soundQuery.muteClient$ | async">
+          <button *ngSwitchCase="true" tippy="Unmute sounds on clients" (click)="soundService.SwitchMuteClient()" class="btn btn-sm btn-circle btn-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+            </svg>
+          </button>
+          <button *ngSwitchDefault="" tippy="Mute sounds on clients" (click)="soundService.SwitchMuteClient()" class="btn btn-sm btn-circle btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
             </svg>
           </button>

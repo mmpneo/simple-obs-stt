@@ -10,5 +10,5 @@ export class SoundQuery extends Query<SoundState> {
 
   isVoicePlaying$ = this.select("isVoicePlaying");
   mute$ = this.select("mute");
-
+  muteClient$ = this.select("muteClient");
 }

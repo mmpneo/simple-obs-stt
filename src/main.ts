@@ -24,7 +24,7 @@ if (GetClientType() === ClientType.host) { //add persistent for host
       if (storeName === 'voice')
         return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
       if (storeName === 'sound')
-        return {mute: state.mute}
+        return {mute: state.mute, muteClient: state.muteClient}
       return state;
     }
   });

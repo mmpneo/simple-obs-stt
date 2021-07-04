@@ -67,7 +67,8 @@ export class VoiceService {
       !this.soundQuery.getValue().mute && this.soundService.PlaySpeech(data);
     })
 
-    this.pluginInstance.Start(languageCode, voiceCode, state.selectedPluginData);
+    this.pluginInstance.Start(languageCode, voiceCode, state.selectedPluginData)
+        .catch(error => this.toastService.error(error.message, {theme: "snackbar", position: "bottom-right"}));
   }
 
   public async StopHost() {
