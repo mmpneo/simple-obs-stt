@@ -1,6 +1,5 @@
-import {BasePlugin}            from "@store/speech/plugins/BasePlugin";
-import {ConnectionState}       from "../../../utils/types";
-import {CancellationErrorCode} from "microsoft-cognitiveservices-speech-sdk";
+import {BasePlugin}      from "@store/speech/plugins/BasePlugin";
+import {ConnectionState} from "../../../utils/types";
 
 export class SpeechPluginNative extends BasePlugin {
   constructor() {super();}
@@ -40,16 +39,20 @@ export class SpeechPluginNative extends BasePlugin {
 
     this.instance.addEventListener("error", (error) => { // listener for active connection
       if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-      if (error.error === "no-speech") console.log("no speech")
+      if (error.error === "no-speech")
+        console.log("[Native] No speech detected")
       else if (error.error !== "bad-grammar")
         this.onPluginCrashed$.next("[Native] Lost connection");
     })
     this.instance.addEventListener("end", event => {
       if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-      console.log(`[Native] Stopped`)
+      console.log(`[Native] End: ${event.type}`)
       if (event.type === 'end') {
         (<SpeechRecognition>event.target)?.stop()
-        setTimeout(() => (<SpeechRecognition>event.target)?.start(), 100);
+        setTimeout(() => {
+          console.log(`[Native] Restart plugin`);
+          (<SpeechRecognition>event.target)?.start();
+        }, 0);
       }
       else
         this.onPluginCrashed$.next("end");
