@@ -42,7 +42,7 @@ export class SpeechPluginNative extends BasePlugin {
       if (error.error === "no-speech")
         console.log("[Native] No speech detected")
       else if (error.error !== "bad-grammar")
-        this.onPluginCrashed$.next("[Native] Lost connection");
+        this.onPluginCrashed$.next(`[Native] Lost connection: ${error.error}`);
     })
     this.instance.addEventListener("end", event => {
       if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
