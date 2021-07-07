@@ -31,7 +31,7 @@ export class NetworkService {
 
   public CopyLink() {
     const isLocal = this.networkQuery.getValue().networkMode === NetworkMode.localhost;
-    const url     = `${isLocal ? environment.peerConfig.local.clientHost : environment.peerConfig.remote.clientHost}/${this?.getPeerId()}/${isLocal ? 'local' : ''}`
+    const url     = `${isLocal ? environment.peerConfig.local.clientHost : environment.peerConfig.remote.clientHost}/${this?.getPeerId()}`
     navigator.clipboard.writeText(url);
     this.toastService.success("Copied!", {theme: "snackbar", position: "bottom-right"})
   }
