@@ -13,6 +13,7 @@ import {EmotesService}          from "@store/emotes/emotes.service";
 import {EmotesQuery}            from "@store/emotes/emotes.query";
 import {environment}            from 'src/environments/environment';
 import {SoundService}           from "@store/sound/sound.service";
+import {SoundQuery}             from "@store/sound/sound.query";
 
 type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global' | 'emotes';
 
@@ -30,7 +31,8 @@ export class EditorComponent implements OnInit {
     public fontsService: FontsService,
     public emotesService: EmotesService,
     public emotesQuery: EmotesQuery,
-    public soundService: SoundService
+    public soundService: SoundService,
+    public soundQuery: SoundQuery
   ) {
   }
 
