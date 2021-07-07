@@ -1,7 +1,7 @@
 <h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
   Speech-to-text and keyboard input captions for OBS.<br>
-  <a href="https://github.com/mmpneo/simple-obs-stt/wiki/Quick-Start">Quick start</a> | <a href="#examples">See examples</a><br>
+  <a href="https://github.com/mmpneo/simple-obs-stt/wiki/Quick-Start">Quick start</a> | <a href="#examples">See examples</a> | <a href="https://discord.gg/SMKjA2yGf7">Discord</a><br>
 </p>
 
 ## Features
