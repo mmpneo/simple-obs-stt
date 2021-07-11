@@ -52,6 +52,7 @@
       <div class="flex flex-col space-y-2 pl-5">
         <div class="text-xs opacity-50" *ngIf="networkQuery.state$ | async as state"><b>Network</b> - {{connectionState[state.peerConnectionState]}}</div>
         <div class="text-xs opacity-50" *ngIf="speechQuery.state$ | async as state"><b>STT plugin - {{speechPlugins[state.selectedPlugin[0]]?.name}}</b> - {{connectionState[state.connectionState]}}</div>
+        <div class="text-xs opacity-50" *ngIf="voiceQuery.state$ | async as state"><b>TTS plugin - {{voicePlugins[state.selectedPlugin[0]]?.name}}</b> - {{connectionState[state.connectionState]}}</div>
       </div>
     </div>
     <div class="flex flex-col space-y-4">
