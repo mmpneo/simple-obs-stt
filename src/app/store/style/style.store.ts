@@ -299,7 +299,7 @@ export const STYLE_TEMPLATE: STTStyle = {
 
     typingAnimation: {type: StyleValueType.bool, value: ['', ''], linked: true},
     typeWords: {type: StyleValueType.bool, value: ['', ''], linked: true},
-    typingDelay: {type: StyleValueType.number, value: [0.06, 0.06], linked: true}
+    typingDelay: {type: StyleValueType.number, value: [80, 80], linked: true}
   }
 }
 

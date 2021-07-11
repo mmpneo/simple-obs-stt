@@ -116,16 +116,16 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 
   // current sentence
   private isRunningSentence   = false;
-  private lastRunningSentence = -1;
 
   private CreateSentence(data: SpeechSentence) {
     const style    = this.styleQuery.getValue().currentStyle.globalStyle;
+
     const sentence = new SentenceRenderer(data, this, {
       animate:          !!style.typingAnimation.value[0],
       animateWords:     !!style.typeWords.value[0],
       interval:         style.typingDelay.value[0],
       onUpdateRenderer: () => this.AnimateScroll(),
-      onActivity: () => {
+      onActivity:       () => {
         this.speechService.TriggerShowTimer();
         this.soundService.Play();
       }
@@ -141,17 +141,24 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
     const f = this.list.find(s => !s.isPlayed && s.data.finalized);
     if (!f)
       return;
+    const style = this.styleQuery.getValue().currentStyle.globalStyle;
+    if (!!style.keepSingleSentence.value[0])
+      this.list = this.list.filter(s => {
+        s.isPlayed && s.Dispose();
+        return !s.isPlayed;
+      });
+
     this.isRunningSentence = true;
     await f.Run();
     this.isRunningSentence = false;
+
     this.TryRunNext();
   }
 
   private Clear() {
     this.list.forEach(s => s.Dispose());
-    this.list = [];
-    this.lastRunningSentence = -1;
-    this.isRunningSentence = false;
+    this.list                = [];
+    this.isRunningSentence   = false;
   }
 
   ngOnInit(): void {

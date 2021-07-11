@@ -64,7 +64,7 @@ export class SpeechService {
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
     this.timeout = timer(targetTime).subscribe(_ => {
       this.speechStore.update(state => {
-        if (globalConfig.clearOnInactivity?.value[0]) state.sentences = state.sentences.filter(s => !s.finalized);
+        if (globalConfig.clearOnInactivity?.value[0]) this.ClearSentences();
         state.show = false;
       });
     });
@@ -139,7 +139,7 @@ export class SpeechService {
     if(finalized) {
       const lastWord = value[value.length-1];
       const lastLetter = lastWord[lastWord.length-2];
-      if (!/[.,\/#!$%\^&\*;:{}=\-_`~()]/g.test(lastLetter)) {
+      if (!/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g.test(lastLetter)) {
         lastWord.splice(-1, 0, ".");
         value[value.length-1] = lastWord;
       }
