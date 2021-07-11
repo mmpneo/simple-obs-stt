@@ -16,7 +16,6 @@ export class SoundService {
     networkService.messages$.subscribe(m => {m.type === 'sound:mute' && this.soundStore.update({muteClient: m.data});});
     networkService.onClientConnected$.subscribe(_ => this.SendClientMuteState());
     this.SoundGraphInit();
-    speechQuery.onSentenceUpdate$.subscribe(_ => this.Play());
     styleQuery.soundClip$.subscribe(clip => this.ResolveTypeAudio(clip.value))
   }
 

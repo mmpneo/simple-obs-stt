@@ -242,6 +242,12 @@
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping, fn: GetFn('global', 'realtimeTyping'), fnLink: GetSwFn('global', 'realtimeTyping')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Keep only last sentence', $implicit: currentStyle.globalStyle.keepSingleSentence, fn: GetFn('global', 'keepSingleSentence'), fnLink: GetSwFn('global', 'keepSingleSentence')}"></ng-container>
       <div class="divider"></div>
+      <div class="font-semibold">Text animation</div>
+      <small class="opacity-70">Enabling typing animation will hide all intermediate STT results and ignore realtime keyboard input.</small>
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Enable typing animation', $implicit: currentStyle.globalStyle.typingAnimation, fn: GetFn('global', 'typingAnimation'), fnLink: GetSwFn('global', 'typingAnimation')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Animate words', $implicit: currentStyle.globalStyle.typeWords, fn: GetFn('global', 'typeWords'), fnLink: GetSwFn('global', 'typeWords')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Animation timer', $implicit: currentStyle.globalStyle.typingDelay, fn: GetFn('global', 'typingDelay'), fnLink: GetSwFn('global', 'typingDelay'), min: 10, max: 5000, step: 10, disableLink: true}"></ng-container>
+      <div class="divider"></div>
       <div class="font-semibold">Inactivity</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Use inactivity style', $implicit: currentStyle.globalStyle.hideOnInactivity, fn: GetFn('global', 'hideOnInactivity'), fnLink: GetSwFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity, fn: GetFn('global', 'clearOnInactivity'), fnLink: GetSwFn('global', 'clearOnInactivity')}"></ng-container>

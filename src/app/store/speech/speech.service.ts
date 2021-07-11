@@ -23,11 +23,12 @@ export class SpeechService {
     private toastService: HotToastService
   ) {
     networkService.messages$.subscribe(m => {
-      if (m.type === 'stt:clear') this.speechStore.update({sentences: []});
-      if (m.type === 'stt:updatesentence') {
-        this.UpsertSentence(m.data)
-        this.TriggerShowTimer();
+      if (m.type === 'stt:clear') {
+        this.speechQuery.onClear$.next(null);
+        this.speechStore.update({sentences: []})
       }
+      if (m.type === 'stt:updatesentence')
+        this.UpsertSentence(m.data)
     }); // listen for network messages
   }
 
@@ -56,7 +57,7 @@ export class SpeechService {
   private timeout?: Subscription;
 
   // Show text and start or restart countdown to hide it
-  TriggerShowTimer() {
+  public TriggerShowTimer() {
     const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
     const targetTime   = parseInt(globalConfig.inactivityTimer?.value[0] || '1000');
     this.speechStore.update({show: true});
@@ -70,13 +71,14 @@ export class SpeechService {
   }
 
   private UpsertSentence(sentence: SpeechSentence) {
-    const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
-    this.speechStore.update(e => ({sentences: arrayUpsert(globalConfig.keepSingleSentence.value[0] ? e.sentences.filter((s => !s.finalized)) : e.sentences, sentence.id, sentence)}));
+    const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle.keepSingleSentence?.value[0];
+    this.speechStore.update(e => ({sentences: arrayUpsert(globalConfig ? e.sentences.filter((s => !s.finalized)) : e.sentences, sentence.id, sentence)}));
+    this.speechQuery.onSentenceUpdate$.next(sentence);
   }
 
   @transaction()
   private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
-    if (text === undefined)
+    if (text === undefined || text === " ")
       return;
 
     const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
@@ -89,20 +91,20 @@ export class SpeechService {
       const targetSentence = {...sentences[lastUnconfirmed], finalized: true};
       this.UpsertSentence(targetSentence);
       this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence});
-      this.TriggerShowTimer();
       return;
     }
 
 
     let ttsValue = text;
-    let words = (text).split(" ");
-    let value = [];
+    let words = text.trim().split(" ");
+    let value: string[][] = [];
     if (environment.features.EMOTES) {
       const emotesState         = this.emotesQuery.getValue();
       const emotesBindings      = emotesState.bindings_cache;
       const emotesKeyword       = emotesState.keyword.toLocaleLowerCase();
       const emotesKeywordSecond = emotesState.keyword_secondary.toLocaleLowerCase();
 
+      // region find emotes keyword bindings
       if (emotesKeyword || emotesKeywordSecond) {
         for (let i = 0; i < words.length; i++) {
           if (i + 1 === words.length) break; // ignore if last word
@@ -117,8 +119,10 @@ export class SpeechService {
           }
         }
       }
+      // endregion
 
       ttsValue = words.join(" "); // join mutated words to send clean version to tts
+      // region insert emotes
       value = words.map((word, i) => {
         const firstLetter  = word[0];
         const wordFiltered = word.replace(".", "");
@@ -126,9 +130,20 @@ export class SpeechService {
           return [`<img class="emote" src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
         return [...word.split(""), " "];
       });
+      // endregion
     }
     else
       value = words.map(word => [...word.split(""), " "]);
+
+    // add dot at the end of the sentence if no symbols found
+    if(finalized) {
+      const lastWord = value[value.length-1];
+      const lastLetter = lastWord[lastWord.length-2];
+      if (!/[.,\/#!$%\^&\*;:{}=\-_`~()]/g.test(lastLetter)) {
+        lastWord.splice(-1, 0, ".");
+        value[value.length-1] = lastWord;
+      }
+    }
 
     let targetSentence: SpeechSentence;
     if (sentences.length === 0 || sentences[sentences.length - 1].finalized) // create new
@@ -137,7 +152,6 @@ export class SpeechService {
       targetSentence = {...sentences[sentences.length - 1], finalized, valueNext: value, ttsValue};
     this.UpsertSentence(targetSentence);
     this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence})
-    this.TriggerShowTimer();
   }
 
   public StartHost() {
@@ -161,6 +175,7 @@ export class SpeechService {
 
   public ClearSentences() {
     this.speechStore.update({sentences: []});
+    this.speechQuery.onClear$.next(null);
     this.networkService.SendMessage({type: "stt:clear", data: null});
   }
 
@@ -170,10 +185,10 @@ export class SpeechService {
   }
 
   public SendTextInput(event: any) {
-    const value: string = event.target?.value;
+    let value: string = event.target?.value;
     if (value === "")
       return;
-    this.speechStore.update({textInput: ""})
-    this.UpdateLastVoiceSentence(value + ".", true, SpeechSentenceType.text);
+    this.speechStore.update({textInput: ""});
+    this.UpdateLastVoiceSentence(value, true, SpeechSentenceType.text);
   }
 }

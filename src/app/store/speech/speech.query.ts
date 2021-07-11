@@ -1,9 +1,10 @@
-import {Injectable}                        from '@angular/core';
-import {combineQueries, Query}             from '@datorama/akita';
-import {SpeechState, SpeechStore}          from './speech.store';
-import {StyleQuery}                        from "@store/style/style.query";
-import {distinctUntilChanged, filter, map} from "rxjs/operators";
-import {SoundQuery}                        from "@store/sound/sound.query";
+import {Injectable}                               from '@angular/core';
+import {combineQueries, Query}                    from '@datorama/akita';
+import {SpeechSentence, SpeechState, SpeechStore} from './speech.store';
+import {StyleQuery}                               from "@store/style/style.query";
+import {distinctUntilChanged, map}                from "rxjs/operators";
+import {SoundQuery}                               from "@store/sound/sound.query";
+import {Subject}                                  from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class SpeechQuery extends Query<SpeechState> {
@@ -11,20 +12,20 @@ export class SpeechQuery extends Query<SpeechState> {
     super(store);
   }
 
+  state$ = this.select();
+
   showBubble$ = combineQueries([
     this.select(),
     this.styleQuery.globalConfig$,
     this.soundQuery.isVoicePlaying$
-  ]).pipe(map(([speechState, config, isVoicePlaying]) =>
-    !config.hideOnInactivity?.value[0] || // if should always show
+  ]).pipe(map(([speechState, styleConfig, isVoicePlaying]) =>
+    !styleConfig.hideOnInactivity?.value[0] || // if should always show
     (isVoicePlaying || (speechState.show && speechState.sentences.length > 0))),
     distinctUntilChanged()
   ); // if time to show and has anything to show
 
-  onSentenceUpdate$ = this.select("sentences").pipe(filter(v => v.length !== 0));
-
-  sentences$ = this.select("sentences");
-  state$     = this.select();
+  onSentenceUpdate$ = new Subject<SpeechSentence>();
+  onClear$          = new Subject();
 
   onNewLastSentence$ = this.select("sentences").pipe(
     map(sentences => {

@@ -197,6 +197,10 @@ export interface STTStyle {
     clearOnInactivity: StyleValue<StyleValueType.bool>;
     realtimeTyping: StyleValue<StyleValueType.bool>;
     inactivityTimer: StyleValue<StyleValueType.string>;
+
+    typingAnimation: StyleValue<StyleValueType.bool>;
+    typeWords: StyleValue<StyleValueType.bool>;
+    typingDelay: StyleValue<StyleValueType.number>;
   }
 }
 
@@ -207,7 +211,7 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     5,
+  version:     6,
   boxStyle:    {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
@@ -292,6 +296,10 @@ export const STYLE_TEMPLATE: STTStyle = {
     clearOnInactivity:  {type: StyleValueType.bool, value: ['', ''], linked: true},
     realtimeTyping:     {type: StyleValueType.bool, value: ['1', '1'], linked: true},
     inactivityTimer:    {type: StyleValueType.string, value: ['5000', '5000'], linked: true},
+
+    typingAnimation: {type: StyleValueType.bool, value: ['', ''], linked: true},
+    typeWords: {type: StyleValueType.bool, value: ['', ''], linked: true},
+    typingDelay: {type: StyleValueType.number, value: [0.06, 0.06], linked: true}
   }
 }
 

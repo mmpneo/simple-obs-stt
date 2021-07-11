@@ -7,13 +7,14 @@ const migrations = [
   migrate_3,
   migrate_4,
   migrate_5,
+  migrate_6,
 ]
 
 export function migrate_style(style: STTStyle): STTStyle {
   if (style.version === STYLE_TEMPLATE.version)
     return style;
   let styleClone = {...style};
-  console.log("[Migrate] from", style.version);
+  console.log("[Migrate] template from", style.version);
   for (let i = style.version || 0; i < STYLE_TEMPLATE.version; i++) {
     if (i < STYLE_TEMPLATE.version)
       styleClone = migrations[i](styleClone);
@@ -138,5 +139,13 @@ function migrate_5(style: STTStyle): STTStyle {
   console.log("migrate 4 -> 5");
   const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
   s.version = 5;
+  return s;
+}
+
+// add typing animation
+function migrate_6(style: STTStyle): STTStyle {
+  console.log("migrate 5 -> 6");
+  const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
+  s.version = 6;
   return s;
 }
