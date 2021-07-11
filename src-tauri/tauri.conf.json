@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "SimpleSTT",
-    "version": "1.0.0"
+    "version": "1.2.0"
   },
   "build": {
     "distDir": "../dist",
@@ -13,14 +13,25 @@
   "tauri": {
     "bundle": {
       "active": true,
-      "targets": "all",
+      "targets": ["msi"],
       "identifier": "com.simple.stt",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
         "icons/128x128@2x.png",
         "icons/icon.icns",
-        "icons/icon.ico"
+        "icons/icon.ico",
+        "icons/icon.png",
+        "icons/Square30x30Logo.png",
+        "icons/Square44x44Logo.png",
+        "icons/Square71x71Logo.png",
+        "icons/Square89x89Logo.png",
+        "icons/Square107x107Logo.png",
+        "icons/Square142x142Logo.png",
+        "icons/Square150x150Logo.png",
+        "icons/Square284x284Logo.png",
+        "icons/Square310x310Logo.png",
+        "icons/StoreLogo.png"
       ],
       "resources": [],
       "externalBin": [],
@@ -43,7 +54,10 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "wix": {
+          "template": "src/main.wxs"
+        }
       }
     },
     "updater": {
