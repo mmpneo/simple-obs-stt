@@ -13,6 +13,7 @@ export class SoundService {
     private styleQuery: StyleQuery,
     private networkService: NetworkService
   ) {
+    speechQuery.onTypingEvent$.subscribe(() => this.Play())
     networkService.messages$.subscribe(m => {m.type === 'sound:mute' && this.soundStore.update({muteClient: m.data});});
     networkService.onClientConnected$.subscribe(_ => this.SendClientMuteState());
     this.SoundGraphInit();

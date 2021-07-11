@@ -2,15 +2,16 @@ import {Injectable}                                                 from '@angul
 import {languages, SpeechSentence, SpeechSentenceType, SpeechStore} from './speech.store';
 import {SpeechQuery}                                                from "@store/speech/speech.query";
 import {NetworkService}                                             from "@store/network/network.service";
-import {arrayUpsert, guid, transaction}                             from "@datorama/akita";
+import {transaction}                                                from "@datorama/akita";
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
 import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
 import {Subscription, timer}                                        from "rxjs";
 import {take}                                                       from "rxjs/operators";
 import {EmotesQuery}                                                from "@store/emotes/emotes.query";
-import {environment}                                                from "../../../environments/environment";
 import {HotToastService}                                            from "@ngneat/hot-toast";
+import {SpeechSentenceModel}                                        from "@store/speech/speech.model";
+import {GenerateSentence}                                           from "@store/speech/utils/sentence.generator";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -23,17 +24,13 @@ export class SpeechService {
     private toastService: HotToastService
   ) {
     networkService.messages$.subscribe(m => {
-      if (m.type === 'stt:clear') {
-        this.speechQuery.onClear$.next(null);
-        this.speechStore.update({sentences: []})
-      }
-      if (m.type === 'stt:updatesentence')
-        this.UpsertSentence(m.data)
-    }); // listen for network messages
+      if (m.type === 'stt:clear') this.DoClearSentences();
+      if (m.type === 'stt:updatesentence') this.DoUpsertSentence(m.data)
+    });
   }
 
+  // region plugin control
   private activePlugin?: BasePlugin;
-
   public SelectPlugin     = (key: string) => {
     const plugin = SPEECH_PLUGINS[key];
     this.speechStore.update(e => {
@@ -54,6 +51,27 @@ export class SpeechService {
     this.activePlugin = undefined;
   }
 
+  public StartHost() {
+    const plugin             = SPEECH_PLUGINS[this.speechQuery.getValue().selectedPlugin[0]];
+    const pluginInstance     = new plugin.plugin();
+    const selected           = this.speechQuery.getValue().selectedLanguage;
+    const selectedPluginData = this.speechQuery.getValue().selectedPluginData;
+    const selectedDialect    = languages[selected[0]][selected[1] + 1][0];
+    this.activePlugin        = pluginInstance;
+    this.activePlugin.onInter$.subscribe(value => this.UpsertSentence(value, false, SpeechSentenceType.voice))
+    this.activePlugin.onFinal$.subscribe(value => this.UpsertSentence(value, true, SpeechSentenceType.voice))
+    this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({connectionState: value}))
+    this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
+      this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
+      this.StopHost();
+    });
+
+    this.activePlugin.Start(selectedDialect, selectedPluginData)
+        .catch(error => this.toastService.error(error.message, {theme: "snackbar", position: "bottom-right"}));
+  }
+
+  // endregion
+
   private timeout?: Subscription;
 
   // Show text and start or restart countdown to hide it
@@ -64,131 +82,85 @@ export class SpeechService {
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
     this.timeout = timer(targetTime).subscribe(_ => {
       this.speechStore.update(state => {
-        if (globalConfig.clearOnInactivity?.value[0]) this.ClearSentences();
+        if (globalConfig.clearOnInactivity?.value[0]) this.DoClearFinishedSentences();
         state.show = false;
       });
     });
   }
 
-  private UpsertSentence(sentence: SpeechSentence) {
-    const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle.keepSingleSentence?.value[0];
-    this.speechStore.update(e => ({sentences: arrayUpsert(globalConfig ? e.sentences.filter((s => !s.finalized)) : e.sentences, sentence.id, sentence)}));
-    this.speechQuery.onSentenceUpdate$.next(sentence);
-  }
+  private isRunningSentence = false;
 
-  @transaction()
-  private UpdateLastVoiceSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
-    if (text === undefined || text === " ")
+  private async TryRunNext() {
+    if (this.isRunningSentence)
       return;
-
-    const sentences = this.speechQuery.getValue().sentences.filter(s => s.type === type);
-
-    if (text === "" && finalized) { // azure fix for empty finalized strings
-      // try confirm last sentence
-      const lastUnconfirmed = sentences.findIndex(s => !s.finalized)
-      if (lastUnconfirmed === -1)
-        return;
-      const targetSentence = {...sentences[lastUnconfirmed], finalized: true};
-      this.UpsertSentence(targetSentence);
-      this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence});
+    const list = this.speechQuery.getAll();
+    // find first not played sentence
+    const f    = list.find(s => !s.isPlayed && s.finalized);
+    if (!f)
       return;
-    }
-
-
-    let ttsValue = text;
-    let words = text.trim().split(" ");
-    let value: string[][] = [];
-    if (environment.features.EMOTES) {
-      const emotesState         = this.emotesQuery.getValue();
-      const emotesBindings      = emotesState.bindings_cache;
-      const emotesKeyword       = emotesState.keyword.toLocaleLowerCase();
-      const emotesKeywordSecond = emotesState.keyword_secondary.toLocaleLowerCase();
-
-      // region find emotes keyword bindings
-      if (emotesKeyword || emotesKeywordSecond) {
-        for (let i = 0; i < words.length; i++) {
-          if (i + 1 === words.length) break; // ignore if last word
-          const wLower = words[i].toLocaleLowerCase();
-          if (wLower === emotesKeyword || wLower === emotesKeywordSecond) {
-            const first_word  = words[i + 1]?.replace(".", "").replace(",", ""),
-                  second_word = words[i + 2]?.replace(".", "").replace(",", "");
-            if (emotesBindings[first_word]?.[second_word]) // replace two words
-              words.splice(i, 3, emotesBindings[first_word][second_word])
-            else if (emotesBindings[first_word]?.['']) // replace one word
-              words.splice(i, 2, emotesBindings[first_word]['']);
-          }
-        }
-      }
-      // endregion
-
-      ttsValue = words.join(" "); // join mutated words to send clean version to tts
-      // region insert emotes
-      value = words.map((word, i) => {
-        const firstLetter  = word[0];
-        const wordFiltered = word.replace(".", "");
-        if (emotesState.emotes[firstLetter]?.[wordFiltered])
-          return [`<img class="emote" src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
-        return [...word.split(""), " "];
-      });
-      // endregion
-    }
-    else
-      value = words.map(word => [...word.split(""), " "]);
-
-    // add dot at the end of the sentence if no symbols found
-    if(finalized) {
-      const lastWord = value[value.length-1];
-      const lastLetter = lastWord[lastWord.length-2];
-      if (!/[.,\/#!?$%\^&\*;:{}=\-_`~()]/g.test(lastLetter)) {
-        lastWord.splice(-1, 0, ".");
-        value[value.length-1] = lastWord;
-      }
-    }
-
-    let targetSentence: SpeechSentence;
-    if (sentences.length === 0 || sentences[sentences.length - 1].finalized) // create new
-      targetSentence = {finalized, valueNext: value, id: guid(), type, ttsValue};
-    else // update last sentence
-      targetSentence = {...sentences[sentences.length - 1], finalized, valueNext: value, ttsValue};
-    this.UpsertSentence(targetSentence);
-    this.networkService.SendMessage({type: 'stt:updatesentence', data: targetSentence})
+    const style = this.styleQuery.getValue().currentStyle.globalStyle;
+    !!style.keepSingleSentence?.value[0] && this.DoClearFinishedSentences();
+    this.isRunningSentence = true;
+    await f.Run();
+    this.isRunningSentence = false;
+    this.TryRunNext();
   }
 
-  public StartHost() {
-      const plugin             = SPEECH_PLUGINS[this.speechQuery.getValue().selectedPlugin[0]];
-      const pluginInstance     = new plugin.plugin();
-      const selected           = this.speechQuery.getValue().selectedLanguage;
-      const selectedPluginData = this.speechQuery.getValue().selectedPluginData;
-      const selectedDialect    = languages[selected[0]][selected[1] + 1][0];
-      this.activePlugin        = pluginInstance;
-      this.activePlugin.onInter$.subscribe(value => this.UpdateLastVoiceSentence(value))
-      this.activePlugin.onFinal$.subscribe(value => this.UpdateLastVoiceSentence(value, true))
-      this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({connectionState: value}))
-      this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
-        this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
-        this.StopHost();
-      });
+  private DoUpsertSentence(sentence: SpeechSentence) {
+    const hasSentence = this.speechQuery.hasEntity(sentence.id);
+    this.speechStore.upsert(sentence.id, sentence, {baseClass: SpeechSentenceModel});
+    const entity = this.speechQuery.getEntity(sentence.id);
 
-      this.activePlugin.Start(selectedDialect, selectedPluginData)
-          .catch(error => this.toastService.error(error.message, {theme: "snackbar", position: "bottom-right"}));
+    if (!hasSentence) {
+      entity?.BindTypeEvent(() => {
+        this.TriggerShowTimer();
+        this.speechQuery.onTypingEvent$.next(null)
+      });
+      const style = this.styleQuery.getValue().currentStyle.globalStyle;
+      // clear if not animating
+      !style.typingAnimation?.value[0] && !!style.keepSingleSentence?.value[0] && this.DoClearFinishedSentences();
+    }
+
+    entity?.Update(sentence);
+    this.TryRunNext();
   }
+
+  private UpsertSentence(text: string, finalized = false, type = SpeechSentenceType.voice) {
+    const sentence: SpeechSentence | null = GenerateSentence(text, finalized, type, this.emotesQuery, this.speechQuery, this.styleQuery);
+    if (!sentence)
+      return;
+    this.DoUpsertSentence(sentence);
+    this.networkService.SendMessage({type: "stt:updatesentence", data: this.speechQuery.getEntity(sentence.id)?.data});
+  }
+
+  private DoClearFinishedSentences() {
+    this.speechQuery.getAll({filterBy: s => s.finalized && s.isPlayed}).forEach(s => s.Dispose());
+    this.speechStore.remove(s => s.finalized && s.isPlayed);
+  };
+
+  private DoClearSentences() {
+    this.speechQuery.getAll().forEach(s => s.Dispose());
+    this.speechStore.remove()
+  };
 
   public ClearSentences() {
-    this.speechStore.update({sentences: []});
-    this.speechQuery.onClear$.next(null);
+    this.DoClearSentences();
     this.networkService.SendMessage({type: "stt:clear", data: null});
   }
 
+  @transaction()
   public InterimTextInput(event: any) {
     this.speechStore.update({textInput: event});
-    !!this.styleQuery.getValue().currentStyle.globalStyle.realtimeTyping.value[0] && this.UpdateLastVoiceSentence(event, false, SpeechSentenceType.text);
+    !!this.styleQuery.getValue().currentStyle.globalStyle.realtimeTyping.value[0] &&
+    this.UpsertSentence(event, false, SpeechSentenceType.text);
   }
 
+  @transaction()
   public SendTextInput(event: any) {
     let value: string = event.target?.value;
     if (value === "")
       return;
     this.speechStore.update({textInput: ""});
-    this.UpdateLastVoiceSentence(value, true, SpeechSentenceType.text);
+    this.UpsertSentence(value, true, SpeechSentenceType.text);
   }
 }

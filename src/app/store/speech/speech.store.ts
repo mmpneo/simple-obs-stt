@@ -1,7 +1,8 @@
-import {Injectable}             from '@angular/core';
-import {ID, Store, StoreConfig} from '@datorama/akita';
-import {ConnectionState}        from "../../utils/types";
-import produce                  from "immer";
+import {Injectable}                                from '@angular/core';
+import {EntityState, EntityStore, ID, StoreConfig} from '@datorama/akita';
+import {ConnectionState}                           from "../../utils/types";
+import produce                                     from "immer";
+import {SpeechSentenceModel}                       from "@store/speech/speech.model";
 
 export enum SpeechSentenceType {
   voice,
@@ -13,15 +14,19 @@ export interface SpeechSentence {
   type: SpeechSentenceType;
   finalized: boolean;
   valueNext: string[][],
-  ttsValue: string
+  ttsValue: string,
+  animation: {
+    animate: boolean
+    animateWords: boolean,
+    interval: number
+  }
 }
 
-export interface SpeechState {
+export interface SpeechState extends EntityState<SpeechSentenceModel, ID> {
   selectedPlugin: [string, any],
   selectedPluginData: string[],
   selectedLanguage: [number, number],
   connectionState: ConnectionState,
-  sentences: SpeechSentence[],
   textInput: string;
   show: boolean
 }
@@ -32,7 +37,6 @@ export function createInitialState(): SpeechState {
     selectedPluginData: [],
     selectedLanguage:   [0, 0],
     connectionState:    ConnectionState.Disconnected,
-    sentences:          [],
     textInput:          "",
     show:               false
   };
@@ -40,7 +44,7 @@ export function createInitialState(): SpeechState {
 
 @Injectable({providedIn: 'root'})
 @StoreConfig({name: 'speech', producerFn: produce})
-export class SpeechStore extends Store<SpeechState> {
+export class SpeechStore extends EntityStore<SpeechState> {
 
   constructor() {
     super(createInitialState());
