@@ -90,7 +90,6 @@ export class NetworkService {
       this.connInstance?.on("close", () => this.ResetClient(hostId));
       this.connInstance?.on("error", error => {
         console.log(error);
-        // this.ResetClient(hostId);
       });
     });
     this.peerInstance.on("disconnected", () => {
