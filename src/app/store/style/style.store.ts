@@ -192,6 +192,8 @@ export interface STTStyle {
     voiceVolume: StyleValue<StyleValueType.string>;
   },
   globalStyle: {
+    emoteHeight: StyleValue<StyleValueType.pixels>
+
     hideOnInactivity: StyleValue<StyleValueType.bool>;
     keepSingleSentence: StyleValue<StyleValueType.bool>;
     clearOnInactivity: StyleValue<StyleValueType.bool>;
@@ -211,7 +213,7 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     6,
+  version:     7,
   boxStyle:    {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
@@ -291,6 +293,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     voiceVolume: {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
   },
   globalStyle: {
+    emoteHeight:        {type: StyleValueType.pixels, value: ['24', '24'], linked: true},
     hideOnInactivity:   {type: StyleValueType.bool, value: ['', ''], linked: true},
     keepSingleSentence: {type: StyleValueType.bool, value: ['', ''], linked: true},
     clearOnInactivity:  {type: StyleValueType.bool, value: ['', ''], linked: true},
@@ -298,8 +301,8 @@ export const STYLE_TEMPLATE: STTStyle = {
     inactivityTimer:    {type: StyleValueType.string, value: ['5000', '5000'], linked: true},
 
     typingAnimation: {type: StyleValueType.bool, value: ['', ''], linked: true},
-    typeWords: {type: StyleValueType.bool, value: ['', ''], linked: true},
-    typingDelay: {type: StyleValueType.number, value: [80, 80], linked: true}
+    typeWords:       {type: StyleValueType.bool, value: ['', ''], linked: true},
+    typingDelay:     {type: StyleValueType.number, value: [80, 80], linked: true}
   }
 }
 

@@ -8,6 +8,7 @@ const migrations = [
   migrate_4,
   migrate_5,
   migrate_6,
+  migrate_7,
 ]
 
 export function migrate_style(style: STTStyle): STTStyle {
@@ -147,5 +148,13 @@ function migrate_6(style: STTStyle): STTStyle {
   console.log("migrate 5 -> 6");
   const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
   s.version = 6;
+  return s;
+}
+
+// add emote height
+function migrate_7(style: STTStyle): STTStyle {
+  console.log("migrate 6 -> 7");
+  const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
+  s.version = 7;
   return s;
 }
