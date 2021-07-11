@@ -246,12 +246,12 @@
       <small class="opacity-70">Enabling typing animation will hide all intermediate STT results and ignore realtime keyboard input.</small>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Enable typing animation', $implicit: currentStyle.globalStyle.typingAnimation, fn: GetFn('global', 'typingAnimation'), fnLink: GetSwFn('global', 'typingAnimation')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Animate words', $implicit: currentStyle.globalStyle.typeWords, fn: GetFn('global', 'typeWords'), fnLink: GetSwFn('global', 'typeWords')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Animation timer', $implicit: currentStyle.globalStyle.typingDelay, fn: GetFn('global', 'typingDelay'), fnLink: GetSwFn('global', 'typingDelay'), min: 10, max: 5000, step: 10, disableLink: true}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Animation interval (ms)', $implicit: currentStyle.globalStyle.typingDelay, fn: GetFn('global', 'typingDelay'), fnLink: GetSwFn('global', 'typingDelay'), min: 10, max: 5000, step: 10, disableLink: true}"></ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Inactivity</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Use inactivity style', $implicit: currentStyle.globalStyle.hideOnInactivity, fn: GetFn('global', 'hideOnInactivity'), fnLink: GetSwFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity, fn: GetFn('global', 'clearOnInactivity'), fnLink: GetSwFn('global', 'clearOnInactivity')}"></ng-container>
-      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer', $implicit: currentStyle.globalStyle.inactivityTimer, fn: GetFn('global', 'inactivityTimer'), fnLink: GetSwFn('global', 'inactivityTimer'), min: 100, max: 30000, disableLink: true}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer (ms)', $implicit: currentStyle.globalStyle.inactivityTimer, fn: GetFn('global', 'inactivityTimer'), fnLink: GetSwFn('global', 'inactivityTimer'), min: 100, max: 30000, disableLink: true}"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'emotes'">
       <ng-container *ngIf="emotesQuery.state$ | async as emoteState">
@@ -267,6 +267,9 @@
           <div>Connect your twitch account to use twitch/bttv/ffz emotes</div>
           <a class="link link-primary" (click)="emotesService.Login()">Connect twitch account</a>
         </ng-template>
+        <div class="divider"></div>
+        <div class="font-semibold">Emote style</div>
+        <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Height', $implicit: currentStyle.globalStyle.emoteHeight, fn: GetFn('global', 'emoteHeight'), fnLink: GetSwFn('global', 'emoteHeight'), min: 10, max: 100}"></ng-container>
         <div class="divider"></div>
         <div class="font-semibold">Emote bindings keywords</div>
         <div class="flex justify-between items-center">
