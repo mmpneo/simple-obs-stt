@@ -7,9 +7,9 @@ import {enableAkitaProdMode, persistState} from "@datorama/akita";
 import {ClientType, GetClientType}         from "./app/utils/client_type";
 import {ClearSWCache}                      from "./app/utils/clear_sw_cache";
 
+enableAkitaProdMode()
 if (environment.production) {
   enableProdMode();
-  enableAkitaProdMode()
 }
 if (GetClientType() === ClientType.host) { //add persistent for host
   const storage_main = persistState({
