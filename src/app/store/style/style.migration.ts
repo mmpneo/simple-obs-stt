@@ -9,6 +9,7 @@ const migrations = [
   migrate_5,
   migrate_6,
   migrate_7,
+  migrate_8,
 ]
 
 export function migrate_style(style: STTStyle): STTStyle {
@@ -156,5 +157,13 @@ function migrate_7(style: STTStyle): STTStyle {
   console.log("migrate 6 -> 7");
   const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
   s.version = 7;
+  return s;
+}
+
+// add audio playback and detune
+function migrate_8(style: STTStyle): STTStyle {
+  console.log("migrate 7 -> 8");
+  const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
+  s.version = 8;
   return s;
 }

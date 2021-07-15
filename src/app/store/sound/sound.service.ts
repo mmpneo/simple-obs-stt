@@ -52,10 +52,13 @@ export class SoundService {
     this.voiceGainNode.connect(this.audioContext.destination);
   }
 
+
+  private random = (min: number, max: number) => Math.random() * (max - (min)) + (min);
   Play() {
     if (this.soundStore.getValue().mute)
       return;
-    const volValue = this.IsClientMuted ? 0 : parseFloat(this.styleQuery.getValue().currentStyle.soundStyle.volume.value[0]);
+    const soundStyle = this.styleQuery.getValue().currentStyle.soundStyle;
+    const volValue = this.IsClientMuted ? 0 : parseFloat(soundStyle.volume.value[0]);
     if (volValue === 0)
       return;
     this.typeGainNode.gain.setValueAtTime(volValue ?? 0.5, this.audioContext.currentTime);
@@ -63,6 +66,16 @@ export class SoundService {
     const source = this.audioContext.createBufferSource();
     source.buffer = this.typeAudioBuffer;
     source.connect(this.typeGainNode);
+
+    // region effects
+    const playbackValue =  soundStyle.typePlayback;
+    if (!!playbackValue)
+      source.playbackRate.value = playbackValue.linked ? playbackValue.value[0] : this.random(Math.max(playbackValue.value[0], 0.1), Math.min(playbackValue.value[1], 2));
+    const detuneValue =  soundStyle.typeDetune;
+    if (!!detuneValue)
+      source.detune.value = detuneValue.linked ? detuneValue.value[0] : this.random(Math.max(detuneValue.value[0], -1200), Math.min(detuneValue.value[1], 1200));
+    // endregion
+
     source.start();
   }
 

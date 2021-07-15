@@ -189,6 +189,8 @@ export interface STTStyle {
   soundStyle: {
     volume: StyleValue<StyleValueType.string>;
     typeClip: StyleValue<StyleValueType.audioFile>;
+    typePlayback: StyleValue<StyleValueType.number>;
+    typeDetune: StyleValue<StyleValueType.number>;
     voiceVolume: StyleValue<StyleValueType.string>;
   },
   globalStyle: {
@@ -213,7 +215,7 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     7,
+  version:     8,
   boxStyle:    {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
@@ -288,9 +290,11 @@ export const STYLE_TEMPLATE: STTStyle = {
     opacity:           {type: StyleValueType.number, value: [1, 1], linked: true},
   },
   soundStyle:  {
-    volume:      {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
-    typeClip:    {type: StyleValueType.audioFile, value: ['assets/sounds/type_1.wav', 'url'], linked: true},
-    voiceVolume: {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
+    volume:       {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
+    typeClip:     {type: StyleValueType.audioFile, value: ['assets/sounds/type_1.wav', 'url'], linked: true},
+    typeDetune:   {type: StyleValueType.number, value: [0, 0], linked: true},
+    typePlayback: {type: StyleValueType.number, value: [1, 1], linked: true},
+    voiceVolume:  {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
   },
   globalStyle: {
     emoteHeight:        {type: StyleValueType.pixels, value: ['24', '24'], linked: true},

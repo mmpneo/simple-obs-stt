@@ -23,9 +23,14 @@
     </a>
   </div>
 
-  <ng-template #fieldNumber let-value let-title="title" let-fn="fn" let-fnLink="fnLink" let-min="min" let-max="max" let-step="step" let-disableLink="disableLink">
+  <ng-template #fieldNumber let-value let-title="title" let-tooltip="tooltip" let-fn="fn" let-fnLink="fnLink" let-min="min" let-max="max" let-step="step" let-disableLink="disableLink">
     <div class="flex items-center space-x-2">
-      <div class="flex-grow">{{title}}</div>
+      <button *ngIf="tooltip" class="btn btn-xs btn-circle btn-ghost" [tippy]="tooltip">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
+      <div class="flex-grow truncate" [title]="title" [tippy]="tooltip" [popperOptions]="{}">{{title}}</div>
       <input type="number" [step]="step || 1" [min]="min || 0" [max]="max || 100" class="w-20 input input-bordered input-sm" [ngModel]="value.value[0]" (ngModelChange)="fn($event, 0)">
       <ng-container *ngIf="!disableLink">
         <input type="number" [step]="step || 1" [min]="min || 0" [max]="max || 100" class="w-20 input input-bordered input-sm" *ngIf="!value.linked" [ngModel]="value.value[1]" (ngModelChange)="fn($event, 1)">
@@ -34,15 +39,15 @@
     </div>
   </ng-template>
   <ng-template #fieldSlider let-value let-title="title" let-fn="fn" let-min="min" let-max="max" let-step="step">
-    <div class="flex justify-between items-center">
-      <div>{{title}}</div>
+    <div class="flex justify-between items-center space-x-2">
+      <div class="flex-grow truncate" [title]="title">{{title}}</div>
       <input type="range" [step]="step" [min]="min || 0" [max]="max || 100" class="px-0 w-20 input input-range input-bordered input-sm" [ngModel]="value.value[0]" (ngModelChange)="fn($event, 0)">
     </div>
   </ng-template>
 
   <ng-template #fieldString let-value let-title="title" let-fn="fn"  let-fnLink="fnLink">
     <div class="flex items-center space-x-2">
-      <div class="flex-grow">{{title}}</div>
+      <div class="flex-grow truncate" [title]="title">{{title}}</div>
       <input class="w-24 input input-bordered input-sm" [ngModel]="value.value[0]" (ngModelChange)="fn($event, 0)">
       <input class="w-24 input input-bordered input-sm" *ngIf="!value.linked" [ngModel]="value.value[1]" (ngModelChange)="fn($event, 1)">
       <ng-container *ngTemplateOutlet="switchLinkButton; context: {fn: fnLink, linked: value.linked}"></ng-container>
@@ -51,14 +56,14 @@
 
   <ng-template #fieldToggle let-value let-title="title" let-fn="fn">
     <div class="form-control">
-      <label class="cursor-pointer p-0 label"> <span class="label-text">{{title}}</span><div> <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!(value.value[0])" (ngModelChange)="fn($event ? '1' : '', 0)">   <span class="toggle-mark"></span> </div>
+      <label class="cursor-pointer p-0 label"> <span class="label-text" [title]="title">{{title}}</span><div> <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!(value.value[0])" (ngModelChange)="fn($event ? '1' : '', 0)">   <span class="toggle-mark"></span> </div>
       </label>
     </div>
   </ng-template>
 
   <ng-template #fieldChips let-value let-title="title" let-fn="fn" let-options="options">
     <div class="flex justify-between items-center">
-      <div>{{title}}</div>
+      <div class="flex-grow truncate" [title]="title">{{title}}</div>
       <div class="btn-group"> <button *ngFor="let option of options" class="btn btn-sm normal-case" (click)="fn(option[1], 0)" [class.btn-active]="value.value[0] === option[1]">{{option[0]}}</button>
       </div>
     </div>
@@ -66,7 +71,7 @@
 
   <ng-template #fieldChipsI let-value let-title="title" let-fn="fn" let-options="options">
     <div class="flex justify-between items-center">
-      <div>{{title}}</div>
+      <div class="flex-grow truncate" [title]="title">{{title}}</div>
       <div class="btn-group"> <button *ngFor="let option of options" class="btn btn-sm normal-case" (click)="fn(option[1], 0)" [class.btn-active]="value.value[0] === option[1]"><ng-container *ngTemplateOutlet="option[0]"></ng-container></button>
       </div>
     </div>
@@ -220,6 +225,8 @@
       </ng-container>
       <div class="divider"></div>
       <div class="font-semibold">Typing sound effect</div>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Playback', $implicit: currentStyle.soundStyle.typePlayback, fn: GetFn('sound', 'typePlayback'), fnLink: GetSwFn('sound', 'typePlayback'), min: 0.1, max: 2, tooltip: 'Playback speed. 1 is normal, 0.1 is min, 2 is max.'}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Detune', $implicit: currentStyle.soundStyle.typeDetune, fn: GetFn('sound', 'typeDetune'), fnLink: GetSwFn('sound', 'typeDetune'), min: -1200, max: 1200, tooltip: '0 is normal, -1200 is min, 1200 is max'}"></ng-container>
       <button class="btn btn-sm btn-primary btn-outline" (click)="styleService.ImportAudio()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
