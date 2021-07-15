@@ -77,14 +77,16 @@ export class SpeechService {
   // Show text and start or restart countdown to hide it
   public TriggerShowTimer() {
     const globalConfig = this.styleQuery.getValue().currentStyle.globalStyle;
+    const boxStyle = this.styleQuery.getValue().currentStyle.boxStyle;
     const targetTime   = parseInt(globalConfig.inactivityTimer?.value[0] || '1000');
     this.speechStore.update({show: true});
     this.timeout && !this.timeout.closed && this.timeout.unsubscribe();
     this.timeout = timer(targetTime).subscribe(_ => {
-      this.speechStore.update(state => {
-        if (globalConfig.clearOnInactivity?.value[0]) this.DoClearFinishedSentences();
-        state.show = false;
-      });
+
+      // if hiding box while keeping only last sentence ignore clear on inactivity to simulate clearing after animation
+      if (globalConfig.hideOnInactivity.value[0] && globalConfig.keepSingleSentence.value[0] && boxStyle.opacity.value[1] === 0) {}
+      else if (globalConfig.clearOnInactivity?.value[0]) this.DoClearFinishedSentences();
+      this.speechStore.update({show: false});
     });
   }
 
