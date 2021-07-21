@@ -17,7 +17,7 @@ export class SoundService {
     networkService.messages$.subscribe(m => {m.type === 'sound:mute' && this.soundStore.update({muteClient: m.data});});
     networkService.onClientConnected$.subscribe(_ => this.SendClientMuteState());
     this.SoundGraphInit();
-    styleQuery.soundClip$.subscribe(clip => this.ResolveTypeAudio(clip.value))
+    styleQuery.soundClip$.subscribe(clip => this.ResolveTypeAudio(clip?.value))
   }
 
   private audioContext!: AudioContext;
@@ -33,6 +33,8 @@ export class SoundService {
   }
 
   private async ResolveTypeAudio(value: [string, string]) {
+    if (!value?.[0])
+      return;
     if (value[1] === 'base64')
       this.typeAudioBuffer = await this.audioContext.decodeAudioData(this.base64ToArrayBuffer(value[0]))
     else  {

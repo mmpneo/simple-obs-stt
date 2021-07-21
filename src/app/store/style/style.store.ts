@@ -82,14 +82,18 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
 
       elementStyle.borderImage     = null;
       elementStyle.backgroundImage = null;
-      if (calculatedValue === 'normal')
+      if (calculatedValue === 'normal') {
+        if (state.boxStyle.backgroundImage.value[valueIndex])
         elementStyle.backgroundImage = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
+      }
       else {
         // ignore border rules
         elementStyle.border           = '0px solid transparent';
-        elementStyle.borderImage      = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
-        elementStyle.borderImageSlice = `${state.boxStyle.borderWidthTop.value[valueIndex]} ${state.boxStyle.borderWidthRight.value[valueIndex]} ${state.boxStyle.borderWidthBottom.value[valueIndex]} ${state.boxStyle.borderWidthLeft.value[valueIndex]} fill`;
-        elementStyle.borderImageWidth = `${state.boxStyle.borderWidthTop.value[valueIndex]}px ${state.boxStyle.borderWidthRight.value[valueIndex]}px ${state.boxStyle.borderWidthBottom.value[valueIndex]}px ${state.boxStyle.borderWidthLeft.value[valueIndex]}px`;
+        if (state.boxStyle.backgroundImage.value[valueIndex]) {
+          elementStyle.borderImage      = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
+          elementStyle.borderImageSlice = `${state.boxStyle.borderWidthTop.value[valueIndex]} ${state.boxStyle.borderWidthRight.value[valueIndex]} ${state.boxStyle.borderWidthBottom.value[valueIndex]} ${state.boxStyle.borderWidthLeft.value[valueIndex]} fill`;
+          elementStyle.borderImageWidth = `${state.boxStyle.borderWidthTop.value[valueIndex]}px ${state.boxStyle.borderWidthRight.value[valueIndex]}px ${state.boxStyle.borderWidthBottom.value[valueIndex]}px ${state.boxStyle.borderWidthLeft.value[valueIndex]}px`;
+        }
         // border-image-slice x-x-x-x fill
         // border-image-width x-x-x-x
       }
