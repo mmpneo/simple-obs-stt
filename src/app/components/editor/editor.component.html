@@ -288,6 +288,14 @@
           <input class="w-44 input input-bordered input-sm" placeholder="Keyword" [ngModel]="emoteState.keyword_secondary" (ngModelChange)="emotesService.UpdateKeywordSecondary($event)">
         </div>
         <div class="divider"></div>
+        <div class="font-semibold flex items-center justify-between">Emote terms
+          <a tippy="Import json file with predefined emotes-terms" class="link-secondary cursor-pointer flex space-x-2 items-center" (click)="emotesService.UploadConfig()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <div>Import</div>
+          </a>
+        </div>
         <div class="flex space-x-2" *ngIf="emoteState.bindings?.length">
           <div class="font-semibold flex-1">Emote</div>
           <div class="font-semibold flex-1">Trigger</div>
@@ -309,20 +317,30 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Add binding</button>
-        <div class="text-sm opacity-70">
-          <b>Example</b><br>
-          Keyword 1 = "emote"<br>
-          Keyword 2 = "em"<br>
-          Emote = "Kappa"<br>
-          Trigger = "smile"<br>
-          <span>"<b>emote smile</b>" or "<b>em smile</b>" will be recognized as Kappa emote</span>
-          <ul class="p-4 list-disc">
+        <div class="flex flex-col space-y-2 text-sm opacity-70">
+          <b>Example</b>
+          <span>
+            Keyword 1 = "emote"<br>
+            Emote = "Kappa"<br>
+            Trigger = "smile"<br>
+          </span>
+          <span>"<b>emote smile</b>" will be recognized as <img style="height: 24px" class="inline" src="https://static-cdn.jtvnw.net/emoticons/v1/25/1.0"></span>
+          <ul class="pl-4 list-disc">
             <li>Clear keywords to disable feature</li>
             <li>Triggers can contain up to two words</li>
             <li>Triggers can share first words (smile one, smile two) </li>
           </ul>
+          <b>Import file example</b>
+          <pre class="rounded-md select-text p-4 bg-neutral text-neutral-content text-primary-content">
+<small>emotes.json</small><small class="select-text">
+{{"{"}}
+    "monkaThink": "think",
+    "happythoStare": "stare",
+    "dottLove": "love",
+    "qynoaMORE": "more",
+    "OMEGALUL": "red circle"
+{{"}"}}</small></pre>
         </div>
-
       </ng-container>
     </ng-container>
   </ng-container>

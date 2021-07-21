@@ -8,13 +8,15 @@ import {
   FfzGlobalResponse,
   TwitchResponse,
   TwitchUserResponse
-}                                           from "@store/emotes/emotes.models";
-import {environment}                        from "../../../environments/environment";
+}                                  from "@store/emotes/emotes.models";
+import {environment}               from "../../../environments/environment";
 import {ClientType, GetClientType} from "../../utils/client_type";
+import {fileOpen, FileWithHandle}  from "browser-fs-access";
+import {HotToastService}           from "@ngneat/hot-toast";
 
 @Injectable({providedIn: 'root'})
 export class EmotesService {
-  constructor(private emotesStore: EmotesStore) {
+  constructor(private emotesStore: EmotesStore, private toastService: HotToastService) {
     GetClientType() === ClientType.host && this.Init();
   }
 
@@ -32,6 +34,23 @@ export class EmotesService {
       state.bindings[index][valueIndex] = value;
     });
     this.BuildCache();
+  }
+
+  async UploadConfig() {
+    let resp: FileWithHandle | null = null;
+    try {
+      resp = await fileOpen({mimeTypes: ['application/json'], extensions: ['.json']});
+    } catch (error) {}
+    if (resp) try {
+      const txt = await resp.text();
+      const json: {[emote: string]: string} = JSON.parse(txt);
+      this.emotesStore.update(state => {
+        state.bindings = Object.entries<any>(json).filter(([emote, value]) => typeof value === "string");
+      });
+      this.BuildCache();
+    } catch (error) {
+      this.toastService.error('Invalid file', {theme: 'snackbar', position: 'bottom-right'})
+    }
   }
 
   private BuildCache() {
