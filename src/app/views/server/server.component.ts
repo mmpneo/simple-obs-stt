@@ -52,13 +52,13 @@ export class ServerComponent implements OnInit {
   get voicePluginLanguages() {
     const state = this.voiceQuery.getValue();
     const selectedPlugin = this.voicePlugins[state.selectedPlugin[0]];
-    return selectedPlugin?.languages ?? [];
+    return selectedPlugin?.languages() ?? [];
   }
 
   get voicePluginVoices(): [string, string][] {
     const state = this.voiceQuery.getValue();
     const selectedPlugin = this.voicePlugins[state.selectedPlugin[0]];
-    return selectedPlugin?.languages[state.selectedPlugin[1]][2] ?? [];
+    return selectedPlugin?.languages()[state.selectedPlugin[1]]?.[2] ?? [];
   }
 
   RgbaToString(rgba: RGBA) {

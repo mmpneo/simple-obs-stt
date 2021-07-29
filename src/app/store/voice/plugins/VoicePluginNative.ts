@@ -1,45 +1,35 @@
-import {BaseVoicePlugin}                              from "@store/voice/plugins/BaseVoicePlugin";
-import {
-  AudioConfig, SpeakerAudioDestination,
-  SpeechConfig,
-  SpeechSynthesizer
-} from "microsoft-cognitiveservices-speech-sdk";
-import {ConnectionState}                              from "../../../utils/types";
+import {BaseVoicePlugin} from "@store/voice/plugins/BaseVoicePlugin";
+import {ConnectionState} from "../../../utils/types";
+
 
 export class VoicePluginNative extends BaseVoicePlugin {
   constructor() {
     super();
   }
-
-  private instance!: SpeechSynthesizer;
-
-  RequestPlay(text: string) {
-    this.instance.speakTextAsync(text, e => {
-      this.onFinal$.next(e.audioData);
-    }, e => {console.log(e)});
-  }
+  private instance?: SpeechSynthesisUtterance;
 
   async Start(language: string, voice: string, data: string[]): Promise<void> {
-    if (!data[0] || !data[1])
-      throw new Error("[Azure] Invalid voice configuration");
-    try {
-      super.Start(language, voice, data);
-      // const player = new SpeakerAudioDestination();
-      // const audioConfig                     = AudioConfig.fromSpeakerOutput(player);
-      this.onStatusChanged$.next(ConnectionState.Connecting);
-      const speechConfig                    = SpeechConfig.fromSubscription(data[0], data[1]);
-      speechConfig.speechSynthesisLanguage  = language;
-      speechConfig.speechSynthesisVoiceName = voice;
-      this.instance                         = new SpeechSynthesizer(speechConfig, null as any);
-      this.onStatusChanged$.next(ConnectionState.Connected);
-    } catch (error) {
-      this.onPluginCrashed$.next(error.message || error);
+    super.Start(language, voice, data);
+    const voices: SpeechSynthesisVoice[] = (<any>window).NativeVoices;
+    this.instance = new SpeechSynthesisUtterance();
+    const findVoice = voices.find(v => voice === v.voiceURI);
+    if (!findVoice) {
+      this.onPluginCrashed$.next("[Native] cannot initialize voice");
+      return;
     }
+    this.instance.lang = language;
+    this.instance.voice = findVoice;
+    this.onStatusChanged$.next(ConnectionState.Connected);
+  }
+
+  RequestPlay(text: string) {
+    if (!this.instance)
+      return;
+    this.instance.text = text;
+    window.speechSynthesis.speak(this.instance);
   }
 
   async Stop(): Promise<void> {
-    this.instance?.close()
     super.Stop();
-
   }
 }

@@ -1,5 +1,6 @@
-import {VoicePluginNative} from "@store/voice/plugins/VoicePluginNative";
+import {VoicePluginAzure}  from "@store/voice/plugins/VoicePluginAzure";
 import {BaseVoicePlugin}   from "@store/voice/plugins/BaseVoicePlugin";
+import {VoicePluginNative} from "@store/voice/plugins/VoicePluginNative";
 
 type voices = [string, string][]
 
@@ -8,7 +9,7 @@ export type VoicePluginDescriptor = {
   plugin: { new(): BaseVoicePlugin },
   pluginDataFields: string[],
   // langName, langCode, [voiceName, voiceCode][]
-  languages: [
+  languages: () => [
     string,
     string,
     voices
@@ -18,9 +19,16 @@ export type VoicePluginDescriptor = {
 
 export const VOICE_PLUGINS: VoicePluginDescriptor = [
   {
-    name:             "Azure Cognitive Services",
-    plugin:           VoicePluginNative,
-    languages:        [
+    name: 'Native (Experimental, sound is playing only on host)',
+    plugin: VoicePluginNative,
+    languages: () => (<any>window)?.NativeVoicesGroups || [],
+    platformValidate: () => true,
+    pluginDataFields: []
+  },
+  {
+    name:      "Azure Cognitive Services",
+    plugin:    VoicePluginAzure,
+    languages: () => [
       ["Arabic (Egypt)", "ar-EG", [["SalmaNeural", "ar-EG-SalmaNeural"], ["ShakirNeural", "ar-EG-ShakirNeural"]]],
       ["Arabic (Saudi Arabia)", "ar-SA", [["ZariyahNeural", "ar-SA-ZariyahNeural"], ["HamedNeural", "ar-SA-HamedNeural"]]],
       ["Bulgarian (Bulgaria)", "bg-BG", [["KalinaNeural", "bg-BG-KalinaNeural"], ["BorislavNeural", "bg-BG-BorislavNeural"]]],

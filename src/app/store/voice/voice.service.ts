@@ -53,8 +53,8 @@ export class VoiceService {
     const state          = this.voiceStore.getValue();
     const plugin         = VOICE_PLUGINS[state.selectedPlugin[0]];
     this.pluginInstance = new plugin.plugin();
-    const languageCode = plugin.languages[state.selectedPlugin[1]][1];
-    const voiceCode = plugin.languages[state.selectedPlugin[1]][2][state.selectedPlugin[2]][1];
+    const languageCode = plugin.languages()[state.selectedPlugin[1]][1];
+    const voiceCode = plugin.languages()[state.selectedPlugin[1]][2][state.selectedPlugin[2]][1];
     this.pluginInstance.onStatusChanged$.subscribe(value => this.voiceStore.update({connectionState: value}));
     this.pluginInstance.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin
       this.toastService.error(v, {theme: "snackbar", position: "bottom-right"});
