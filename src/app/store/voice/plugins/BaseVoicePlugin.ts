@@ -12,7 +12,7 @@ export class BaseVoicePlugin {
     console.log(`[Base voice] Start ${language}`);
   };
 
-  RequestPlay(text: string) {}
+  RequestPlay(text: string, volume: number | string) {}
 
   async Stop() {
     console.log("[Base voice] Stop");

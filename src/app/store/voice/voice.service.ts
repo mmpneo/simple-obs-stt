@@ -9,6 +9,7 @@ import {HotToastService}           from "@ngneat/hot-toast";
 import {NetworkService}            from "@store/network/network.service";
 import {SoundService}              from "@store/sound/sound.service";
 import {SoundQuery}                from "@store/sound/sound.query";
+import {StyleQuery}                from "@store/style/style.query";
 
 @Injectable({providedIn: 'root'})
 export class VoiceService {
@@ -18,7 +19,8 @@ export class VoiceService {
     private toastService: HotToastService,
     private networkService: NetworkService,
     private soundService: SoundService,
-    private soundQuery: SoundQuery
+    private soundQuery: SoundQuery,
+    private styleQuery: StyleQuery
     ) {
     if (GetClientType() === ClientType.host)
       speechQuery.onNewLastSentence$.subscribe(a => this.Enqueue(a?.ttsValue))
@@ -31,7 +33,7 @@ export class VoiceService {
   private Enqueue(q: string) {
       q
       && this.pluginInstance
-      && this.pluginInstance.RequestPlay(q)
+      && this.pluginInstance.RequestPlay(q, this.styleQuery.getValue().currentStyle.soundStyle.voiceVolume?.value[0])
   }
 
   public SelectPlugin   = (index: number) => {

@@ -19,13 +19,15 @@ export class VoicePluginNative extends BaseVoicePlugin {
     }
     this.instance.lang = language;
     this.instance.voice = findVoice;
+    this.instance.volume
     this.onStatusChanged$.next(ConnectionState.Connected);
   }
 
-  RequestPlay(text: string) {
+  RequestPlay(text: string, volume: number | string) {
     if (!this.instance)
       return;
     this.instance.text = text;
+    this.instance.volume = typeof volume === "string" ? parseInt(volume) : volume;
     window.speechSynthesis.speak(this.instance);
   }
 
