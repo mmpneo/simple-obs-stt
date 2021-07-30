@@ -10,6 +10,7 @@ const migrations = [
   migrate_6,
   migrate_7,
   migrate_8,
+  migrate_9
 ]
 
 export function migrate_style(style: STTStyle): STTStyle {
@@ -165,5 +166,13 @@ function migrate_8(style: STTStyle): STTStyle {
   console.log("migrate 7 -> 8");
   const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
   s.version = 8;
+  return s;
+}
+
+// add particles
+function migrate_9(style: STTStyle): STTStyle {
+  console.log("migrate 8 -> 9");
+  const s = deepmerge(STYLE_TEMPLATE, style, {arrayMerge: (destinationArray, sourceArray, options) => sourceArray});
+  s.version = 9;
   return s;
 }

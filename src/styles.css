@@ -14,6 +14,16 @@
     @apply opacity-20
 }
 
+.dot{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    opacity: 0;
+    /*background-color: tomato;*/
+    background-size: contain;
+    background-position: center;
+}
+
 app-root > *:not(router-outlet):not(.titlebar) {
     @apply flex;
     @apply flex-col;

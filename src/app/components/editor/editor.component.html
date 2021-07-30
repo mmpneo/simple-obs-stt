@@ -21,6 +21,9 @@
     <a *ngIf="environment.features.EMOTES" class="tab px-2 tab-bordered" tippy="Emotes" [class.tab-active]="activeTab === 'emotes'" (click)="ChangeTab('emotes')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     </a>
+    <a class="tab px-2 tab-bordered" tippy="Particles" [class.tab-active]="activeTab === 'particles'" (click)="ChangeTab('particles')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+    </a>
   </div>
 
   <ng-template #fieldNumber let-value let-title="title" let-tooltip="tooltip" let-fn="fn" let-fnLink="fnLink" let-min="min" let-max="max" let-step="step" let-disableLink="disableLink">
@@ -342,6 +345,18 @@
 {{"}"}}</small></pre>
         </div>
       </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'particles'">
+      <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Enable', $implicit: currentStyle.particleStyles.enable, fn: GetFn('particles', 'enable'), fnLink: GetSwFn('particles', 'enable')}"></ng-container>
+      <small class="opacity-70">Unlink values to add some randomization</small>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Particle lifetime (ms)', $implicit: currentStyle.particleStyles.duration, fn: GetFn('particles', 'duration'), fnLink: GetSwFn('particles', 'duration'), min: 10, max: 5000, step: 10}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldString; context: {title: 'Url', $implicit: currentStyle.particleStyles.url, fn: GetFn('particles', 'url'), fnLink: GetSwFn('particles', 'url')}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Number of particles', $implicit: currentStyle.particleStyles.particles, fn: GetFn('particles', 'particles'), fnLink: GetSwFn('particles', 'particles'), min: 1, max: 10}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Target Scale (0-1)', $implicit: currentStyle.particleStyles.scale, fn: GetFn('particles', 'scale'), fnLink: GetSwFn('particles', 'scale'), min: 0, max: 1, step: 0.1}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Max Opacity (0-1)', $implicit: currentStyle.particleStyles.opacity, fn: GetFn('particles', 'opacity'), fnLink: GetSwFn('particles', 'opacity'), min: 0, max: 1}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Rotation Power', $implicit: currentStyle.particleStyles.rotation, fn: GetFn('particles', 'rotation'), fnLink: GetSwFn('particles', 'rotation'), min: -180, max: 180}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Direction x', $implicit: currentStyle.particleStyles.x, fn: GetFn('particles', 'x'), fnLink: GetSwFn('particles', 'x'), min: -100, max: 100}"></ng-container>
+      <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Direction y', $implicit: currentStyle.particleStyles.y, fn: GetFn('particles', 'y'), fnLink: GetSwFn('particles', 'y'), min: -100, max: 100}"></ng-container>
     </ng-container>
   </ng-container>
 </div>

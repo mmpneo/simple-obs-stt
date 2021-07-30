@@ -1,12 +1,12 @@
 <ng-container *ngIf="styleQuery.current$ | async as currentStyle">
   <ng-container *ngIf="speechQuery.state$ | async as speechState">
     <div class="flex stt-container flex items-end relative">
-      <div #avatarElement [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value[0]" class="stt-box-avatar pointer-events-none z-50 w-36 h-36 bg-contain bg-center bg-no-repeat" style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
-      <div #boxElement class="stt-box-container relative stt-box flex flex-col bg-cover bg-center">
+      <div #avatarElement [class.hidden]="!currentStyle.avatarStyle.backgroundImage.value[0]" class="stt-box-avatar flex-none pointer-events-none z-50 w-36 h-36 bg-contain bg-center bg-no-repeat" style="animation-iteration-count: infinite; animation-timing-function: ease-in-out;"></div>
+      <div #boxElement class="stt-box-container relative stt-box flex flex-col flex-none bg-cover bg-center">
         <div #textElement [class.host]="speechState.connectionState === 2" class="stt-box-text inset-0 flex flex-wrap break-words min-h-8 overflow-y-scroll overflow-x-hidden">
           <ng-container *ngFor="let sentence of this.speechQuery.list$ | async; trackBy: track">
             <div class="flex items-center whitespace-pre-wrap" [class.opacity-70]="!sentence.finalized" *ngFor="let word of sentence.AnimatedValue | async; trackBy: trackWord">
-              <div [@listAnimation]="{value: letter, params: GetRandomizedParams(currentStyle)}" *ngFor="let letter of word; trackBy: trackLetter" [innerHTML]="letter | sanitizeHtml"></div>
+              <div class="letter" #letterElement [@listAnimation]="{value: letter, params: GetRandomizedParams(currentStyle)}" *ngFor="let letter of word; trackBy: trackLetter" [innerHTML]="letter | sanitizeHtml"></div>
             </div>
           </ng-container>
           <div class="whitespace-pre-wrap" [innerHTML]="' '"></div> <!--Keep font height when text box is empty-->

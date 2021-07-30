@@ -15,7 +15,7 @@ import {environment}            from 'src/environments/environment';
 import {SoundService}           from "@store/sound/sound.service";
 import {SoundQuery}             from "@store/sound/sound.query";
 
-type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global' | 'emotes';
+type StyleSections = 'text' | 'box' | 'avatar' | 'sound' | 'global' | 'emotes' | 'particles';
 
 @Component({
   selector:        'app-editor',
@@ -67,6 +67,7 @@ export class EditorComponent implements OnInit {
       case 'avatar':  return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("avatarStyle", key,val, valueIndex);
       case 'sound':   return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("soundStyle", key,val, valueIndex);
       case 'global':  return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("globalStyle", key,val, valueIndex);
+      case 'particles':  return (val: string, valueIndex: number) => this.styleService.UpdateNormalStyles("particleStyles", key,val, valueIndex);
       default:        return (val: string, valueIndex: number) => null;
     }
   }
@@ -79,6 +80,7 @@ export class EditorComponent implements OnInit {
       case 'avatar':  return () => this.styleService.UpdateLinkSwitch("avatarStyle", key);
       case 'sound':   return () => this.styleService.UpdateLinkSwitch("soundStyle", key);
       case 'global':  return () => this.styleService.UpdateLinkSwitch("globalStyle", key);
+      case 'particles':  return () => this.styleService.UpdateLinkSwitch("particleStyles", key);
       default:        return () => null;
     }
   }

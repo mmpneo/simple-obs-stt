@@ -50,16 +50,16 @@ export type CustomStyleFn = (state: STTStyle, elementStyle: any, calculatedValue
 
 // override style applying with side effects
 export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [styleKey: string]: CustomStyleFn } } = {
-  textStyle:   {
+  textStyle:      {
     marginRight: (state, elementStyle, calculatedValue, valueIndex) => {
-      elementStyle.position    = state.boxStyle.heightMode.value[0] === 'fixed' ? 'absolute' : 'relative';
+      // elementStyle.position    = state.boxStyle.heightMode.value[0] === 'fixed' ? 'absolute' : 'relative';
       elementStyle.marginRight = calculatedValue;
     },
     shadowColor: (state, elementStyle, value, valueIndex) => {
       elementStyle.textShadow = `${state.textStyle.shadowX.value[valueIndex]}px ${state.textStyle.shadowY.value[valueIndex]}px ${state.textStyle.shadowB.value[valueIndex]}px ${state.textStyle.shadowColor.value[valueIndex]}`
     }
   },
-  boxStyle:    {
+  boxStyle:       {
     shadowColor: (state, elementStyle, value, valueIndex) => {
       elementStyle.boxShadow = `${state.boxStyle.shadowX.value[valueIndex]}px ${state.boxStyle.shadowY.value[valueIndex]}px ${state.boxStyle.shadowB.value[valueIndex]}px ${state.boxStyle.shadowSpread.value[valueIndex]}px ${state.boxStyle.shadowColor.value[valueIndex]}`
     },
@@ -84,11 +84,11 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
       elementStyle.backgroundImage = null;
       if (calculatedValue === 'normal') {
         if (state.boxStyle.backgroundImage.value[valueIndex])
-        elementStyle.backgroundImage = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
+          elementStyle.backgroundImage = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
       }
       else {
         // ignore border rules
-        elementStyle.border           = '0px solid transparent';
+        elementStyle.border = '0px solid transparent';
         if (state.boxStyle.backgroundImage.value[valueIndex]) {
           elementStyle.borderImage      = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
           elementStyle.borderImageSlice = `${state.boxStyle.borderWidthTop.value[valueIndex]} ${state.boxStyle.borderWidthRight.value[valueIndex]} ${state.boxStyle.borderWidthBottom.value[valueIndex]} ${state.boxStyle.borderWidthLeft.value[valueIndex]} fill`;
@@ -99,13 +99,14 @@ export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [st
       }
     }
   },
-  avatarStyle: {
+  avatarStyle:    {
     transformY: (state, elementStyle, calculatedValue, valueIndex) => {
       elementStyle.transform = `translateX(${state.avatarStyle.transformX.value[valueIndex]}px) translateY(${state.avatarStyle.transformY.value[valueIndex]}px)`
     }
   },
-  globalStyle: {},
-  soundStyle:  {},
+  globalStyle:    {},
+  soundStyle:     {},
+  particleStyles: {}
 }
 
 export interface STTStyle {
@@ -209,6 +210,17 @@ export interface STTStyle {
     typingAnimation: StyleValue<StyleValueType.bool>;
     typeWords: StyleValue<StyleValueType.bool>;
     typingDelay: StyleValue<StyleValueType.number>;
+  },
+  particleStyles: {
+    enable: StyleValue<StyleValueType.bool>;
+    url: StyleValue<StyleValueType.string>;
+    duration: StyleValue<StyleValueType.number>;
+    scale: StyleValue<StyleValueType.number>;
+    particles: StyleValue<StyleValueType.number>;
+    rotation: StyleValue<StyleValueType.number>;
+    opacity: StyleValue<StyleValueType.number>;
+    x: StyleValue<StyleValueType.number>;
+    y: StyleValue<StyleValueType.number>;
   }
 }
 
@@ -219,8 +231,8 @@ export interface StyleState {
 }
 
 export const STYLE_TEMPLATE: STTStyle = {
-  version:     8,
-  boxStyle:    {
+  version:        9,
+  boxStyle:       {
     width:             {type: StyleValueType.pixels, value: ['300', '300'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['100', '100'], linked: true},
     transformX:        {type: StyleValueType.number, value: [0, 0], linked: true},
@@ -245,7 +257,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     shadowSpread: {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
     shadowColor:  {type: StyleValueType.string, value: ['transparent', 'transparent'], linked: true},
   },
-  textStyle:   {
+  textStyle:      {
     fontFamily:     {type: StyleValueType.string, value: ['Roboto', 'Roboto'], linked: true},
     color:          {type: StyleValueType.string, value: ['white', 'white'], linked: true},
     fontSize:       {type: StyleValueType.pixels, value: ['18', '18'], linked: true},
@@ -282,7 +294,7 @@ export const STYLE_TEMPLATE: STTStyle = {
     webkitTextStrokeWidth: {type: StyleValueType.pixels, value: ['0', '0'], linked: true},
     webkitTextStrokeColor: {type: StyleValueType.string, value: ['black', 'black'], linked: true}
   },
-  avatarStyle: {
+  avatarStyle:    {
     order:             {type: StyleValueType.string, value: ['0', '0'], linked: true},
     width:             {type: StyleValueType.pixels, value: ['120', '120'], linked: true},
     height:            {type: StyleValueType.pixels, value: ['120', '120'], linked: true},
@@ -293,14 +305,14 @@ export const STYLE_TEMPLATE: STTStyle = {
     transformY:        {type: StyleValueType.number, value: [0, 0], linked: true},
     opacity:           {type: StyleValueType.number, value: [1, 1], linked: true},
   },
-  soundStyle:  {
+  soundStyle:     {
     volume:       {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
     typeClip:     {type: StyleValueType.audioFile, value: ['assets/sounds/type_1.wav', 'url'], linked: true},
     typeDetune:   {type: StyleValueType.number, value: [0, 0], linked: true},
     typePlayback: {type: StyleValueType.number, value: [1, 1], linked: true},
     voiceVolume:  {type: StyleValueType.string, value: ['0.5', '0.5'], linked: true},
   },
-  globalStyle: {
+  globalStyle:    {
     emoteHeight:        {type: StyleValueType.pixels, value: ['24', '24'], linked: true},
     hideOnInactivity:   {type: StyleValueType.bool, value: ['', ''], linked: true},
     keepSingleSentence: {type: StyleValueType.bool, value: ['', ''], linked: true},
@@ -311,6 +323,17 @@ export const STYLE_TEMPLATE: STTStyle = {
     typingAnimation: {type: StyleValueType.bool, value: ['', ''], linked: true},
     typeWords:       {type: StyleValueType.bool, value: ['', ''], linked: true},
     typingDelay:     {type: StyleValueType.number, value: [80, 80], linked: true}
+  },
+  particleStyles: {
+    enable:    {type: StyleValueType.bool, value: ['', ''], linked: true},
+    url:       {type: StyleValueType.string, value: ['assets/particles/particle-1.png', 'assets/particles/particle-1.png'], linked: true},
+    duration:  {type: StyleValueType.number, value: [300, 500], linked: true},
+    scale:     {type: StyleValueType.number, value: [0.6, 1], linked: true},
+    particles: {type: StyleValueType.number, value: [2, 2], linked: true},
+    rotation:  {type: StyleValueType.number, value: [-180, 180], linked: false},
+    opacity:   {type: StyleValueType.number, value: [1, 1], linked: true},
+    x:         {type: StyleValueType.number, value: [20, 100], linked: false},
+    y:         {type: StyleValueType.number, value: [-20, -150], linked: true},
   }
 }
 

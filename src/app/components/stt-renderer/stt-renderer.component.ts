@@ -4,8 +4,8 @@ import {
   Component,
   ElementRef,
   NgModule,
-  OnInit,
-  ViewChild
+  OnInit, QueryList,
+  ViewChild, ViewChildren
 }                                                                                  from '@angular/core';
 import {CommonModule}                                                              from "@angular/common";
 import {SpeechQuery}                                                               from "@store/speech/speech.query";
@@ -15,6 +15,7 @@ import {SpeechSentence}                                                         
 import {animate, style, transition, trigger}                                       from "@angular/animations";
 import {combineQueries}                                                            from "@datorama/akita";
 import {SanitizeHtmlPipeModule}                                                    from "../../pipes/sanitize-html.pipe";
+import {EffectsService}                                                            from "@store/effects/effects.service";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -38,12 +39,14 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   constructor(
     public speechQuery: SpeechQuery,
     public styleQuery: StyleQuery,
+    private effectsService: EffectsService
   ) {
   }
 
   @ViewChild("avatarElement") avatarElement!: ElementRef;
   @ViewChild("boxElement") boxElement!: ElementRef;
   @ViewChild("textElement") textElement!: ElementRef;
+  @ViewChildren("letterElement") letters!: QueryList<ElementRef>;
 
   track       = (index: number, obj: SpeechSentence) => obj.id;
   trackWord   = (index: number, obj: string[]) => index;
@@ -94,6 +97,15 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.letters.changes.subscribe(_ => {
+      const ls = document.querySelectorAll('.letter');
+      if (!ls.length)
+        return;
+      const last = ls[ls.length-1];
+      const rect = last?.getBoundingClientRect();
+      (rect?.height === 0 || !!last.innerHTML) && this.effectsService.PlayParticles(rect);
+    })
+    this.letters?.notifyOnChanges()
     combineQueries([this.styleQuery.current$, this.speechQuery.showBubble$]).subscribe(([style, show]) => {
       this.ApplyStyles(style, show ? 0 : 1)
     })
