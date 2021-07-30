@@ -125,7 +125,7 @@ export class EmotesService {
   }
 
   SetupTwitchAuth(access_token: string) {
-    access_token && window.opener.postMessage(`token:${access_token}`, '*');
+    access_token && window.opener?.postMessage(`token:${access_token}`, '*');
     window.close();
   }
 
