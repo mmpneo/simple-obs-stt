@@ -1,8 +1,8 @@
 import {APP_INITIALIZER}           from '@angular/core';
 import {FontsService}              from "@store/fonts/fonts.service";
-import {groupBy}                   from "lodash-es";
-import {ClientType, GetClientType} from "./utils/client_type";
-import UAParser                    from "ua-parser-js";
+import {groupBy}                          from "lodash-es";
+import {ClientType, GetClientType, IsOBS} from "./utils/client_type";
+import UAParser                           from "ua-parser-js";
 
 export const InitializeApplication = {
   provide:    APP_INITIALIZER,
@@ -27,7 +27,7 @@ export function InitLoading(fontsService: FontsService,): () => Promise<boolean>
       const ua = new UAParser();
 
       // ensure this is not obs, has speech api and not client
-      if (!!(<any>window).obsstudio || window.speechSynthesis.onvoiceschanged === undefined || GetClientType() === ClientType.client)
+      if (IsOBS() || GetClientType() === ClientType.client || window.speechSynthesis.onvoiceschanged === undefined)
         return true;
       if (ua.getBrowser().name === 'Firefox') {
         BuildNativeVoices();

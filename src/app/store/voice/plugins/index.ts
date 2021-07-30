@@ -24,7 +24,7 @@ export const VOICE_PLUGINS: VoicePluginDescriptor = [
     name: 'Native (Experimental, sound is playing only on host)',
     plugin: VoicePluginNative,
     languages: () => (<any>window)?.NativeVoicesGroups || [],
-    platformValidate: () => true,
+    platformValidate: () => environment.platform === "web",
     pluginDataFields: []
   },
   {

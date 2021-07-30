@@ -33,7 +33,7 @@ export class VoiceService {
   private Enqueue(q: string) {
       q
       && this.pluginInstance
-      && this.pluginInstance.RequestPlay(q, this.styleQuery.getValue().currentStyle.soundStyle.voiceVolume?.value[0])
+      && this.pluginInstance.RequestPlay(q, this.styleQuery.getValue().currentStyle.soundStyle.voiceVolume?.value[0] || 1)
   }
 
   public SelectPlugin   = (index: number) => {

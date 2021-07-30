@@ -53,7 +53,7 @@ import {BrowserAnimationsModule}                        from "@angular/platform-
           ...popperVariation,
           role:     'popper',
           theme:    'raw',
-          appendTo: 'parent',
+          // appendTo: 'parent',
 
           popperOptions: {modifiers: [{name: 'preventOverflow', options: {padding: 20}}]}
         },

@@ -46,8 +46,6 @@ export class AppComponent {
   }
 
   CheckUpdate() {
-    if (GetClientType() === ClientType.client)
-      navigator.serviceWorker?.getRegistrations()?.then( function(registrations) { for(let registration of registrations) { registration.unregister(); } });
     if (GetClientType() === ClientType.client || environment.platform === "app" || !environment.production)
       return;
     this.updates.available.subscribe(event => {

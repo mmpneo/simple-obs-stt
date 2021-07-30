@@ -3,6 +3,10 @@ export enum ClientType {
   client
 }
 
+export function IsOBS() {
+  return !!(<any>window).obsstudio;
+}
+
 export function GetClientType(): ClientType {
   return (
     location.pathname === '/' ||

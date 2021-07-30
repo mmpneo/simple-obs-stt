@@ -14,7 +14,7 @@ module.exports = {
   darkMode: false,
   theme:    {
     extend: {
-      colors: require('daisyui/colors')
+      // colors: require('daisyui/colors')
     },
   },
   variants: {},
