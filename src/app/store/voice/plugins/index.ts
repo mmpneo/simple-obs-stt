@@ -1,6 +1,8 @@
 import {VoicePluginAzure}  from "@store/voice/plugins/VoicePluginAzure";
 import {BaseVoicePlugin}   from "@store/voice/plugins/BaseVoicePlugin";
 import {VoicePluginNative} from "@store/voice/plugins/VoicePluginNative";
+import UAParser            from "ua-parser-js";
+import {environment}       from "../../../../environments/environment";
 
 type voices = [string, string][]
 

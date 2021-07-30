@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration=production",
+    "start": "ng serve",
     "build": "ng build --configuration=production",
     "build-tauri": "ng build --configuration=production,tauri"
   },

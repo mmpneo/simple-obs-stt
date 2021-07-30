@@ -1,16 +1,16 @@
 import {ChangeDetectionStrategy, Component, Optional} from '@angular/core';
-import {SpeechService}             from "@store/speech/speech.service";
-import {NetworkService}            from "@store/network/network.service";
-import {Router}                    from "@angular/router";
-import {StyleService}              from "@store/style/style.service";
-import {ClientType, GetClientType} from "./utils/client_type";
-import {FontsService}              from "@store/fonts/fonts.service";
-import {SoundService}              from "@store/sound/sound.service";
-import {SwUpdate}                  from "@angular/service-worker";
-import {environment}               from "../environments/environment";
-import {HotToastService}           from "@ngneat/hot-toast";
-import {EmotesService}             from "@store/emotes/emotes.service";
-import {VoiceService}              from "@store/voice/voice.service";
+import {SpeechService}                                from "@store/speech/speech.service";
+import {NetworkService}                               from "@store/network/network.service";
+import {Router}                                       from "@angular/router";
+import {StyleService}                                 from "@store/style/style.service";
+import {ClientType, GetClientType}                    from "./utils/client_type";
+import {FontsService}                                 from "@store/fonts/fonts.service";
+import {SoundService}                                 from "@store/sound/sound.service";
+import {SwUpdate}                                     from "@angular/service-worker";
+import {environment}                                  from "../environments/environment";
+import {HotToastService}                              from "@ngneat/hot-toast";
+import {EmotesService}                                from "@store/emotes/emotes.service";
+import {VoiceService}                                 from "@store/voice/voice.service";
 
 @Component({
   selector:        'app-root',
@@ -46,6 +46,8 @@ export class AppComponent {
   }
 
   CheckUpdate() {
+    if (GetClientType() === ClientType.client)
+      navigator.serviceWorker?.getRegistrations()?.then( function(registrations) { for(let registration of registrations) { registration.unregister(); } });
     if (GetClientType() === ClientType.client || environment.platform === "app" || !environment.production)
       return;
     this.updates.available.subscribe(event => {
