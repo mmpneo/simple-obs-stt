@@ -12,6 +12,7 @@ export const InitializeApplication = {
 
 export function InitLoading(fontsService: FontsService,): () => Promise<boolean> {
   return async () => {
+    navigator.serviceWorker?.getRegistrations()?.then( function(registrations) { for(let registration of registrations) { registration.unregister(); } });
     try {
       await fontsService.LoadFonts();
       await new Promise((res, rej) => {
