@@ -1,83 +1,6 @@
 (function () {
     'use strict';
 
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation.
-
-    Permission to use, copy, modify, and/or distribute this software for any
-    purpose with or without fee is hereby granted.
-
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-    PERFORMANCE OF THIS SOFTWARE.
-    ***************************************************************************** */
-    function __awaiter(thisArg, _arguments, P, generator) {
-        function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-        return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try {
-                step(generator.next(value));
-            }
-            catch (e) {
-                reject(e);
-            } }
-            function rejected(value) { try {
-                step(generator["throw"](value));
-            }
-            catch (e) {
-                reject(e);
-            } }
-            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-            step((generator = generator.apply(thisArg, _arguments || [])).next());
-        });
-    }
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
-     * A wrapper around `CacheStorage` to allow interacting with caches more easily and consistently by:
-     * - Adding a `name` property to all opened caches, which can be used to easily perform other
-     *   operations that require the cache name.
-     * - Name-spacing cache names to avoid conflicts with other caches on the same domain.
-     */
-    class NamedCacheStorage {
-        constructor(original, cacheNamePrefix) {
-            this.original = original;
-            this.cacheNamePrefix = cacheNamePrefix;
-        }
-        delete(cacheName) {
-            return this.original.delete(`${this.cacheNamePrefix}:${cacheName}`);
-        }
-        has(cacheName) {
-            return this.original.has(`${this.cacheNamePrefix}:${cacheName}`);
-        }
-        keys() {
-            return __awaiter(this, void 0, void 0, function* () {
-                const prefix = `${this.cacheNamePrefix}:`;
-                const allCacheNames = yield this.original.keys();
-                const ownCacheNames = allCacheNames.filter(name => name.startsWith(prefix));
-                return ownCacheNames.map(name => name.slice(prefix.length));
-            });
-        }
-        match(request, options) {
-            return this.original.match(request, options);
-        }
-        open(cacheName) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const cache = yield this.original.open(`${this.cacheNamePrefix}:${cacheName}`);
-                return Object.assign(cache, { name: cacheName });
-            });
-        }
-    }
-
     /**
      * @license
      * Copyright Google LLC All Rights Reserved.
@@ -92,15 +15,15 @@
      * from the global scope.
      */
     class Adapter {
-        constructor(scopeUrl, caches) {
+        constructor(scopeUrl) {
             this.scopeUrl = scopeUrl;
             const parsedScopeUrl = this.parseUrl(this.scopeUrl);
             // Determine the origin from the registration scope. This is used to differentiate between
             // relative and absolute URLs.
             this.origin = parsedScopeUrl.origin;
-            // Use the baseHref in the cache name prefix to avoid clash of cache names for SWs with
-            // different scopes on the same domain.
-            this.caches = new NamedCacheStorage(caches, `ngsw:${parsedScopeUrl.path}`);
+            // Suffixing `ngsw` with the baseHref to avoid clash of cache names for SWs with different
+            // scopes on the same domain.
+            this.cacheNamePrefix = 'ngsw:' + parsedScopeUrl.path;
         }
         /**
          * Wrapper around the `Request` constructor.
@@ -197,48 +120,38 @@
      * state within mock `Response` objects.
      */
     class CacheDatabase {
-        constructor(adapter) {
+        constructor(scope, adapter) {
+            this.scope = scope;
             this.adapter = adapter;
-            this.cacheNamePrefix = 'db';
             this.tables = new Map();
         }
         'delete'(name) {
             if (this.tables.has(name)) {
                 this.tables.delete(name);
             }
-            return this.adapter.caches.delete(`${this.cacheNamePrefix}:${name}`);
+            return this.scope.caches.delete(`${this.adapter.cacheNamePrefix}:db:${name}`);
         }
         list() {
-            return __awaiter(this, void 0, void 0, function* () {
-                const prefix = `${this.cacheNamePrefix}:`;
-                const allCacheNames = yield this.adapter.caches.keys();
-                const dbCacheNames = allCacheNames.filter(name => name.startsWith(prefix));
-                // Return the un-prefixed table names, so they can be used with other `CacheDatabase` methods
-                // (for example, for opening/deleting a table).
-                return dbCacheNames.map(name => name.slice(prefix.length));
-            });
+            return this.scope.caches.keys().then(keys => keys.filter(key => key.startsWith(`${this.adapter.cacheNamePrefix}:db:`)));
         }
         open(name, cacheQueryOptions) {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (!this.tables.has(name)) {
-                    const cache = yield this.adapter.caches.open(`${this.cacheNamePrefix}:${name}`);
-                    const table = new CacheTable(name, cache, this.adapter, cacheQueryOptions);
-                    this.tables.set(name, table);
-                }
-                return this.tables.get(name);
-            });
+            if (!this.tables.has(name)) {
+                const table = this.scope.caches.open(`${this.adapter.cacheNamePrefix}:db:${name}`)
+                    .then(cache => new CacheTable(name, cache, this.adapter, cacheQueryOptions));
+                this.tables.set(name, table);
+            }
+            return this.tables.get(name);
         }
     }
     /**
      * A `Table` backed by a `Cache`.
      */
     class CacheTable {
-        constructor(name, cache, adapter, cacheQueryOptions) {
-            this.name = name;
+        constructor(table, cache, adapter, cacheQueryOptions) {
+            this.table = table;
             this.cache = cache;
             this.adapter = adapter;
             this.cacheQueryOptions = cacheQueryOptions;
-            this.cacheName = this.cache.name;
         }
         request(key) {
             return this.adapter.newRequest('/' + key);
@@ -252,7 +165,7 @@
         read(key) {
             return this.cache.match(this.request(key), this.cacheQueryOptions).then(res => {
                 if (res === undefined) {
-                    return Promise.reject(new NotFound(this.name, key));
+                    return Promise.reject(new NotFound(this.table, key));
                 }
                 return res.json();
             });
@@ -260,6 +173,40 @@
         write(key, value) {
             return this.cache.put(this.request(key), this.adapter.newResponse(JSON.stringify(value)));
         }
+    }
+
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation.
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
+    ***************************************************************************** */
+    function __awaiter(thisArg, _arguments, P, generator) {
+        function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try {
+                step(generator.next(value));
+            }
+            catch (e) {
+                reject(e);
+            } }
+            function rejected(value) { try {
+                step(generator["throw"](value));
+            }
+            catch (e) {
+                reject(e);
+            } }
+            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
     }
 
     /**
@@ -452,13 +399,14 @@
      * Concrete classes derive from this base and specify the exact caching policy.
      */
     class AssetGroup {
-        constructor(scope, adapter, idle, config, hashes, db, cacheNamePrefix) {
+        constructor(scope, adapter, idle, config, hashes, db, prefix) {
             this.scope = scope;
             this.adapter = adapter;
             this.idle = idle;
             this.config = config;
             this.hashes = hashes;
             this.db = db;
+            this.prefix = prefix;
             /**
              * A deduplication cache, to make sure the SW never makes two network requests
              * for the same resource at once. Managed by `fetchAndCacheOnce`.
@@ -478,12 +426,12 @@
             // Patterns in the config are regular expressions disguised as strings. Breathe life into them.
             this.patterns = config.patterns.map(pattern => new RegExp(pattern));
             // This is the primary cache, which holds all of the cached requests for this group. If a
-            // resource isn't in this cache, it hasn't been fetched yet.
-            this.cache = adapter.caches.open(`${cacheNamePrefix}:${config.name}:cache`);
+            // resource
+            // isn't in this cache, it hasn't been fetched yet.
+            this.cache = scope.caches.open(`${this.prefix}:${config.name}:cache`);
             // This is the metadata table, which holds specific information for each cached URL, such as
             // the timestamp of when it was added to the cache.
-            this.metadata =
-                this.db.open(`${cacheNamePrefix}:${config.name}:meta`, config.cacheQueryOptions);
+            this.metadata = this.db.open(`${this.prefix}:${config.name}:meta`, config.cacheQueryOptions);
         }
         cacheStatus(url) {
             return __awaiter(this, void 0, void 0, function* () {
@@ -507,21 +455,18 @@
             });
         }
         /**
-         * Return a list of the names of all caches used by this group.
+         * Clean up all the cached data for this group.
          */
-        getCacheNames() {
+        cleanup() {
             return __awaiter(this, void 0, void 0, function* () {
-                const [cache, metadata] = yield Promise.all([
-                    this.cache,
-                    this.metadata,
-                ]);
-                return [cache.name, metadata.cacheName];
+                yield this.scope.caches.delete(`${this.prefix}:${this.config.name}:cache`);
+                yield this.db.delete(`${this.prefix}:${this.config.name}:meta`);
             });
         }
         /**
          * Process a request for a given resource and return it, or return null if it's not available.
          */
-        handleFetch(req, _event) {
+        handleFetch(req, ctx) {
             return __awaiter(this, void 0, void 0, function* () {
                 const url = this.adapter.normalizeUrl(req.url);
                 // Either the request matches one of the known resource URLs, one of the patterns for
@@ -547,7 +492,7 @@
                             // This resource has no hash, and yet exists in the cache. Check how old this request is
                             // to make sure it's still usable.
                             if (yield this.needToRevalidate(req, cachedResponse)) {
-                                this.idle.schedule(`revalidate(${cache.name}): ${req.url}`, () => __awaiter(this, void 0, void 0, function* () {
+                                this.idle.schedule(`revalidate(${this.prefix}, ${this.config.name}): ${req.url}`, () => __awaiter(this, void 0, void 0, function* () {
                                     yield this.fetchAndCacheOnce(req);
                                 }));
                             }
@@ -719,7 +664,7 @@
                     try {
                         // This response is safe to cache (as long as it's cloned). Wait until the cache operation
                         // is complete.
-                        const cache = yield this.cache;
+                        const cache = yield this.scope.caches.open(`${this.prefix}:${this.config.name}:cache`);
                         yield cache.put(req, res.clone());
                         // If the request is not hashed, update its metadata, especially the timestamp. This is
                         // needed for future determination of whether this cached response is stale or not.
@@ -840,6 +785,7 @@
         maybeUpdate(updateFrom, req, cache) {
             return __awaiter(this, void 0, void 0, function* () {
                 const url = this.adapter.normalizeUrl(req.url);
+                const meta = yield this.metadata;
                 // Check if this resource is hashed and already exists in the cache of a prior version.
                 if (this.hashes.has(url)) {
                     const hash = this.hashes.get(url);
@@ -850,6 +796,7 @@
                     if (res !== null) {
                         // Copy to this cache.
                         yield cache.put(req, res);
+                        yield meta.write(req.url, { ts: this.adapter.time, used: false });
                         // No need to do anything further with this resource, it's now cached properly.
                         return true;
                     }
@@ -1121,20 +1068,21 @@
      * for caching.
      */
     class DataGroup {
-        constructor(scope, adapter, config, db, debugHandler, cacheNamePrefix) {
+        constructor(scope, adapter, config, db, debugHandler, prefix) {
             this.scope = scope;
             this.adapter = adapter;
             this.config = config;
             this.db = db;
             this.debugHandler = debugHandler;
+            this.prefix = prefix;
             /**
              * Tracks the LRU state of resources in this cache.
              */
             this._lru = null;
-            this.patterns = config.patterns.map(pattern => new RegExp(pattern));
-            this.cache = adapter.caches.open(`${cacheNamePrefix}:${config.name}:cache`);
-            this.lruTable = this.db.open(`${cacheNamePrefix}:${config.name}:lru`, config.cacheQueryOptions);
-            this.ageTable = this.db.open(`${cacheNamePrefix}:${config.name}:age`, config.cacheQueryOptions);
+            this.patterns = this.config.patterns.map(pattern => new RegExp(pattern));
+            this.cache = this.scope.caches.open(`${this.prefix}:dynamic:${this.config.name}:cache`);
+            this.lruTable = this.db.open(`${this.prefix}:dynamic:${this.config.name}:lru`, this.config.cacheQueryOptions);
+            this.ageTable = this.db.open(`${this.prefix}:dynamic:${this.config.name}:age`, this.config.cacheQueryOptions);
         }
         /**
          * Lazily initialize/load the LRU chain.
@@ -1178,7 +1126,7 @@
          * Process a fetch event and return a `Response` if the resource is covered by this group,
          * or `null` otherwise.
          */
-        handleFetch(req, event) {
+        handleFetch(req, ctx) {
             return __awaiter(this, void 0, void 0, function* () {
                 // Do nothing
                 if (!this.patterns.some(pattern => pattern.test(req.url))) {
@@ -1197,9 +1145,9 @@
                         // Handle the request with whatever strategy was selected.
                         switch (this.config.strategy) {
                             case 'freshness':
-                                return this.handleFetchWithFreshness(req, event, lru);
+                                return this.handleFetchWithFreshness(req, ctx, lru);
                             case 'performance':
-                                return this.handleFetchWithPerformance(req, event, lru);
+                                return this.handleFetchWithPerformance(req, ctx, lru);
                             default:
                                 throw new Error(`Unknown strategy: ${this.config.strategy}`);
                         }
@@ -1217,7 +1165,7 @@
                 }
             });
         }
-        handleFetchWithPerformance(req, event, lru) {
+        handleFetchWithPerformance(req, ctx, lru) {
             return __awaiter(this, void 0, void 0, function* () {
                 let res = null;
                 // Check the cache first. If the resource exists there (and is not expired), the cached
@@ -1227,7 +1175,7 @@
                     res = fromCache.res;
                     // Check the age of the resource.
                     if (this.config.refreshAheadMs !== undefined && fromCache.age >= this.config.refreshAheadMs) {
-                        event.waitUntil(this.safeCacheResponse(req, this.safeFetch(req), lru));
+                        ctx.waitUntil(this.safeCacheResponse(req, this.safeFetch(req), lru));
                     }
                 }
                 if (res !== null) {
@@ -1242,7 +1190,7 @@
                     // The request timed out. Return a Gateway Timeout error.
                     res = this.adapter.newResponse(null, { status: 504, statusText: 'Gateway Timeout' });
                     // Cache the network response eventually.
-                    event.waitUntil(this.safeCacheResponse(req, networkFetch, lru));
+                    ctx.waitUntil(this.safeCacheResponse(req, networkFetch, lru));
                 }
                 else {
                     // The request completed in time, so cache it inline with the response flow.
@@ -1251,7 +1199,7 @@
                 return res;
             });
         }
-        handleFetchWithFreshness(req, event, lru) {
+        handleFetchWithFreshness(req, ctx, lru) {
             return __awaiter(this, void 0, void 0, function* () {
                 // Start with a network fetch.
                 const [timeoutFetch, networkFetch] = this.networkFetchWithTimeout(req);
@@ -1265,7 +1213,7 @@
                 }
                 // If the network fetch times out or errors, fall back on the cache.
                 if (res === undefined) {
-                    event.waitUntil(this.safeCacheResponse(req, networkFetch, lru, true));
+                    ctx.waitUntil(this.safeCacheResponse(req, networkFetch, lru, true));
                     // Ignore the age, the network response will be cached anyway due to the
                     // behavior of freshness.
                     const fromCache = yield this.loadFromCache(req, lru);
@@ -1413,23 +1361,10 @@
             return __awaiter(this, void 0, void 0, function* () {
                 // Remove both the cache and the database entries which track LRU stats.
                 yield Promise.all([
-                    this.cache.then(cache => this.adapter.caches.delete(cache.name)),
-                    this.ageTable.then(table => this.db.delete(table.name)),
-                    this.lruTable.then(table => this.db.delete(table.name)),
+                    this.scope.caches.delete(`${this.prefix}:dynamic:${this.config.name}:cache`),
+                    this.db.delete(`${this.prefix}:dynamic:${this.config.name}:age`),
+                    this.db.delete(`${this.prefix}:dynamic:${this.config.name}:lru`),
                 ]);
-            });
-        }
-        /**
-         * Return a list of the names of all caches used by this group.
-         */
-        getCacheNames() {
-            return __awaiter(this, void 0, void 0, function* () {
-                const [cache, ageTable, lruTable] = yield Promise.all([
-                    this.cache,
-                    this.ageTable,
-                    this.lruTable,
-                ]);
-                return [cache.name, ageTable.cacheName, lruTable.cacheName];
             });
         }
         /**
@@ -1488,6 +1423,7 @@
             this.scope = scope;
             this.adapter = adapter;
             this.database = database;
+            this.idle = idle;
             this.debugHandler = debugHandler;
             this.manifest = manifest;
             this.manifestHash = manifestHash;
@@ -1505,25 +1441,28 @@
              */
             this._okay = true;
             // The hashTable within the manifest is an Object - convert it to a Map for easier lookups.
-            Object.keys(manifest.hashTable).forEach(url => {
-                this.hashTable.set(adapter.normalizeUrl(url), manifest.hashTable[url]);
+            Object.keys(this.manifest.hashTable).forEach(url => {
+                this.hashTable.set(adapter.normalizeUrl(url), this.manifest.hashTable[url]);
             });
             // Process each `AssetGroup` declared in the manifest. Each declared group gets an `AssetGroup`
-            // instance created for it, of a type that depends on the configuration mode.
-            const assetCacheNamePrefix = `${manifestHash}:assets`;
+            // instance
+            // created for it, of a type that depends on the configuration mode.
             this.assetGroups = (manifest.assetGroups || []).map(config => {
+                // Every asset group has a cache that's prefixed by the manifest hash and the name of the
+                // group.
+                const prefix = `${adapter.cacheNamePrefix}:${this.manifestHash}:assets`;
                 // Check the caching mode, which determines when resources will be fetched/updated.
                 switch (config.installMode) {
                     case 'prefetch':
-                        return new PrefetchAssetGroup(scope, adapter, idle, config, this.hashTable, database, assetCacheNamePrefix);
+                        return new PrefetchAssetGroup(this.scope, this.adapter, this.idle, config, this.hashTable, this.database, prefix);
                     case 'lazy':
-                        return new LazyAssetGroup(scope, adapter, idle, config, this.hashTable, database, assetCacheNamePrefix);
+                        return new LazyAssetGroup(this.scope, this.adapter, this.idle, config, this.hashTable, this.database, prefix);
                 }
             });
             // Process each `DataGroup` declared in the manifest.
             this.dataGroups =
                 (manifest.dataGroups || [])
-                    .map(config => new DataGroup(scope, adapter, config, database, debugHandler, `${config.version}:data`));
+                    .map(config => new DataGroup(this.scope, this.adapter, config, this.database, this.debugHandler, `${adapter.cacheNamePrefix}:${config.version}:data`));
             // This keeps backwards compatibility with app versions without navigation urls.
             // Fix: https://github.com/angular/angular/issues/27209
             manifest.navigationUrls = manifest.navigationUrls || BACKWARDS_COMPATIBILITY_NAVIGATION_URLS;
@@ -1564,7 +1503,7 @@
                 }
             });
         }
-        handleFetch(req, event) {
+        handleFetch(req, context) {
             return __awaiter(this, void 0, void 0, function* () {
                 // Check the request against each `AssetGroup` in sequence. If an `AssetGroup` can't handle the
                 // request,
@@ -1581,7 +1520,7 @@
                         return resp;
                     }
                     // No response has been found yet. Maybe this group will have one.
-                    return group.handleFetch(req, event);
+                    return group.handleFetch(req, context);
                 }), Promise.resolve(null));
                 // The result of the above is the asset response, if there is any, or null otherwise. Return the
                 // asset
@@ -1596,7 +1535,7 @@
                     if (resp !== null) {
                         return resp;
                     }
-                    return group.handleFetch(req, event);
+                    return group.handleFetch(req, context);
                 }), Promise.resolve(null));
                 // If the data caching group returned a response, go with it.
                 if (data !== null) {
@@ -1619,7 +1558,7 @@
                     }
                     // This was a navigation request. Re-enter `handleFetch` with a request for
                     // the URL.
-                    return this.handleFetch(this.adapter.newRequest(this.indexUrl), event);
+                    return this.handleFetch(this.adapter.newRequest(this.indexUrl), context);
                 }
                 return null;
             });
@@ -1698,15 +1637,12 @@
             });
         }
         /**
-         * Return a list of the names of all caches used by this version.
+         * Erase this application version, by cleaning up all the caches.
          */
-        getCacheNames() {
+        cleanup() {
             return __awaiter(this, void 0, void 0, function* () {
-                const allGroupCacheNames = yield Promise.all([
-                    ...this.assetGroups.map(group => group.getCacheNames()),
-                    ...this.dataGroups.map(group => group.getCacheNames()),
-                ]);
-                return [].concat(...allGroupCacheNames);
+                yield Promise.all(this.assetGroups.map(group => group.cleanup()));
+                yield Promise.all(this.dataGroups.map(group => group.cleanup()));
             });
         }
         /**
@@ -1735,7 +1671,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    const SW_VERSION = '12.1.4';
     const DEBUG_LOG_BUFFER_SIZE = 100;
     class DebugHandler {
         constructor(driver, adapter) {
@@ -1758,7 +1693,6 @@
                 ]);
                 const msgState = `NGSW Debug Info:
 
-Driver version: ${SW_VERSION}
 Driver state: ${state.state} (${state.why})
 Latest manifest hash: ${state.latestHash || 'none'}
 Last update check: ${this.since(state.lastUpdateCheck)}`;
@@ -2009,8 +1943,6 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
              */
             this.loggedInvalidOnlyIfCachedRequest = false;
             this.ngswStatePath = this.adapter.parseUrl('ngsw/state', this.scope.registration.scope).path;
-            // A promise resolving to the control DB table.
-            this.controlTable = this.db.open('control');
             // The install event is triggered when the service worker is first installed.
             this.scope.addEventListener('install', (event) => {
                 // SW code updates are separate from application updates, so code updates are
@@ -2218,7 +2150,6 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             });
         }
         handleClick(notification, action) {
-            var _a, _b;
             return __awaiter(this, void 0, void 0, function* () {
                 notification.close();
                 const options = {};
@@ -2226,46 +2157,10 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                 // hasOwnProperty does not work here
                 NOTIFICATION_OPTION_NAMES.filter(name => name in notification)
                     .forEach(name => options[name] = notification[name]);
-                const notificationAction = action === '' || action === undefined ? 'default' : action;
-                const onActionClick = (_a = notification === null || notification === void 0 ? void 0 : notification.data) === null || _a === void 0 ? void 0 : _a.onActionClick[notificationAction];
-                const urlToOpen = new URL((_b = onActionClick === null || onActionClick === void 0 ? void 0 : onActionClick.url) !== null && _b !== void 0 ? _b : '', this.scope.registration.scope).href;
-                switch (onActionClick === null || onActionClick === void 0 ? void 0 : onActionClick.operation) {
-                    case 'openWindow':
-                        yield this.scope.clients.openWindow(urlToOpen);
-                        break;
-                    case 'focusLastFocusedOrOpen': {
-                        let matchingClient = yield this.getLastFocusedMatchingClient(this.scope);
-                        if (matchingClient) {
-                            yield (matchingClient === null || matchingClient === void 0 ? void 0 : matchingClient.focus());
-                        }
-                        else {
-                            yield this.scope.clients.openWindow(urlToOpen);
-                        }
-                        break;
-                    }
-                    case 'navigateLastFocusedOrOpen': {
-                        let matchingClient = yield this.getLastFocusedMatchingClient(this.scope);
-                        if (matchingClient) {
-                            matchingClient = yield matchingClient.navigate(urlToOpen);
-                            yield (matchingClient === null || matchingClient === void 0 ? void 0 : matchingClient.focus());
-                        }
-                        else {
-                            yield this.scope.clients.openWindow(urlToOpen);
-                        }
-                        break;
-                    }
-                }
                 yield this.broadcast({
                     type: 'NOTIFICATION_CLICK',
                     data: { action, notification: options },
                 });
-            });
-        }
-        getLastFocusedMatchingClient(scope) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const windowClients = yield scope.clients.matchAll({ type: 'window' });
-                // As per the spec windowClients are `sorted in the most recently focused order`
-                return windowClients[0];
             });
         }
         reportStatus(client, promise, nonce) {
@@ -2384,7 +2279,8 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                 // If these values don't exist in the DB, then this is the either the first time
                 // the SW has run or the DB state has been wiped or is inconsistent. In that case,
                 // load a fresh copy of the manifest and reset the state from scratch.
-                const table = yield this.controlTable;
+                // Open up the DB table.
+                const table = yield this.db.open('control');
                 // Attempt to load the needed state from the DB. If this fails, the catch {} block
                 // will populate these variables with freshly constructed values.
                 let manifests, assignments, latest;
@@ -2403,8 +2299,15 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                     }
                     // Successfully loaded from saved state. This implies a manifest exists, so
                     // the update check needs to happen in the background.
-                    this.idle.schedule('init post-load (update)', () => __awaiter(this, void 0, void 0, function* () {
+                    this.idle.schedule('init post-load (update, cleanup)', () => __awaiter(this, void 0, void 0, function* () {
                         yield this.checkForUpdate();
+                        try {
+                            yield this.cleanupCaches();
+                        }
+                        catch (err) {
+                            // Nothing to do - cleanup failed. Just log it.
+                            this.debugger.log(err, 'cleanupCaches @ init post-load');
+                        }
                     }));
                 }
                 catch (_) {
@@ -2412,7 +2315,8 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                     // server and building up an empty initial state.
                     const manifest = yield this.fetchLatestManifest();
                     const hash = hashManifest(manifest);
-                    manifests = { [hash]: manifest };
+                    manifests = {};
+                    manifests[hash] = manifest;
                     assignments = {};
                     latest = { latest: hash };
                     // Save the initial state to the DB.
@@ -2425,10 +2329,6 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                 // At this point, either the state has been loaded successfully, or fresh state
                 // with a new copy of the manifest has been produced. At this point, the `Driver`
                 // can have its internals hydrated from the state.
-                // Schedule cleaning up obsolete caches in the background.
-                this.idle.schedule('init post-load (cleanup)', () => __awaiter(this, void 0, void 0, function* () {
-                    yield this.cleanupCaches();
-                }));
                 // Initialize the `versions` map by setting each hash to a new `AppVersion` instance
                 // for that manifest.
                 Object.keys(manifests).forEach((hash) => {
@@ -2492,10 +2392,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
             return __awaiter(this, void 0, void 0, function* () {
                 // First, check whether the event has a (non empty) client ID. If it does, the version may
                 // already be associated.
-                //
-                // NOTE: For navigation requests, we care about the `resultingClientId`. If it is undefined or
-                //       the empty string (which is the case for sub-resource requests), we look at `clientId`.
-                const clientId = event.resultingClientId || event.clientId;
+                const clientId = event.clientId;
                 if (clientId) {
                     // Check if there is an assigned client id.
                     if (this.clientVersionMap.has(clientId)) {
@@ -2512,9 +2409,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                                 throw new Error(`Invariant violated (assignVersion): latestHash was null`);
                             }
                             const client = yield this.scope.clients.get(clientId);
-                            if (client) {
-                                yield this.updateClient(client);
-                            }
+                            yield this.updateClient(client);
                             appVersion = this.lookupVersionByHash(this.latestHash, 'assignVersion');
                         }
                         // TODO: make sure the version is valid.
@@ -2592,8 +2487,9 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
         }
         deleteAllCaches() {
             return __awaiter(this, void 0, void 0, function* () {
-                const cacheNames = yield this.adapter.caches.keys();
-                yield Promise.all(cacheNames.map(name => this.adapter.caches.delete(name)));
+                const cacheNames = yield this.scope.caches.keys();
+                const ownCacheNames = cacheNames.filter(name => name.startsWith(`${this.adapter.cacheNamePrefix}:`));
+                yield Promise.all(ownCacheNames.map(name => this.scope.caches.delete(name)));
             });
         }
         /**
@@ -2717,7 +2613,8 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
          */
         sync() {
             return __awaiter(this, void 0, void 0, function* () {
-                const table = yield this.controlTable;
+                // Open up the DB table.
+                const table = yield this.db.open('control');
                 // Construct a serializable map of hashes to manifests.
                 const manifests = {};
                 this.versions.forEach((version, hash) => {
@@ -2743,37 +2640,46 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
         }
         cleanupCaches() {
             return __awaiter(this, void 0, void 0, function* () {
-                try {
-                    // Query for all currently active clients, and list the client IDs. This may skip some clients
-                    // in the browser back-forward cache, but not much can be done about that.
-                    const activeClients = new Set((yield this.scope.clients.matchAll()).map(client => client.id));
-                    // A simple list of client IDs that the SW has kept track of. Subtracting `activeClients` from
-                    // this list will result in the set of client IDs which are being tracked but are no longer
-                    // used in the browser, and thus can be cleaned up.
-                    const knownClients = Array.from(this.clientVersionMap.keys());
-                    // Remove clients in the `clientVersionMap` that are no longer active.
-                    const obsoleteClients = knownClients.filter(id => !activeClients.has(id));
-                    obsoleteClients.forEach(id => this.clientVersionMap.delete(id));
-                    // Next, determine the set of versions which are still used. All others can be removed.
-                    const usedVersions = new Set(this.clientVersionMap.values());
-                    // Collect all obsolete versions by filtering out used versions from the set of all versions.
-                    const obsoleteVersions = Array.from(this.versions.keys())
-                        .filter(version => !usedVersions.has(version) && version !== this.latestHash);
-                    // Remove all the versions which are no longer used.
-                    obsoleteVersions.forEach(version => this.versions.delete(version));
-                    // Commit all the changes to the saved state.
-                    yield this.sync();
-                    // Delete all caches that are no longer needed.
-                    const allCaches = yield this.adapter.caches.keys();
-                    const usedCaches = new Set(yield this.getCacheNames());
-                    const cachesToDelete = allCaches.filter(name => !usedCaches.has(name));
-                    yield Promise.all(cachesToDelete.map(name => this.adapter.caches.delete(name)));
-                }
-                catch (err) {
-                    // Oh well? Not much that can be done here. These caches will be removed on the next attempt
-                    // or when the SW revs its format version, which happens from time to time.
-                    this.debugger.log(err, 'cleanupCaches');
-                }
+                // Query for all currently active clients, and list the client ids. This may skip
+                // some clients in the browser back-forward cache, but not much can be done about
+                // that.
+                const activeClients = (yield this.scope.clients.matchAll()).map(client => client.id);
+                // A simple list of client ids that the SW has kept track of. Subtracting
+                // activeClients from this list will result in the set of client ids which are
+                // being tracked but are no longer used in the browser, and thus can be cleaned up.
+                const knownClients = Array.from(this.clientVersionMap.keys());
+                // Remove clients in the clientVersionMap that are no longer active.
+                knownClients.filter(id => activeClients.indexOf(id) === -1)
+                    .forEach(id => this.clientVersionMap.delete(id));
+                // Next, determine the set of versions which are still used. All others can be
+                // removed.
+                const usedVersions = new Set();
+                this.clientVersionMap.forEach((version, _) => usedVersions.add(version));
+                // Collect all obsolete versions by filtering out used versions from the set of all versions.
+                const obsoleteVersions = Array.from(this.versions.keys())
+                    .filter(version => !usedVersions.has(version) && version !== this.latestHash);
+                // Remove all the versions which are no longer used.
+                yield obsoleteVersions.reduce((previous, version) => __awaiter(this, void 0, void 0, function* () {
+                    // Wait for the other cleanup operations to complete.
+                    yield previous;
+                    // Try to get past the failure of one particular version to clean up (this
+                    // shouldn't happen, but handle it just in case).
+                    try {
+                        // Get ahold of the AppVersion for this particular hash.
+                        const instance = this.versions.get(version);
+                        // Delete it from the canonical map.
+                        this.versions.delete(version);
+                        // Clean it up.
+                        yield instance.cleanup();
+                    }
+                    catch (err) {
+                        // Oh well? Not much that can be done here. These caches will be removed when
+                        // the SW revs its format version, which happens from time to time.
+                        this.debugger.log(err, `cleanupCaches - cleanup ${version}`);
+                    }
+                }), Promise.resolve());
+                // Commit all the changes to the saved state.
+                yield this.sync();
             });
         }
         /**
@@ -2783,13 +2689,9 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
          */
         cleanupOldSwCaches() {
             return __awaiter(this, void 0, void 0, function* () {
-                // This is an exceptional case, where we need to interact with caches that would not be
-                // generated by this ServiceWorker (but by old versions of it). Use the native `CacheStorage`
-                // directly.
-                const caches = this.adapter.caches.original;
-                const cacheNames = yield caches.keys();
+                const cacheNames = yield this.scope.caches.keys();
                 const oldSwCacheNames = cacheNames.filter(name => /^ngsw:(?!\/)/.test(name));
-                yield Promise.all(oldSwCacheNames.map(name => caches.delete(name)));
+                yield Promise.all(oldSwCacheNames.map(name => this.scope.caches.delete(name)));
             });
         }
         /**
@@ -2855,9 +2757,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                     .map(([clientId]) => clientId);
                 yield Promise.all(affectedClients.map((clientId) => __awaiter(this, void 0, void 0, function* () {
                     const client = yield this.scope.clients.get(clientId);
-                    if (client) {
-                        client.postMessage({ type: 'UNRECOVERABLE_STATE', reason });
-                    }
+                    client.postMessage({ type: 'UNRECOVERABLE_STATE', reason });
                 })));
             });
         }
@@ -2945,14 +2845,6 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
                 }
             });
         }
-        getCacheNames() {
-            return __awaiter(this, void 0, void 0, function* () {
-                const controlTable = yield this.controlTable;
-                const appVersions = Array.from(this.versions.values());
-                const appVersionCacheNames = yield Promise.all(appVersions.map(version => version.getCacheNames()));
-                return [controlTable.cacheName].concat(...appVersionCacheNames);
-            });
-        }
     }
 
     /**
@@ -2963,7 +2855,7 @@ ${msgIdle}`, { headers: this.adapter.newHeaders({ 'Content-Type': 'text/plain' }
      * found in the LICENSE file at https://angular.io/license
      */
     const scope = self;
-    const adapter = new Adapter(scope.registration.scope, self.caches);
-    new Driver(scope, adapter, new CacheDatabase(adapter));
+    const adapter = new Adapter(scope.registration.scope);
+    const driver = new Driver(scope, adapter, new CacheDatabase(scope, adapter));
 
 }());
