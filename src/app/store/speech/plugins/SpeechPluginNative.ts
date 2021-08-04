@@ -5,6 +5,8 @@ export class SpeechPluginNative extends BasePlugin {
   constructor() {super();}
 
   private instance?: SpeechRecognition;
+  private refreshInterval: any;
+  private lastResultDate!: number;
 
   private BindSpeech() {
     if (!this.instance)
@@ -12,6 +14,7 @@ export class SpeechPluginNative extends BasePlugin {
     this.instance.onresult = (event) => {
       let interim_transcript = '';
       let final_transcript   = '';
+      this.lastResultDate = Date.now();
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           final_transcript += event.results[i][0].transcript;
@@ -23,6 +26,31 @@ export class SpeechPluginNative extends BasePlugin {
         }
       }
     };
+  }
+
+  private stopInProgress = false;
+  private BindSilence() { // restart every x seconds if no speech detected
+    this.lastResultDate = Date.now();
+    this.refreshInterval = setInterval(() => {
+      if (this.onStatusChanged$.value !== ConnectionState.Connected)
+        return;
+
+      const currentDate = Date.now();
+      const sinceLastUpdate = currentDate - (this.lastResultDate || currentDate);
+
+      if (this.stopInProgress || sinceLastUpdate < 6400)
+        return;
+      this.instance?.stop();
+      this.stopInProgress = true;
+      setTimeout(() => {
+        try {
+          this.instance?.start();
+          this.lastResultDate = Date.now();
+        } catch (e) {/** still running **/} finally {
+          this.stopInProgress = false;
+        }
+      }, 700);
+    }, 500)
   }
 
   async Start(language: string, data: string[]) {
@@ -37,30 +65,26 @@ export class SpeechPluginNative extends BasePlugin {
     this.instance.continuous     = true;
     this.instance.interimResults = true;
 
+    this.instance.addEventListener("start", () => {
+      this.lastResultDate = Date.now();
+    });
+
     this.instance.addEventListener("error", (error) => { // listener for active connection
       if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-      if (error.error === "no-speech")
-        console.log("[Native] No speech detected")
-      else if (error.error !== "bad-grammar")
-        this.onPluginCrashed$.next(`[Native] Lost connection: ${error.error}`);
+      console.log(`[Native] Error: ${error.error}`)
+      // if (error.error === "no-speech")
+      // else if (error.error !== "bad-grammar")
+      //   this.onPluginCrashed$.next(`[Native] Error: ${error.error}`);
     })
     this.instance.addEventListener("end", event => {
-      if (this.onStatusChanged$.value !== ConnectionState.Connected) return;
-      console.log(`[Native] End: ${event.type}`)
-      if (event.type === 'end') {
-        (<SpeechRecognition>event.target)?.stop()
-        setTimeout(() => {
-          console.log(`[Native] Restart plugin`);
-          (<SpeechRecognition>event.target)?.start();
-        }, 0);
-      }
-      else
-        this.onPluginCrashed$.next("end");
+      if (this.onStatusChanged$.value !== ConnectionState.Connected)
+        clearInterval(this.refreshInterval);
     }) // auto restart after silence
 
     this.instance.start();
 
     this.onStatusChanged$.next(ConnectionState.Connected);
+    this.BindSilence();
     console.log("[Native] Started");
 
     window.addEventListener("beforeunload", () => { // temp fix for browser freezing on page reload
