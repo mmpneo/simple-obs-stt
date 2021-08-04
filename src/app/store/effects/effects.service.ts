@@ -19,7 +19,7 @@ export class EffectsService {
     // translate y
     const style = this.styleQuery.getValue().currentStyle.particleStyles;
 
-    if (!style.enable.value[0] || !style.url.value[0])
+    if (!style?.enable?.value[0] || !style?.url?.value[0])
       return;
 
     const listOfParticles = new Array(Math.min(10, anime.random(style.particles.value[0], style.particles.value[1]))).fill(null).map(_ => {
