@@ -1,15 +1,15 @@
 use std::sync::Arc;
 use globset::Glob;
 use serde::Deserialize;
-use tauri::api::assets::EmbeddedAssets;
+use tauri::api::assets::{EmbeddedAssets, AssetKey};
 use tauri::Assets;
-use tokio::sync::{mpsc, RwLock};
 use warp::{Filter, Rejection, Reply};
 use warp::http::{HeaderValue, Response, StatusCode};
 use warp::http::header::{ACCEPT_RANGES, ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_SECURITY_POLICY, ORIGIN, X_FRAME_OPTIONS};
 use warp::path::{FullPath, param};
 
 use crate::ws_handler::{user_connected, Users};
+use tauri::async_runtime::spawn;
 
 #[derive(Deserialize)]
 struct WsQueryData {
@@ -30,16 +30,17 @@ pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
             ws.on_upgrade(move |socket| user_connected(q.id, socket, users))
         });
 
-    tokio::spawn(warp::serve(ws_path.or(full)).run(([127, 0, 0, 1], 3030)));
+    spawn(warp::serve(ws_path.or(full)).run(([127, 0, 0, 1], 3030)));
 }
 
 async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<impl Reply, Rejection> {
     let glob = Glob::new("/**/*.{css,js,png,ico,wav,mp3,webmanifest}").unwrap().compile_matcher();
     let path = path.as_str();
 
+    let index_asset = &AssetKey::from(String::from("index.html"));
     let substr = &path[1..];
     if !(glob.is_match(path)) {
-        let asset = assets.get("index.html").unwrap();
+        let asset = assets.get(index_asset).unwrap();
         return Ok(Response::builder()
 
             .status(StatusCode::OK)
@@ -50,7 +51,8 @@ async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<im
             .body(asset.to_vec()));
     }
 
-    let asset = assets.get(substr);
+    let asset_key = &AssetKey::from(String::from(substr));
+    let asset = assets.get(asset_key);
     return if asset.is_some() {
         let vv = asset.unwrap();
         Ok(Response::builder()

@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 use std::sync::Arc;
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::cmp::PartialEq;
 use futures::{FutureExt, StreamExt};
 use tokio::sync::{mpsc, RwLock};
