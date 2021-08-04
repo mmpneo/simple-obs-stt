@@ -1,1 +1,26 @@
+<div *ngIf="appWindow && clientType === 0" data-tauri-drag-region class="px-4 py-2 w-screen flex justify-between space-x-2 bg-base-200">
+  <div class="flex space-x-2">
+    <img class="pointer-events-none object-contain h-6 self-start" src="assets/logo.png">
+    <div class="text-base-content font-semibold">Simple STT</div>
+  </div>
+
+  <div class="flex space-x-2">
+    <button class="btn btn-xs btn-circle btn-ghost" (click)="appWindow?.minimize()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+      </svg>
+    </button>
+    <button class="btn btn-xs btn-circle btn-ghost" (click)="appWindow?.maximize()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+      </svg>
+    </button>
+    <button class="btn btn-xs btn-circle btn-ghost" (click)="appWindow?.close()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+  </div>
+</div>
 <router-outlet></router-outlet>

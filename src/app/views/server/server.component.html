@@ -1,58 +1,55 @@
-<div class="w-screen h-screen bg-base-300 drawer drawer-mobile text-base-content">
+<div class="w-screen h-full bg-base-300 drawer drawer-mobile text-base-content">
   <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
   <div class="relative flex flex-col items-center justify-center drawer-content">
-    <div class="absolute top-2 left-2 right-5 flex flex-col space-y-2">
-      <div class="flex space-x-2 items-center">
-        <div tippy="Create new template from current style">
-          <button [tippy]="newTemplate" variation="popper" placement="bottom" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          </button>
-        </div>
+    <div class="absolute top-0 left-0 right-0 p-4 flex justify-between">
+      <div class="flex space-x-2" *ngIf="styleQuery.state$ | async as state">
+        <select class="w-36 select-bordered select select-sm" [disabled]="!state.templates.length" [ngModel]="styleQuery.currentTemplate$ | async" (ngModelChange)="styleService.SelectTemplate($event)">
+          <option [ngValue]="null" selected disabled>Select template</option>
+          <option *ngFor="let template of state.templates; let index = index" [ngValue]="index">{{template.name}}</option>
+        </select>
+        <button class="btn btn-circle btn-ghost btn-sm" [tippy]="templateMenu" className="with-shadow" variation="popper">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
+        </button>
 
-        <ng-container *ngIf="styleQuery.state$ | async as state">
-          <select [disabled]="!state.templates.length" [ngModel]="styleQuery.currentTemplate$ | async" (ngModelChange)="styleService.SelectTemplate($event)" class="w-36 select-bordered select select-sm">
-            <option [ngValue]="null" selected disabled>Select template</option>
-            <option *ngFor="let template of state.templates; let index = index" [ngValue]="index">{{template.name}}</option>
-          </select>
-          <button *ngIf="state.currentTemplate !== null" tippy="Delete template (current style won't be reset)" (click)="styleService.DeleteTemplate()" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-          <button *ngIf="state.currentTemplate !== null" tippy="Export template" (click)="styleService.ExportTemplate()" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-          </button>
-          <button tippy="Import template" (click)="styleService.ImportTemplate()" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-          </button>
-        </ng-container>
-        <div class="flex-1"></div>
+        <ng-template #templateMenu>
+          <ul class="menu font-semibold">
+            <li class="hover-bordered" [tippy]="newTemplate" className="with-shadow" appendTo="parent" placement="right" variation="popper"><a>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <!--              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>-->
+              Save template
+            </a></li>
+            <li class="hover-bordered" [class.disabled]="state.currentTemplate === null" (click)="state.currentTemplate !== null && styleService.DeleteTemplate()"><a>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              Remove template
+            </a></li>
+            <li class="hover-bordered" [class.disabled]="state.currentTemplate === null" (click)="state.currentTemplate !== null && styleService.ExportTemplate()"><a>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+              Export template
+            </a></li>
+            <li class="hover-bordered" (click)="styleService.ImportTemplate()"><a>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+              Import template
+            </a></li>
+          </ul>
+        </ng-template>
+      </div>
 
-        <button [disabled]="(networkQuery.connectionState$ | async) !== 2" tippy="Copy client link" (click)="networkService.CopyLink()" class="btn btn-xs btn-ghost">
+      <div class="flex justify-end space-x-2">
+        <button [disabled]="(networkQuery.connectionState$ | async) !== 2" tippy="Copy client link" (click)="networkService.CopyLink()" class="btn btn-sm btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
           </svg>
           Copy link
         </button>
 
-        <button [tippy]="hostMenu" className="with-shadow" variation="popper" placement="bottom" class="w-24 btn btn-sm btn-primary">
+        <button [tippy]="hostMenu" className="with-shadow" variation="popper" placement="bottom" class="btn btn-sm btn-primary">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
           </svg>
           Host
         </button>
-      </div>
-
-      <div class="flex flex-col space-y-2 pl-5">
-        <div class="text-xs opacity-50" *ngIf="networkQuery.state$ | async as state"><b>Network</b> - {{connectionState[state.peerConnectionState]}}</div>
-        <div class="text-xs opacity-50" *ngIf="speechQuery.state$ | async as state"><b>STT plugin - {{speechPlugins[state.selectedPlugin[0]]?.name}}</b> - {{connectionState[state.connectionState]}}</div>
-        <div class="text-xs opacity-50" *ngIf="voiceQuery.state$ | async as state"><b>TTS plugin - {{voicePlugins[state.selectedPlugin[0]]?.name}}</b> - {{connectionState[state.connectionState]}}</div>
       </div>
     </div>
     <div class="flex flex-col space-y-4">
@@ -82,42 +79,31 @@
         </ng-container>
       </div>
     </div>
-    <div class="absolute bottom-2 left-2 right-5 flex justify-end items-center space-x-2">
-      <img class="pointer-events-none mb-4 object-contain h-16 self-start" src="assets/logo.png">
-      <select tippy="Change theme" class="opacity-60 w-36 select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
-        <option value="aqua">Aqua</option>
-        <option value="black">Black</option>
-        <option value="emerald">Emerald</option>
-        <option value="bumblebee">Bumblebee</option>
-        <option value="cupcake">Cupcake</option>
-        <option value="corporate">Corporate</option>
-        <option value="cyberpunk">Cyberpunk</option>
-        <option value="dark">Dark</option>
-        <option value="dracula">Dracula</option>
-        <option value="fantasy">Fantasy</option>
-        <option value="forest">Forest</option>
-        <option value="garden">Garden</option>
-        <option value="halloween">Halloween</option>
-        <option value="light">Light</option>
-        <option value="lofi">LoFi</option>
-        <option value="luxury">Luxury</option>
-        <option value="pastel">Pastel</option>
-        <option value="retro">Retro</option>
-        <option value="wireframe">Wireframe</option>
-        <option value="synthwave">Synthwave</option>
-        <option value="valentine">Valentine</option>
-      </select>
+    <div class="absolute bottom-0 left-0 right-0 p-4 flex justify-between items-end space-x-2">
+      <div class="flex space-x-4 items-end">
+        <svg class="h-5 w-5 transition-colors" tippy="Host connection" *ngIf="networkQuery.state$ | async as state" [class.opacity-30]="state.peerConnectionState !== 2" [class.text-success]="state.peerConnectionState === 2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+        </svg>
+        <svg class="h-5 w-5 transition-colors" [tippy]="'Speech to text: ' + speechPlugins[state.selectedPlugin[0]]?.name || ''" [class.opacity-30]="state.connectionState !== 2" [class.text-success]="state.connectionState === 2" *ngIf="speechQuery.state$ | async as state" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        </svg>
+        <svg class="h-5 w-5 transition-colors" [tippy]="'Text to speech: ' + voicePlugins[state.selectedPlugin[0]]?.name || ''" [class.opacity-30]="state.connectionState !== 2" [class.text-success]="state.connectionState === 2" *ngIf="voiceQuery.state$ | async as state" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+      </div>
 
-      <a href="https://github.com/mmpneo/simple-obs-stt" target="_blank" class="btn btn-circle btn-ghost opacity-40"><img width="28" height="28" src="assets/icons/github.png"></a>
+      <a tippy="Open Github" href="https://github.com/mmpneo/simple-obs-stt" target="_blank"><img class="pointer-events-none object-contain h-16" src="assets/logo.png"></a>
     </div>
   </div>
-  <div class="flex drawer-side overflow-y-hidden" style="overflow-y: hidden">
+  <div class="flex drawer-side overflow-y-hidden" style="overflow-y: hidden; display: flex">
     <label for="my-drawer-2" class="drawer-overlay"></label>
-    <ngx-simplebar class="w-80 flex flex-col h-screen bg-base-100">
-      <div class="p-4">
-        <app-editor></app-editor>
-      </div>
-    </ngx-simplebar>
+    <div class="flex flex-col w-80">
+      <ngx-simplebar class="flex flex-col h-full bg-base-100">
+        <div class="p-4">
+          <app-editor></app-editor>
+        </div>
+      </ngx-simplebar>
+    </div>
   </div>
 
   <ng-template #hostMenu>
@@ -251,7 +237,7 @@
 </div>
 
 <ng-template #newTemplate let-hide>
-  <div class="form-control">
+  <div class="p-2">
     <div class="relative">
       <input type="text" #inputElement placeholder="Template name" class="w-full pr-16 input input-primary input-sm input-bordered">
       <button class="absolute right-0 rounded-l-none btn btn-sm btn-primary" (click)="styleService.CreateTemplate(inputElement.value); hide();">Create</button>

@@ -24,11 +24,18 @@
     background-position: center;
 }
 
-app-root > *:not(router-outlet):not(.titlebar) {
-    @apply flex;
-    @apply flex-col;
+.app app-root {
+    @apply rounded-lg overflow-hidden;
+}
+app-root {
+    @apply flex flex-col h-screen;
+}
+
+app-root > *:not(router-outlet):not(.titlebar):not([data-tauri-drag-region]) {
+    @apply flex flex-col;
     @apply w-screen;
-    @apply h-screen;
+    @apply h-full;
+    @apply overflow-hidden;
 }
 
 [data-tippy-root] {
@@ -49,10 +56,10 @@ app-root > *:not(router-outlet):not(.titlebar) {
 [role="popper"] .tippy-content > div {
     @apply flex flex-col;
     @apply h-full;
-    @apply p-4;
+    /*@apply p-4;*/
 }
 [role="popper"] .tippy-content > div > ngx-simplebar {
-    @apply -m-4;
+    /*@apply -m-4;*/
     @apply flex-grow;
 }
 [role="popper"] .tippy-scroll-content {
@@ -161,16 +168,12 @@ input[type="range"].input-range::-moz-range-track {
     transform-origin: 50% 50%;
 }
 
-.titlebar {
+body.app .titlebar {
     height: 30px;
-    background: #329ea3;
+    /*background: #329ea3;*/
     user-select: none;
     display: flex;
     justify-content: flex-end;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
 }
 
 .titlebar-button {
@@ -179,6 +182,7 @@ input[type="range"].input-range::-moz-range-track {
     align-items: center;
     width: 30px;
     height: 30px;
+    color: aliceblue;
 }
 
 .titlebar-button:hover {

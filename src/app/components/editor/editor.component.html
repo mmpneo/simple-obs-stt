@@ -1,28 +1,25 @@
 <div class="text-sm flex flex-col space-y-2" *ngIf="styleQuery.current$ | async as currentStyle">
   <div class="tabs self-center">
-    <a class="tab px-2 tab-bordered" tippy="Text" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+    <a class="tab px-3 tab-bordered" tippy="Text" [class.tab-active]="activeTab === 'text'" (click)="ChangeTab('text')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
     </a>
-    <a class="tab px-2 tab-bordered" tippy="Bubble" [class.tab-active]="activeTab === 'box'" (click)="ChangeTab('box')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+    <a class="tab px-3 tab-bordered" tippy="Bubble" [class.tab-active]="activeTab === 'box'" (click)="ChangeTab('box')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
     </a>
-    <a class="tab px-2 tab-bordered" tippy="Avatar" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+    <a class="tab px-3 tab-bordered" tippy="Avatar" [class.tab-active]="activeTab === 'avatar'" (click)="ChangeTab('avatar')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     </a>
-
-    <a class="tab px-2 tab-bordered" tippy="Sound" [class.tab-active]="activeTab === 'sound'" (click)="ChangeTab('sound')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+    <a class="tab px-3 tab-bordered" tippy="Sound" [class.tab-active]="activeTab === 'sound'" (click)="ChangeTab('sound')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
     </a>
-
-    <a class="tab px-2 tab-bordered" tippy="Global" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    <a *ngIf="environment.features.EMOTES" class="tab px-3 tab-bordered" tippy="Emotes" [class.tab-active]="activeTab === 'emotes'" (click)="ChangeTab('emotes')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     </a>
-
-    <a *ngIf="environment.features.EMOTES" class="tab px-2 tab-bordered" tippy="Emotes" [class.tab-active]="activeTab === 'emotes'" (click)="ChangeTab('emotes')">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    </a>
-    <a class="tab px-2 tab-bordered" tippy="Particles" [class.tab-active]="activeTab === 'particles'" (click)="ChangeTab('particles')">
+    <a class="tab px-3 tab-bordered" tippy="Particles" [class.tab-active]="activeTab === 'particles'" (click)="ChangeTab('particles')">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+    </a>
+    <a class="tab px-3 tab-bordered" tippy="Settings" [class.tab-active]="activeTab === 'global'" (click)="ChangeTab('global')">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
     </a>
   </div>
 
@@ -58,7 +55,7 @@
   </ng-template>
 
   <ng-template #fieldToggle let-value let-title="title" let-fn="fn">
-    <div class="form-control">
+    <div class="form-control" *ngIf="value">
       <label class="cursor-pointer p-0 label"> <span class="label-text" [title]="title">{{title}}</span><div> <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!(value.value[0])" (ngModelChange)="fn($event ? '1' : '', 0)">   <span class="toggle-mark"></span> </div>
       </label>
     </div>
@@ -248,6 +245,35 @@
 
     </ng-container>
     <ng-container *ngSwitchCase="'global'">
+      <div class="font-semibold">Application</div>
+      <div class="flex justify-between items-center">
+        <div>App theme</div>
+        <select tippy="Change theme" class="opacity-60 w-36 select select-bordered select-sm" [ngModel]="applicationQuery.theme$ | async" (ngModelChange)="applicationService.ChangeTheme($event)">
+          <option value="aqua">Aqua</option>
+          <option value="black">Black</option>
+          <option value="emerald">Emerald</option>
+          <option value="bumblebee">Bumblebee</option>
+          <option value="cupcake">Cupcake</option>
+          <option value="corporate">Corporate</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="dark">Dark</option>
+          <option value="dracula">Dracula</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="forest">Forest</option>
+          <option value="garden">Garden</option>
+          <option value="halloween">Halloween</option>
+          <option value="light">Light</option>
+          <option value="lofi">LoFi</option>
+          <option value="luxury">Luxury</option>
+          <option value="pastel">Pastel</option>
+          <option value="retro">Retro</option>
+          <option value="wireframe">Wireframe</option>
+          <option value="synthwave">Synthwave</option>
+          <option value="valentine">Valentine</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
       <div class="font-semibold">Text input</div>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Real-time typing', $implicit: currentStyle.globalStyle.realtimeTyping, fn: GetFn('global', 'realtimeTyping'), fnLink: GetSwFn('global', 'realtimeTyping')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Keep only last sentence', $implicit: currentStyle.globalStyle.keepSingleSentence, fn: GetFn('global', 'keepSingleSentence'), fnLink: GetSwFn('global', 'keepSingleSentence')}"></ng-container>

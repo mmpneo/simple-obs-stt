@@ -16,6 +16,7 @@ import {animate, style, transition, trigger}                                    
 import {combineQueries}                                                            from "@datorama/akita";
 import {SanitizeHtmlPipeModule}                                                    from "../../pipes/sanitize-html.pipe";
 import {EffectsService}                                                            from "@store/effects/effects.service";
+import {GetClientType}                                                             from "../../utils/client_type";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -75,6 +76,7 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
       translateY: this.GetRandomRange(translationYMin, translationYMax).toFixed(1),
     }
   }
+  clientType = GetClientType()
 
   private ApplyElementStyleDAta(style: STTStyle, section: keyof Omit<STTStyle, 'version'>, element: any, styles: { [key: string]: StyleValue }, valueIndex: number) {
     for (const cssKey in styles) {

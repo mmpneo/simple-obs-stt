@@ -1,16 +1,17 @@
-import {ChangeDetectionStrategy, Component, Optional} from '@angular/core';
-import {SpeechService}                                from "@store/speech/speech.service";
-import {NetworkService}                               from "@store/network/network.service";
-import {Router}                                       from "@angular/router";
-import {StyleService}                                 from "@store/style/style.service";
-import {ClientType, GetClientType}                    from "./utils/client_type";
-import {FontsService}                                 from "@store/fonts/fonts.service";
-import {SoundService}                                 from "@store/sound/sound.service";
-import {SwUpdate}                                     from "@angular/service-worker";
-import {environment}                                  from "../environments/environment";
-import {HotToastService}                              from "@ngneat/hot-toast";
-import {EmotesService}                                from "@store/emotes/emotes.service";
-import {VoiceService}                                 from "@store/voice/voice.service";
+import {ChangeDetectionStrategy, Component, OnInit, Optional} from '@angular/core';
+import {SpeechService}                                        from "@store/speech/speech.service";
+import {NetworkService}            from "@store/network/network.service";
+import {Router}                    from "@angular/router";
+import {StyleService}              from "@store/style/style.service";
+import {ClientType, GetClientType} from "./utils/client_type";
+import {FontsService}              from "@store/fonts/fonts.service";
+import {SoundService}              from "@store/sound/sound.service";
+import {SwUpdate}                  from "@angular/service-worker";
+import {environment}               from "../environments/environment";
+import {HotToastService}           from "@ngneat/hot-toast";
+import {EmotesService}             from "@store/emotes/emotes.service";
+import {VoiceService}              from "@store/voice/voice.service";
+import {WindowManager}             from "@tauri-apps/api/window";
 
 @Component({
   selector:        'app-root',
@@ -18,7 +19,7 @@ import {VoiceService}                                 from "@store/voice/voice.s
   styles:          [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   constructor(
     private _speechService: SpeechService,
     private _voiceService: VoiceService,
@@ -43,7 +44,10 @@ export class AppComponent {
       localStorage.removeItem('path-fragment');
       this.router.navigate([path.replace("simple-obs-stt", "")], {fragment: path_fragment || undefined});
     }
+
   }
+  appWindow?: WindowManager = (<any>window).__TAURI__?.window?.appWindow;
+  clientType = GetClientType();
 
   CheckUpdate() {
     if (GetClientType() === ClientType.client || environment.platform === "app" || !environment.production)
@@ -52,6 +56,12 @@ export class AppComponent {
       this.updates.activateUpdate().then(_ => this.toast.success("Update available. Refresh page"))
     })
     this.updates.checkForUpdate();
+  }
+
+  ngOnInit(): void {
+    !!this.appWindow && document.body.classList.add("app")
+
+    // this.appWindow?.maximize()
   }
 
 }
