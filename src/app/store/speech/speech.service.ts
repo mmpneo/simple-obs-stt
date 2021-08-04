@@ -12,6 +12,8 @@ import {EmotesQuery}                                                from "@store
 import {HotToastService}                                            from "@ngneat/hot-toast";
 import {SpeechSentenceModel}                                        from "@store/speech/speech.model";
 import {GenerateSentence}                                           from "@store/speech/utils/sentence.generator";
+import {NetworkQuery}                                               from "@store/network/network.query";
+import {ConnectionState}                                            from "../../utils/types";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -21,8 +23,11 @@ export class SpeechService {
     private speechQuery: SpeechQuery,
     private emotesQuery: EmotesQuery,
     private networkService: NetworkService,
+    private networkQuery: NetworkQuery,
     private toastService: HotToastService
   ) {
+    networkQuery.connectionState$.subscribe(state => state === ConnectionState.Connected && this.DoClearSentences())
+
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.DoClearSentences();
       if (m.type === 'stt:updatesentence') this.DoUpsertSentence(m.data)
