@@ -19,6 +19,7 @@ module.exports = {
   },
   variants: {},
   plugins:  [
-    require('daisyui')
+    require('daisyui'),
+    require('@tailwindcss/aspect-ratio')
   ],
 }

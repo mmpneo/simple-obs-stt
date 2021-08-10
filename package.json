@@ -22,6 +22,7 @@
     "@ngneat/helipopper": "^4.1.0",
     "@ngneat/hot-toast": "^3.3.0",
     "@ngneat/overview": "^2.0.2",
+    "@tailwindcss/aspect-ratio": "^0.2.1",
     "@tauri-apps/api": "^1.0.0-beta.4",
     "@tauri-apps/cli": "^1.0.0-beta.6",
     "@types/animejs": "^3.1.4",

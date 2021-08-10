@@ -2,10 +2,9 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {NetworkQuery}                               from "@store/network/network.query";
 import {SpeechQuery}                                from "@store/speech/speech.query";
 import {SpeechService}                              from "@store/speech/speech.service";
-import {ApplicationQuery}                           from "@store/application/application.query";
 import {ApplicationService}                         from "@store/application/application.service";
-import {languages}                              from "@store/speech/speech.store";
-import {StyleService}                           from "@store/style/style.service";
+import {languages}                                  from "@store/speech/speech.store";
+import {StyleService}                               from "@store/style/style.service";
 import {StyleQuery}                             from "@store/style/style.query";
 import {RGBA}                                   from "ngx-color";
 import {NetworkService}                         from "@store/network/network.service";
@@ -17,6 +16,7 @@ import {VoiceService}                           from "@store/voice/voice.service
 import {VoiceQuery}                             from "@store/voice/voice.query";
 import {SoundQuery}                             from "@store/sound/sound.query";
 import {SoundService}                           from "@store/sound/sound.service";
+import {EmotesQuery}                            from "@store/emotes/emotes.query";
 
 @Component({
   selector:        'app-server',
@@ -28,7 +28,6 @@ export class ServerComponent implements OnInit {
   constructor(
     public networkQuery: NetworkQuery,
     public networkService: NetworkService,
-    public applicationQuery: ApplicationQuery,
     public applicationService: ApplicationService,
     public speechService: SpeechService,
     public speechQuery: SpeechQuery,
@@ -37,7 +36,8 @@ export class ServerComponent implements OnInit {
     public voiceService: VoiceService,
     public voiceQuery: VoiceQuery,
     public soundService: SoundService,
-    public soundQuery: SoundQuery
+    public soundQuery: SoundQuery,
+    public emotesQuery: EmotesQuery
   ) {
   }
 
@@ -50,13 +50,13 @@ export class ServerComponent implements OnInit {
   voicePlugins: VoicePluginDescriptor   = [];
 
   get voicePluginLanguages() {
-    const state = this.voiceQuery.getValue();
+    const state          = this.voiceQuery.getValue();
     const selectedPlugin = this.voicePlugins[state.selectedPlugin[0]];
     return selectedPlugin?.languages() ?? [];
   }
 
   get voicePluginVoices(): [string, string][] {
-    const state = this.voiceQuery.getValue();
+    const state          = this.voiceQuery.getValue();
     const selectedPlugin = this.voicePlugins[state.selectedPlugin[0]];
     return selectedPlugin?.languages()[state.selectedPlugin[1]]?.[2] ?? [];
   }
