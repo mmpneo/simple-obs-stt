@@ -9,6 +9,8 @@ export class EffectsService {
   }
 
   PlayParticles(boundingClientRect?: DOMRect) {
+    if (document.hidden)
+      return;
     // scale
     // image url
     // n particles
