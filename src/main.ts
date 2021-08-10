@@ -20,7 +20,7 @@ if (GetClientType() === ClientType.host) { //add persistent for host
       if (storeName === 'network')
         return {saveHost: state.saveHost, hostID : state.saveHost ? state.hostID : null}
       if (storeName === 'speech')
-        return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
+        return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage, profanityWords: state.profanityWords}
       if (storeName === 'voice')
         return {selectedPlugin: state.selectedPlugin, selectedPluginData: state.selectedPluginData, selectedLanguage: state.selectedLanguage}
       if (storeName === 'sound')

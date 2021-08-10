@@ -4,6 +4,7 @@ import {guid}                               from "@datorama/akita";
 import {EmotesQuery}                        from "@store/emotes/emotes.query";
 import {SpeechQuery}                        from "@store/speech/speech.query";
 import {StyleQuery}                         from "@store/style/style.query";
+import sample from "lodash-es/sample";
 
 export function GenerateSentence(
   text: string,
@@ -24,9 +25,30 @@ export function GenerateSentence(
     return lastUnconfirmed === -1 ? null : {...sentences[lastUnconfirmed], finalized: true};
   }
 
-  let ttsValue          = text;
   let words             = text.trim().split(" ");
   let value: string[][] = [];
+
+
+  // region profanity
+  let og_dictionary = speechQuery.getValue().profanityWords;
+  let dictionary = new Set(og_dictionary);
+  if (finalized && dictionary.size > 0) {
+    for (let i = 0; i < words.length; i++) {
+      if (words[i][0] === "*" || words[i][1] === "*" || words[i][2] === "*") {
+        if (dictionary.size === 0)
+          dictionary = new Set(og_dictionary); // refill if empty
+        let takeSample = sample(Array.from(dictionary));
+        if (takeSample) {
+          dictionary.delete(takeSample);
+          words[i] = takeSample;
+        }
+      }
+    }
+  }
+  // endregion
+
+  let ttsValue          = words.join(" ");
+
   if (environment.features.EMOTES) {
     const emotesState         = emotesQuery.getValue();
     const emotesBindings      = emotesState.bindings_cache;
@@ -51,6 +73,7 @@ export function GenerateSentence(
     // endregion
 
     ttsValue = words.join(" "); // join mutated words to send clean version to tts
+
     // region insert emotes
     value = words.map((word, i) => {
       const firstLetter  = word[0];

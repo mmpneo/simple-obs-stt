@@ -28,7 +28,8 @@ export interface SpeechState extends EntityState<SpeechSentenceModel, ID> {
   selectedLanguage: [number, number],
   connectionState: ConnectionState,
   textInput: string;
-  show: boolean
+  show: boolean;
+  profanityWords: string[]
 }
 
 export function createInitialState(): SpeechState {
@@ -38,7 +39,8 @@ export function createInitialState(): SpeechState {
     selectedLanguage:   [0, 0],
     connectionState:    ConnectionState.Disconnected,
     textInput:          "",
-    show:               false
+    show:               false,
+    profanityWords: []
   };
 }
 

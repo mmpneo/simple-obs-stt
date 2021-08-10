@@ -101,7 +101,7 @@
   </ng-template>
 
   <ng-template #fontSelect>
-    <div class="flex flex-col items-start w-56 space-y-2">
+    <div class="p-2 flex flex-col items-start w-56 space-y-2">
       <div class="flex flex-wrap gap-1">
         <button class="btn btn-xs btn-circle" [class.btn-accent]="selectedFontLetter === a.key" *ngFor="let a of fontsService.fontsMap | keyvalue" (click)="selectedFontLetter = a.key">{{a.key}}</button>
       </div>
@@ -267,7 +267,6 @@
           <option value="luxury">Luxury</option>
           <option value="pastel">Pastel</option>
           <option value="retro">Retro</option>
-          <option value="wireframe">Wireframe</option>
           <option value="synthwave">Synthwave</option>
           <option value="valentine">Valentine</option>
         </select>
@@ -288,6 +287,24 @@
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Use inactivity style', $implicit: currentStyle.globalStyle.hideOnInactivity, fn: GetFn('global', 'hideOnInactivity'), fnLink: GetSwFn('global', 'hideOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldToggle; context: {title: 'Clear on inactivity', $implicit: currentStyle.globalStyle.clearOnInactivity, fn: GetFn('global', 'clearOnInactivity'), fnLink: GetSwFn('global', 'clearOnInactivity')}"></ng-container>
       <ng-container *ngTemplateOutlet="fieldNumber; context: {title: 'Inactivity timer (ms)', $implicit: currentStyle.globalStyle.inactivityTimer, fn: GetFn('global', 'inactivityTimer'), fnLink: GetSwFn('global', 'inactivityTimer'), min: 100, max: 30000, disableLink: true}"></ng-container>
+
+      <div class="divider"></div>
+      <div class="font-semibold">Profanity randomizer</div>
+      <small class="opacity-70">Replace asterisks with emotes or words</small>
+      <div class="flex space-x-2" *ngFor="let w of speechQuery.profanityWords$ | async; trackBy: trackBindings; let index = index">
+        <input class="w-full input input-bordered input-sm" placeholder="Keyword" [ngModel]="w" (ngModelChange)="speechService.UpdateProfanityWord($event, index)">
+        <button class="btn btn-sm btn-circle btn-ghost" (click)="speechService.RemoveProfanityWord(index)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+
+      <button class="btn btn-sm btn-neutral mb-2" (click)="speechService.AddProfanityWord()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Add word</button>
     </ng-container>
     <ng-container *ngSwitchCase="'emotes'">
       <ng-container *ngIf="emotesQuery.state$ | async as emoteState">

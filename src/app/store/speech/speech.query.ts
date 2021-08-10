@@ -15,6 +15,7 @@ export class SpeechQuery extends QueryEntity<SpeechState> {
   list$ = this.selectAll();
 
   state$ = this.select();
+  profanityWords$ = this.select("profanityWords");
 
   showBubble$ = combineQueries([
     this.select(),

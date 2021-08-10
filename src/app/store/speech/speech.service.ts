@@ -14,6 +14,7 @@ import {SpeechSentenceModel}                                        from "@store
 import {GenerateSentence}                                           from "@store/speech/utils/sentence.generator";
 import {NetworkQuery}                                               from "@store/network/network.query";
 import {ConnectionState}                                            from "../../utils/types";
+import {ClientType, GetClientType}                                  from "../../utils/client_type";
 
 @Injectable({providedIn: 'root'})
 export class SpeechService {
@@ -26,7 +27,7 @@ export class SpeechService {
     private networkQuery: NetworkQuery,
     private toastService: HotToastService
   ) {
-    networkQuery.connectionState$.subscribe(state => state === ConnectionState.Connected && this.DoClearSentences())
+    networkQuery.connectionState$.subscribe(state => state === ConnectionState.Connected && GetClientType() === ClientType.client && this.DoClearSentences())
 
     networkService.messages$.subscribe(m => {
       if (m.type === 'stt:clear') this.DoClearSentences();
@@ -169,5 +170,26 @@ export class SpeechService {
       return;
     this.speechStore.update({textInput: ""});
     this.UpsertSentence(value, true, SpeechSentenceType.text);
+  }
+
+  AddProfanityWord() {
+    this.speechStore.update(s => ({profanityWords : [...s.profanityWords, "haha"]}))
+  }
+
+  UpdateProfanityWord($event: string, index: number) {
+    this.speechStore.update(t => {
+      t.profanityWords[index] = $event;
+    })
+  }
+
+  RemoveProfanityWord(index: number) {
+    this.speechStore.update(t => {
+      t.profanityWords.splice(index, 1)
+    })
+  }
+
+  InterimAddEmote(key: string) {
+    const sentences = this.speechQuery.getAll().filter(s => s.type === SpeechSentenceType.text && !s.finalized);
+    this.InterimTextInput(!sentences.length ? key :`${sentences[0].ttsValue} ${key}`)
   }
 }
