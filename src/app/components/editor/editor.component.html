@@ -41,7 +41,7 @@
   <ng-template #fieldSlider let-value let-title="title" let-fn="fn" let-min="min" let-max="max" let-step="step">
     <div class="flex justify-between items-center space-x-2">
       <div class="flex-grow truncate" [title]="title">{{title}}</div>
-      <input type="range" [step]="step" [min]="min || 0" [max]="max || 100" class="px-0 w-20 input input-range input-bordered input-sm" [ngModel]="value.value[0]" (ngModelChange)="fn($event, 0)">
+      <input type="range" [step]="step" [min]="min || 0" [max]="max || 100" class="w-20 range range-sm" [ngModel]="value.value[0]" (ngModelChange)="fn($event, 0)">
     </div>
   </ng-template>
 
