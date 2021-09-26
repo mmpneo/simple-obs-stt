@@ -1,5 +1,6 @@
 import {BasePlugin}      from "@store/speech/plugins/BasePlugin";
 import {ConnectionState} from "../../../utils/types";
+import UAParser          from "ua-parser-js";
 
 export class SpeechPluginNative extends BasePlugin {
   constructor() {super();}
@@ -49,11 +50,16 @@ export class SpeechPluginNative extends BasePlugin {
         } catch (e) {/** still running **/} finally {
           this.stopInProgress = false;
         }
-      }, 700);
+      }, this.browserAgent === 'Edge' ? 700 : 300);
     }, 500)
   }
 
+  private browserAgent?: string;
+
   async Start(language: string, data: string[]) {
+    const ua = new UAParser();
+    this.browserAgent = ua.getBrowser().name;
+
     await navigator.mediaDevices.getUserMedia({video: false, audio: true});
     await super.Start(language, data);
     if (!(<any>window).webkitSpeechRecognition)
