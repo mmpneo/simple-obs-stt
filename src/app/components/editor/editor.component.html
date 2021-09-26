@@ -55,8 +55,8 @@
   </ng-template>
 
   <ng-template #fieldToggle let-value let-title="title" let-fn="fn">
-    <div class="form-control" *ngIf="value">
-      <label class="cursor-pointer p-0 label"> <span class="label-text" [title]="title">{{title}}</span><div> <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!(value.value[0])" (ngModelChange)="fn($event ? '1' : '', 0)">   <span class="toggle-mark"></span> </div>
+    <div class="form-control">
+      <label class="cursor-pointer p-0 label"> <span class="label-text" [title]="title">{{title}}</span><div> <input type="checkbox" checked="checked" class="toggle" [ngModel]="!!(value?.value[0])" (ngModelChange)="fn($event ? '1' : '', 0)">   <span class="toggle-mark"></span> </div>
       </label>
     </div>
   </ng-template>
