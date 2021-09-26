@@ -5,16 +5,103 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --stt-box-width: 300px;
+    --stt-box-height: 100px;
+    --stt-box-max-height: none;
+    --stt-box-transform: none;
+    --stt-box-bg-image: none;
+    --stt-box-border: none;
+    --stt-box-border-radius: none;
+    --stt-box-border-width: none;
+    --stt-box-border-image-slice: none;
+    --stt-box-border-image-width: none;
+    --stt-box-bg-color: none;
+    --stt-box-opacity: none;
+    --stt-box-shadow: none;
+
+    --stt-box-width-alt: 300px;
+    --stt-box-height-alt: 100px;
+    --stt-box-max-height-alt: none;
+    --stt-box-transform-alt: none;
+    --stt-box-bg-image-alt: none;
+    --stt-box-border-alt: none;
+    --stt-box-border-radius-alt: none;
+    --stt-box-border-width-alt: none;
+    --stt-box-border-image-slice-alt: none;
+    --stt-box-border-image-width-alt: none;
+    --stt-box-bg-color-alt: none;
+    --stt-box-opacity-alt: none;
+    --stt-box-shadow-alt: none;
+
+
+    --stt-text-color: none;
+    --stt-text-font-size: none;
+    --stt-text-font-family: none;
+    --stt-text-line-height: none;
+    --stt-text-font-weight: none;
+    --stt-text-text-transform: none;
+    --stt-text-justify-content: none;
+    --stt-text-align-content: none;
+    --stt-text-margin: none;
+    --stt-text-padding: none;
+    --stt-text-shadow: none;
+    --stt-text-stroke: none;
+
+    --stt-text-color-alt: none;
+    --stt-text-font-size-alt: none;
+    --stt-text-font-family-alt: none;
+    --stt-text-line-height-alt: none;
+    --stt-text-font-weight-alt: none;
+    --stt-text-text-transform-alt: none;
+    --stt-text-justify-content-alt: none;
+    --stt-text-align-content-alt: none;
+    --stt-text-margin-alt: none;
+    --stt-text-padding-alt: none;
+    --stt-text-shadow-alt: none;
+    --stt-text-stroke-alt: none;
+
+    --stt-avatar-order: none;
+    --stt-avatar-width: none;
+    --stt-avatar-height: none;
+    --stt-avatar-bg-image: none;
+    --stt-avatar-opacity: none;
+    --stt-avatar-transform: none;
+
+    --stt-avatar-order-alt: none;
+    --stt-avatar-width-alt: none;
+    --stt-avatar-height-alt: none;
+    --stt-avatar-bg-image-alt: none;
+    --stt-avatar-opacity-alt: none;
+    --stt-avatar-transform-alt: none;
+}
+
+.stt-box {
+    width: 500px;
+    height: 100px;
+    background-color: var(--stt-box-bg-color);
+}
+
+.hide .stt-box {
+    width: 500px;
+    height: 100px;
+    background-color: var(--stt-box-bg-color-alt);
+}
+
 * {
     user-select: none;
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
-.divider::before,.divider::after {
+.divider::before, .divider::after {
     @apply opacity-20
 }
 
-.dot{
+.disabled {
+    pointer-events: none;
+}
+
+.dot {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -27,6 +114,7 @@
 .app app-root {
     @apply rounded-lg overflow-hidden;
 }
+
 app-root {
     @apply flex flex-col h-screen;
 }
@@ -58,10 +146,12 @@ app-root > *:not(router-outlet):not(.titlebar):not([data-tauri-drag-region]) {
     @apply h-full;
     /*@apply p-4;*/
 }
+
 [role="popper"] .tippy-content > div > ngx-simplebar {
     /*@apply -m-4;*/
     @apply flex-grow;
 }
+
 [role="popper"] .tippy-scroll-content {
     @apply p-4;
 }
@@ -84,61 +174,6 @@ app-root > *:not(router-outlet):not(.titlebar):not([data-tauri-drag-region]) {
     @apply text-base-100;
 }
 
-input[type="range"].input-range{
-    @apply px-0 border-none h-8;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-input[type="range"].input-range::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    appearance: none;
-    pointer-events: all;
-    @apply w-4 h-4 rounded-full bg-primary cursor-pointer;
-    margin-top: -5px;
-    /*margin: -7px; !* alignment fix for Chrome *!*/
-}
-input[type="range"].input-range::-moz-range-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    pointer-events: all;
-    @apply w-4 h-4 rounded-full bg-primary cursor-pointer;
-    margin-top: -5px;
-    /*margin: -7px; !* alignment fix for Chrome *!*/
-}
-input[type="range"]::-ms-thumb {
-    margin: 0; /* Reset margin in Edge since it supports -webkit-slider-thumb as well */
-}
-
-input[type="range"].input-range::-webkit-slider-runnable-track {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    @apply h-2 bg-neutral rounded-full;
-    cursor: pointer;
-    border: none;
-}
-input[type="range"].input-range::-moz-range-track {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    @apply h-2 bg-neutral rounded-full;
-    cursor: pointer;
-    border: none;
-}
-
-@keyframes avatar-floating {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(10px);
-    }
-    0% {
-        transform: translateY(0);
-    }
-}
-
 .stt-box-text {
     scrollbar-width: none;
 }
@@ -159,7 +194,6 @@ input[type="range"].input-range::-moz-range-track {
 
 .stt-box-text .emote {
     object-fit: contain;
-    height: 100%;
 }
 
 .progress-ring__circle {
@@ -168,28 +202,7 @@ input[type="range"].input-range::-moz-range-track {
     transform-origin: 50% 50%;
 }
 
-body.app .titlebar {
-    height: 30px;
-    /*background: #329ea3;*/
-    user-select: none;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.titlebar-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    color: aliceblue;
-}
-
-.titlebar-button:hover {
-    background: #5bbec3;
-}
-
-.stt-box-avatar, .stt-box-container, .stt-box-text{
+.stt-box-avatar, .stt-box-container, .stt-box-text {
     @apply transition-all;
     @apply duration-300;
 }

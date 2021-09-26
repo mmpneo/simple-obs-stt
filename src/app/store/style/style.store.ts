@@ -17,26 +17,6 @@ export enum StyleValueType {
   audioFile
 }
 
-export function BuildTypedValue(v: StyleValue, valueIndex: number): string | number {
-  const value = v.value[valueIndex];
-  switch (v.type) {
-    case StyleValueType.pixels:
-      return value + 'px';
-    case StyleValueType.ms:
-      return value + 'ms';
-    case StyleValueType.url:
-      return `url(${value})`;
-    case StyleValueType.translateX:
-      return `translateX(${value}px)`;
-    case StyleValueType.translateY:
-      return `translateY(${value}px)`;
-    case StyleValueType.number:
-      return value;
-    default:
-      return value;
-  }
-}
-
 type ValueType<T> = T extends StyleValueType.number ? number : string;
 
 export type StyleValue<T = StyleValueType, V = ValueType<T>> =
@@ -46,78 +26,17 @@ export type StyleValue<T = StyleValueType, V = ValueType<T>> =
     linked: boolean
   }
 
-export type CustomStyleFn = (state: STTStyle, elementStyle: any, calculatedValue: string | number, valueIndex: number) => void;
-
-// override style applying with side effects
-export const CUSTOM_STYLE_LOGIC: { [k in keyof Omit<STTStyle, 'version'>]: { [styleKey: string]: CustomStyleFn } } = {
-  textStyle:      {
-    marginRight: (state, elementStyle, calculatedValue, valueIndex) => {
-      // elementStyle.position    = state.boxStyle.heightMode.value[0] === 'fixed' ? 'absolute' : 'relative';
-      elementStyle.marginRight = calculatedValue;
-    },
-    shadowColor: (state, elementStyle, value, valueIndex) => {
-      elementStyle.textShadow = `${state.textStyle.shadowX.value[valueIndex]}px ${state.textStyle.shadowY.value[valueIndex]}px ${state.textStyle.shadowB.value[valueIndex]}px ${state.textStyle.shadowColor.value[valueIndex]}`
-    }
-  },
-  boxStyle:       {
-    shadowColor: (state, elementStyle, value, valueIndex) => {
-      elementStyle.boxShadow = `${state.boxStyle.shadowX.value[valueIndex]}px ${state.boxStyle.shadowY.value[valueIndex]}px ${state.boxStyle.shadowB.value[valueIndex]}px ${state.boxStyle.shadowSpread.value[valueIndex]}px ${state.boxStyle.shadowColor.value[valueIndex]}`
-    },
-    // based on boxStyle.heightMode keep height fixed or minimized with max height
-    height:     (state, elementStyle, calculatedValue, valueIndex) => {
-      if (state.boxStyle.heightMode.value[0] === 'grow') {
-        elementStyle.maxHeight = calculatedValue;
-        elementStyle.height    = 'auto';
-      }
-      else {
-        elementStyle.maxHeight = 'none';
-        elementStyle.height    = calculatedValue;
-      }
-    },
-    transformY: (state, elementStyle, calculatedValue, valueIndex) => {
-      elementStyle.transform = `translateX(${state.boxStyle.transformX.value[valueIndex]}px) translateY(${state.boxStyle.transformY.value[valueIndex]}px) scale(${state.boxStyle.scale.value[valueIndex]})`
-    },
-    bgStyle:    (state, elementStyle, calculatedValue, valueIndex) => {
-      //  normal | sliced
-
-      elementStyle.borderImage     = null;
-      elementStyle.backgroundImage = null;
-      if (calculatedValue === 'normal') {
-        if (state.boxStyle.backgroundImage.value[valueIndex])
-          elementStyle.backgroundImage = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
-      }
-      else {
-        // ignore border rules
-        elementStyle.border = '0px solid transparent';
-        if (state.boxStyle.backgroundImage.value[valueIndex]) {
-          elementStyle.borderImage      = `url(${state.boxStyle.backgroundImage.value[valueIndex]})`;
-          elementStyle.borderImageSlice = `${state.boxStyle.borderWidthTop.value[valueIndex]} ${state.boxStyle.borderWidthRight.value[valueIndex]} ${state.boxStyle.borderWidthBottom.value[valueIndex]} ${state.boxStyle.borderWidthLeft.value[valueIndex]} fill`;
-          elementStyle.borderImageWidth = `${state.boxStyle.borderWidthTop.value[valueIndex]}px ${state.boxStyle.borderWidthRight.value[valueIndex]}px ${state.boxStyle.borderWidthBottom.value[valueIndex]}px ${state.boxStyle.borderWidthLeft.value[valueIndex]}px`;
-        }
-        // border-image-slice x-x-x-x fill
-        // border-image-width x-x-x-x
-      }
-    }
-  },
-  avatarStyle:    {
-    transformY: (state, elementStyle, calculatedValue, valueIndex) => {
-      elementStyle.transform = `translateX(${state.avatarStyle.transformX.value[valueIndex]}px) translateY(${state.avatarStyle.transformY.value[valueIndex]}px)`
-    }
-  },
-  globalStyle:    {},
-  soundStyle:     {},
-  particleStyles: {}
-}
-
 export interface STTStyle {
   version: number,
   boxStyle: {
     width: StyleValue<StyleValueType.pixels>;
     height: StyleValue<StyleValueType.pixels>;
+    heightMode: StyleValue<StyleValueType.logic, 'grow' | 'fixed'>;
+    // transform
     transformX: StyleValue<StyleValueType.number>;
     transformY: StyleValue<StyleValueType.number>;
     scale: StyleValue<StyleValueType.number>;
-    heightMode: StyleValue<StyleValueType.logic, 'grow' | 'fixed'>;
+    // transform
     backgroundImage: StyleValue<StyleValueType.logic>; // apply it later in [bgStyle]
     backgroundColor: StyleValue<StyleValueType.string>;
     opacity: StyleValue<StyleValueType.number>;

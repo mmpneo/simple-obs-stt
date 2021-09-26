@@ -4,19 +4,20 @@ import {
   Component,
   ElementRef,
   NgModule,
-  OnInit, QueryList,
-  ViewChild, ViewChildren
-}                                                                                  from '@angular/core';
-import {CommonModule}                                                              from "@angular/common";
-import {SpeechQuery}                                                               from "@store/speech/speech.query";
-import {StyleQuery}                                                                from "@store/style/style.query";
-import {BuildTypedValue, CUSTOM_STYLE_LOGIC, STTStyle, StyleValue, StyleValueType} from "@store/style/style.store";
-import {SpeechSentence}                                                            from "@store/speech/speech.store";
-import {animate, style, transition, trigger}                                       from "@angular/animations";
-import {combineQueries}                                                            from "@datorama/akita";
-import {SanitizeHtmlPipeModule}                                                    from "../../pipes/sanitize-html.pipe";
-import {EffectsService}                                                            from "@store/effects/effects.service";
-import {GetClientType}                                                             from "../../utils/client_type";
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+}                                            from '@angular/core';
+import {CommonModule}                        from "@angular/common";
+import {SpeechQuery}                         from "@store/speech/speech.query";
+import {StyleQuery}                          from "@store/style/style.query";
+import {STTStyle}                            from "@store/style/style.store";
+import {SpeechSentence}                      from "@store/speech/speech.store";
+import {animate, style, transition, trigger} from "@angular/animations";
+import {SanitizeHtmlPipeModule}              from "../../pipes/sanitize-html.pipe";
+import {EffectsService}                      from "@store/effects/effects.service";
+import {GetClientType}                       from "../../utils/client_type";
 
 @Component({
   selector:        'app-stt-renderer',
@@ -44,8 +45,6 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
   ) {
   }
 
-  @ViewChild("avatarElement") avatarElement!: ElementRef;
-  @ViewChild("boxElement") boxElement!: ElementRef;
   @ViewChild("textElement") textElement!: ElementRef;
   @ViewChildren("letterElement") letters!: QueryList<ElementRef>;
 
@@ -76,46 +75,24 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
       translateY: this.GetRandomRange(translationYMin, translationYMax).toFixed(1),
     }
   }
+
   clientType = GetClientType()
-
-  private ApplyElementStyleDAta(style: STTStyle, section: keyof Omit<STTStyle, 'version'>, element: any, styles: { [key: string]: StyleValue }, valueIndex: number) {
-    for (const cssKey in styles) {
-      const customLogic = CUSTOM_STYLE_LOGIC[section]?.[cssKey];
-      if (styles[cssKey].type === StyleValueType.logic) {
-        !!customLogic && customLogic(style, element.style, BuildTypedValue(styles[cssKey], valueIndex), valueIndex);
-        continue;
-      }
-      if (!!customLogic)
-        customLogic(style, element.style, BuildTypedValue(styles[cssKey], valueIndex), valueIndex)
-      else
-        element.style[cssKey] = BuildTypedValue(styles[cssKey], valueIndex);
-    }
-  }
-
-  private ApplyStyles(style: STTStyle, valueIndex: number) {
-    this.ApplyElementStyleDAta(style, 'avatarStyle', this.avatarElement.nativeElement, style.avatarStyle, valueIndex);
-    this.ApplyElementStyleDAta(style, 'boxStyle', this.boxElement.nativeElement, style.boxStyle, valueIndex);
-    this.ApplyElementStyleDAta(style, 'textStyle', this.textElement.nativeElement, style.textStyle, valueIndex);
-  }
 
   ngAfterViewInit(): void {
     this.letters.changes.subscribe(_ => {
       const ls = document.querySelectorAll('.letter');
       if (!ls.length)
         return;
-      const last = ls[ls.length-1];
+      const last = ls[ls.length - 1];
       const rect = last?.getBoundingClientRect();
       (rect?.height === 0 || !!last.innerHTML) && this.effectsService.PlayParticles(rect);
     })
-    this.letters?.notifyOnChanges()
-    combineQueries([this.styleQuery.current$, this.speechQuery.showBubble$]).subscribe(([style, show]) => {
-      this.ApplyStyles(style, show ? 0 : 1)
-    })
+    this.letters?.notifyOnChanges();
   }
 
   private AnimateScroll() {
     this.textElement?.nativeElement?.scrollTo?.({
-      top:      this.textElement.nativeElement?.scrollHeight,
+      top: this.textElement.nativeElement?.scrollHeight,
       // behavior: 'smooth'
     });
   }
@@ -128,7 +105,7 @@ export class SttRendererComponent implements OnInit, AfterViewInit {
 @NgModule({
   declarations: [SttRendererComponent],
   exports:      [SttRendererComponent],
-  imports: [CommonModule, SanitizeHtmlPipeModule]
+  imports:      [CommonModule, SanitizeHtmlPipeModule]
 })
 export class SttRendererModule {
 }
