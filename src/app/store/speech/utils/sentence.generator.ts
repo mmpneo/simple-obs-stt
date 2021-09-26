@@ -79,7 +79,7 @@ export function GenerateSentence(
       const firstLetter  = word[0];
       const wordFiltered = word.replace(".", "");
       if (emotesState.emotes[firstLetter]?.[wordFiltered])
-        return [`<img style="height: ${globalStyle.emoteHeight.value[0]}px" class="emote" src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
+        return [`<img class="emote" src="${emotesState.emotes[firstLetter]?.[wordFiltered]}">`, " "]
       return [...word.split(""), " "];
     });
     // endregion
