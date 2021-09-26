@@ -6,9 +6,9 @@ import {transaction}                                                from "@dator
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
 import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
-import {Subscription, timer}                                        from "rxjs";
-import {take}                                                       from "rxjs/operators";
-import {EmotesQuery}                                                from "@store/emotes/emotes.query";
+import {Subscription, timer} from "rxjs";
+import {take, throttleTime}  from "rxjs/operators";
+import {EmotesQuery}         from "@store/emotes/emotes.query";
 import {HotToastService}                                            from "@ngneat/hot-toast";
 import {SpeechSentenceModel}                                        from "@store/speech/speech.model";
 import {GenerateSentence}                                           from "@store/speech/utils/sentence.generator";
@@ -64,7 +64,7 @@ export class SpeechService {
     const selectedPluginData = this.speechQuery.getValue().selectedPluginData;
     const selectedDialect    = languages[selected[0]][selected[1] + 1][0];
     this.activePlugin        = pluginInstance;
-    this.activePlugin.onInter$.subscribe(value => this.UpsertSentence(value, false, SpeechSentenceType.voice))
+    this.activePlugin.onInter$.pipe(throttleTime(plugin.throttleInterim)).subscribe(value => this.UpsertSentence(value, false, SpeechSentenceType.voice))
     this.activePlugin.onFinal$.subscribe(value => this.UpsertSentence(value, true, SpeechSentenceType.voice))
     this.activePlugin.onStatusChanged$.subscribe(value => this.speechStore.update({connectionState: value}))
     this.activePlugin.onPluginCrashed$.pipe(take(1)).subscribe(v => { // restart plugin

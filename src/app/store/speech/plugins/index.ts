@@ -11,6 +11,7 @@ export type SpeechPluginDescriptor = {
     plugin: { new(): BasePlugin },
     dataFields: SpeechPluginDataField[]
     platformValidate: () => boolean,
+    throttleInterim: number
   }
 }
 
@@ -38,18 +39,21 @@ export const SPEECH_PLUGINS: SpeechPluginDescriptor = {
       const ua = new UAParser();
       return environment.platform === "web" && (ua.getBrowser().name === 'Edge' || ua.getBrowser().name === 'Chrome');
     },
-    dataFields: []
+    dataFields: [],
+    throttleInterim: 140
   },
   "noop": {
     name:                        'Noop (Keyboard input only)',
     plugin:                      SpeechPluginNoop,
     platformValidate:            () => true,
-    dataFields: []
+    dataFields: [],
+    throttleInterim: 0,
   },
   "azure":  {
     name:                        "Azure Cognitive Services",
     plugin:                      SpeechPluginAzure,
     platformValidate:            () => true,
+    throttleInterim: 0,
     dataFields: [
       {
         name: "Service key",
