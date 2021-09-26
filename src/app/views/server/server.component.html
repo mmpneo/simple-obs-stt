@@ -17,8 +17,12 @@
           <ul class="menu font-semibold">
             <li class="hover-bordered" [tippy]="newTemplate" className="with-shadow" appendTo="parent" placement="right" variation="popper"><a>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <!--              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>-->
-              Save template
+              New style
+            </a></li>
+
+            <li class="hover-bordered" [class.disabled]="state.currentTemplate === null" [tippy]="duplicateTemplate" className="with-shadow" appendTo="parent" placement="right" variation="popper"><a>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
+              Duplicate style
             </a></li>
             <li class="hover-bordered" [class.disabled]="state.currentTemplate === null" (click)="state.currentTemplate !== null && styleService.DeleteTemplate()"><a>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -37,6 +41,18 @@
       </div>
 
       <div class="flex justify-end space-x-2">
+        <ng-container [ngSwitch]="soundQuery.mute$ | async">
+          <button *ngIf="{value: soundQuery.mute$ | async} as v" [ngClass]="v.value ? 'btn-error' : 'btn-ghost'" [tippy]="v.value ? 'Unmute sounds on this page' : 'Mute sounds on this page'" (click)="soundService.SwitchMute()" class="btn btn-sm btn-circle">
+            <svg *ngSwitchCase="v.value" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+            </svg>
+            <svg *ngSwitchDefault="" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          </button>
+        </ng-container>
+
         <button [disabled]="(networkQuery.connectionState$ | async) !== 2" tippy="Copy client link" (click)="networkService.CopyLink()" class="btn btn-sm btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
@@ -56,35 +72,20 @@
       <div class="flex justify-center relative h-48 self-center rounded-md">
         <app-stt-renderer class="absolute bottom-0 self-center"></app-stt-renderer>
       </div>
-      <div class="w-96 flex items-center space-x-2">
-        <div tippy="Emotes">
-          <button [tippy]="emoteMenu" variation="popper" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </button>
-        </div>
-
+      <div class="flex items-center space-x-2">
         <button tippy="Clear text box" (click)="speechService.ClearSentences()" class="btn btn-circle btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </button>
-        <input #mainInput class="flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="(speechQuery.state$ | async)?.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
-
-        <ng-container [ngSwitch]="soundQuery.mute$ | async">
-          <button *ngSwitchCase="true" tippy="Unmute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-circle btn-error">
+        <input class="w-96 flex-grow input input-bordered" placeholder="Type something and press [Enter]" [ngModel]="(speechQuery.state$ | async)?.textInput" (ngModelChange)="speechService.InterimTextInput($event)" (keydown.enter)="speechService.SendTextInput($event); $event.preventDefault();">
+        <div tippy="Emotes">
+          <button [tippy]="emoteMenu" variation="popper" class="btn btn-circle btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </button>
-          <button *ngSwitchDefault="" tippy="Mute sounds on this page" (click)="soundService.SwitchMute()" class="btn btn-circle btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-            </svg>
-          </button>
-        </ng-container>
+        </div>
       </div>
     </div>
     <div class="absolute bottom-0 left-0 right-0 p-4 flex justify-between items-end space-x-2">
@@ -245,10 +246,19 @@
 </div>
 
 <ng-template #newTemplate let-hide>
-  <div class="p-2">
+  <div class="p-2 w-72">
     <div class="relative">
       <input type="text" #inputElement placeholder="Template name" class="w-full pr-16 input input-primary input-sm input-bordered">
       <button class="absolute right-0 rounded-l-none btn btn-sm btn-primary" (click)="styleService.CreateTemplate(inputElement.value); hide();">Create</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #duplicateTemplate let-hide>
+  <div class="p-2 w-72">
+    <div class="relative">
+      <input type="text" #inputElement placeholder="Template name" class="w-full pr-16 input input-primary input-sm input-bordered">
+      <button class="absolute right-0 rounded-l-none btn btn-sm btn-primary" (click)="styleService.DuplicateTemplate(inputElement.value); hide();">Create</button>
     </div>
   </div>
 </ng-template>
