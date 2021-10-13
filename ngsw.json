@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1632690945831,
+  "timestamp": 1634099959380,
   "index": "/simple-obs-stt/index.html",
   "assetGroups": [
     {
@@ -26,7 +26,7 @@
         "/simple-obs-stt/947.e00f73aacbeaa89df1a6.js",
         "/simple-obs-stt/favicon.ico",
         "/simple-obs-stt/index.html",
-        "/simple-obs-stt/main.b6ce2eb8b7ec6b6fd975.js",
+        "/simple-obs-stt/main.d08543bc01c8a5137c6d.js",
         "/simple-obs-stt/manifest.webmanifest",
         "/simple-obs-stt/polyfills.ffb88d3957bf6baf9f56.js",
         "/simple-obs-stt/runtime.9f1600b5774d7451ab4d.js",
@@ -94,8 +94,8 @@
     "/simple-obs-stt/assets/particles/particle-2.png": "bfa46dbd314c07a7e1e3cc1e35c7377018277502",
     "/simple-obs-stt/assets/sounds/type_1.wav": "bedbabda43cce5765d4a7b3b2622b6a8f4042485",
     "/simple-obs-stt/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/simple-obs-stt/index.html": "9ec3625b8f3e24f9ae54cf7541f8dee47b0f5ef9",
-    "/simple-obs-stt/main.b6ce2eb8b7ec6b6fd975.js": "7562e80fc88b6273f2a06e9f90e72dc3bfc063f9",
+    "/simple-obs-stt/index.html": "83142d1ff56f889dce60c5f6da5465e14f5f6172",
+    "/simple-obs-stt/main.d08543bc01c8a5137c6d.js": "6132691a922e3cdd75b728fb05ac04c49ce1d261",
     "/simple-obs-stt/manifest.webmanifest": "61ecbfba1e0195fba72febfae8497c20f45ce0d9",
     "/simple-obs-stt/polyfills.ffb88d3957bf6baf9f56.js": "8687b04ffb050af20330fbaf1bea7bb91018ecd8",
     "/simple-obs-stt/runtime.9f1600b5774d7451ab4d.js": "a7f20212c0ab7d06ce4b32fa7ea2f19d03d75243",
