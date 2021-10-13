@@ -90,6 +90,7 @@ export function InitStyles() {
 }
 
 export function SelectUpdateCssStyle< K extends keyof STTStyle>(target: K, object: any) {
+  if (target === "avatarStyle") UpdateAvatar(object);
   if (target === "boxStyle") UpdateBox(object);
   if (target === "textStyle") UpdateTextContainer(object);
   if (target === "globalStyle") UpdateEmotes(object);
