@@ -17,9 +17,10 @@ export class VoicePluginNative extends BaseVoicePlugin {
       this.onPluginCrashed$.next("[Native] cannot initialize voice");
       return;
     }
+    this.instance.onstart = () => console.log("start");
     this.instance.lang = language;
+    this.instance.volume = 1;
     this.instance.voice = findVoice;
-    this.instance.volume
     this.onStatusChanged$.next(ConnectionState.Connected);
   }
 
@@ -27,7 +28,7 @@ export class VoicePluginNative extends BaseVoicePlugin {
     if (!this.instance)
       return;
     this.instance.text = text;
-    this.instance.volume = typeof volume === "string" ? parseInt(volume) : volume;
+    this.instance.volume = typeof volume === "string" ? parseFloat(volume) : volume;
     window.speechSynthesis.speak(this.instance);
   }
 
