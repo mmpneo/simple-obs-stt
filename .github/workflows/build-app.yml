@@ -50,7 +50,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          files: |
-            D:/a/simple-obs-stt/simple-obs-stt/src-tauri/target/release/bundle/msi/*.msi
+          files: D:\a\simple-obs-stt\simple-obs-stt\src-tauri\target\release\bundle/msi/**.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
