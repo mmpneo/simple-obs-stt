@@ -1,13 +1,12 @@
 use std::sync::Arc;
 use globset::Glob;
 use serde::Deserialize;
-use tauri::api::assets::{EmbeddedAssets, AssetKey};
+use tauri::utils::assets::{EmbeddedAssets, AssetKey};
 use tauri::Assets;
 use warp::{Filter, Rejection, Reply};
 use warp::http::{HeaderValue, Response, StatusCode};
 use warp::http::header::{ACCEPT_RANGES, ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_SECURITY_POLICY, ORIGIN, X_FRAME_OPTIONS};
 use warp::path::{FullPath, param};
-
 use crate::ws_handler::{user_connected, Users};
 use tauri::async_runtime::spawn;
 
@@ -36,6 +35,8 @@ pub fn start_asset_host(assets: Arc<EmbeddedAssets>) {
 async fn file_response(path: FullPath, assets: Arc<EmbeddedAssets>) -> Result<impl Reply, Rejection> {
     let glob = Glob::new("/**/*.{css,js,png,ico,wav,mp3,webmanifest}").unwrap().compile_matcher();
     let path = path.as_str();
+
+  //todo inject files from filesystem dyn
 
     let index_asset = &AssetKey::from(String::from("index.html"));
     let substr = &path[1..];

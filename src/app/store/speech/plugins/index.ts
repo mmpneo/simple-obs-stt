@@ -1,7 +1,6 @@
 import {SpeechPluginNative} from "@store/speech/plugins/SpeechPluginNative";
 import {BasePlugin}         from "@store/speech/plugins/BasePlugin";
 import {SpeechPluginAzure}  from "@store/speech/plugins/SpeechPluginAzure";
-import {SpeechPluginNoop}   from "@store/speech/plugins/SpeechPluginNoop";
 import {environment}        from "../../../../environments/environment";
 import UAParser             from "ua-parser-js";
 
@@ -33,21 +32,14 @@ export type SpeechPluginDataField = {
 
 export const SPEECH_PLUGINS: SpeechPluginDescriptor = {
   "native": {
-    name:                        'Native (Chrome and Edge)',
+    name:                        'Native',
     plugin:                      SpeechPluginNative,
     platformValidate:            () => {
       const ua = new UAParser();
-      return environment.platform === "web" && (ua.getBrowser().name === 'Edge' || ua.getBrowser().name === 'Chrome');
+      return environment.platform === "app" || (ua.getBrowser().name === 'Edge' || ua.getBrowser().name === 'Chrome');
     },
     dataFields: [],
     throttleInterim: 140
-  },
-  "noop": {
-    name:                        'Noop (Keyboard input only)',
-    plugin:                      SpeechPluginNoop,
-    platformValidate:            () => true,
-    dataFields: [],
-    throttleInterim: 0,
   },
   "azure":  {
     name:                        "Azure Cognitive Services",

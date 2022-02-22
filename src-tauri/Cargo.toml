@@ -6,25 +6,25 @@ authors = ["you"]
 license = ""
 repository = ""
 default-run = "app"
-edition = "2018"
+edition = "2021"
 build = "src/build.rs"
 
 [build-dependencies]
-tauri-build = { git = "https://github.com/tauri-apps/tauri/", path = "core/tauri-build", branch = "dev" }
-#tauri-build = "1.0.0-beta.3"
+tauri-build = { version = "1.0.0-rc.3", features = [] }
 
 [dependencies]
+bindings = {path = "bindings"}
+windows = "0.19.0"
+
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-#tauri = { version = "1.0.0-beta.1", features = [] }
-tauri = { git = "https://github.com/tauri-apps/tauri/", branch = "dev", features = ["shell-open", "window-all"] }
+tauri = { version = "1.0.0-rc.3", features = ["shell-open", "window-all"] }
 
 globset = "0.3"
 tokio = { version = "1", features = ["full"] }
 tokio-stream = "0.1.5"
 warp = "0.3.1"
 futures = { version = "0.3", default-features = false, features = ["alloc"] }
-#raw-window-handle = "0.3.3"
 
 [features]
 default = ["custom-protocol"]

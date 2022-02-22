@@ -11,10 +11,14 @@ mod asset_server;
 mod ws_handler;
 
 use tauri::Context;
-use tauri::api::assets::{EmbeddedAssets, Assets};
-use crate::asset_server::start_asset_host;
 
-// #[tokio::main]
+use crate::asset_server::start_asset_host;
+use tauri::utils::assets::EmbeddedAssets;
+
+use bindings::{
+    Windows::Media::SpeechRecognition::*
+};
+
 fn main() {
     let context: Context<EmbeddedAssets> = tauri::generate_context!();
     start_asset_host(context.assets().clone());
