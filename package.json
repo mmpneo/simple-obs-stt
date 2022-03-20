@@ -28,7 +28,7 @@
     "@types/animejs": "^3.1.4",
     "animejs": "^3.2.1",
     "browser-fs-access": "^0.19.2",
-    "daisyui": "^2.1.0",
+    "daisyui": "^2.11.0",
     "deepmerge": "^4.2.2",
     "immer": "^9.0.2",
     "lodash-es": "^4.17.21",
