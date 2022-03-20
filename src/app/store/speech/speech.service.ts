@@ -6,9 +6,9 @@ import {transaction}                                                from "@dator
 import {StyleQuery}                                                 from "@store/style/style.query";
 import {BasePlugin}                                                 from "@store/speech/plugins/BasePlugin";
 import {SPEECH_PLUGINS}                                             from "@store/speech/plugins";
-import {Subscription, timer} from "rxjs";
-import {take, throttleTime}  from "rxjs/operators";
-import {EmotesQuery}         from "@store/emotes/emotes.query";
+import {Subscription, timer}                                        from "rxjs";
+import {take, throttleTime}                                         from "rxjs/operators";
+import {EmotesQuery}                                                from "@store/emotes/emotes.query";
 import {HotToastService}                                            from "@ngneat/hot-toast";
 import {SpeechSentenceModel}                                        from "@store/speech/speech.model";
 import {GenerateSentence}                                           from "@store/speech/utils/sentence.generator";
@@ -115,6 +115,11 @@ export class SpeechService {
   }
 
   private DoUpsertSentence(sentence: SpeechSentence) {
+    // ensure that there is only one active speech sentence
+    const invalidSentences = this.speechQuery.getAll({filterBy: e => !e.finalized && e.type === SpeechSentenceType.voice && e.id !== sentence.id});
+    invalidSentences.forEach(s => s.Dispose());
+    this.speechStore.remove(invalidSentences.map(s => s.id));
+
     const hasSentence = this.speechQuery.hasEntity(sentence.id);
     this.speechStore.upsert(sentence.id, sentence, {baseClass: SpeechSentenceModel});
     const entity = this.speechQuery.getEntity(sentence.id);
@@ -122,7 +127,7 @@ export class SpeechService {
     if (!hasSentence) {
       entity?.BindTypeEvent(() => {
         this.TriggerShowTimer();
-        this.speechQuery.onTypingEvent$.next(null)
+        this.speechQuery.onTypingEvent$.next(null);
       });
       const style = this.styleQuery.getValue().currentStyle.globalStyle;
       // clear if not animating
@@ -142,8 +147,9 @@ export class SpeechService {
   }
 
   private DoClearFinishedSentences() {
-    this.speechQuery.getAll({filterBy: s => s.finalized && s.isPlayed}).forEach(s => s.Dispose());
-    this.speechStore.remove(s => s.finalized && s.isPlayed);
+    const sentencesToRemove = this.speechQuery.getAll({filterBy: s => s.finalized && s.isPlayed});
+    sentencesToRemove.forEach(s => s.Dispose());
+    this.speechStore.remove(sentencesToRemove.map(s => s.id));
   };
 
   private DoClearSentences() {
