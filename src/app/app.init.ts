@@ -1,5 +1,5 @@
-import {APP_INITIALIZER}           from '@angular/core';
-import {FontsService}              from "@store/fonts/fonts.service";
+import {APP_INITIALIZER}                  from '@angular/core';
+import {FontsService}                     from "@store/fonts/fonts.service";
 import {groupBy}                          from "lodash-es";
 import {ClientType, GetClientType, IsOBS} from "./utils/client_type";
 import UAParser                           from "ua-parser-js";
@@ -30,6 +30,8 @@ export function InitLoading(fontsService: FontsService,): () => Promise<boolean>
       if (IsOBS() || GetClientType() === ClientType.client || window.speechSynthesis.onvoiceschanged === undefined)
         return true;
       if (ua.getBrowser().name === 'Firefox') {
+        if (!window.speechSynthesis.getVoices().length)
+          await new Promise(r => speechSynthesis.addEventListener("voiceschanged", r, { once: true }));
         BuildNativeVoices();
         return true;
       }
