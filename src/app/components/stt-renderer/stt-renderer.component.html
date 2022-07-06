@@ -5,7 +5,7 @@
       <div class="stt-box-container relative stt-box flex flex-col flex-none bg-cover bg-center">
         <div #textElement [class.host]="clientType === 0" class="stt-box-text inset-0 flex flex-wrap break-words min-h-8 overflow-y-scroll overflow-x-hidden">
           <ng-container *ngFor="let sentence of this.speechQuery.list$ | async; trackBy: track">
-            <div class="flex items-center whitespace-pre-wrap" [class.opacity-70]="!sentence.finalized" *ngFor="let word of sentence.AnimatedValue | async; trackBy: trackWord">
+            <div class="flex items-center whitespace-pre-wrap" [class.opacity-90]="!sentence.finalized" *ngFor="let word of sentence.AnimatedValue | async; trackBy: trackWord">
               <div class="letter" #letterElement [@listAnimation]="{value: letter, params: GetRandomizedParams(currentStyle)}" *ngFor="let letter of word; trackBy: trackLetter" [innerHTML]="letter | sanitizeHtml"></div>
             </div>
           </ng-container>
