@@ -1,15 +1,10 @@
 name: Build web
-#on:
-#  workflow_dispatch:
-#  push:
-#    branches:
-#      - master
-# on:
-#   workflow_dispatch:
-#   release:
-#     types: [ created ]
-on: workflow_dispatch
 
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
