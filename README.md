@@ -1,3 +1,12 @@
+## SimpleSTT has now been deprecated in favor of [Curses](https://github.com/mmpneo/curses)
+Difference:
+- **General** - Improved performance, simplified obs setup
+- **STT** - More stt/tts services
+- **VRChat** - support for KillFrenzy's avatar text and
+- **Discord** - STT to discord channel with channel hooks
+- **Twitch** - 7TV emotes, Chat integration
+- **UI** - Improved user interface that works well in both desktop and VR.
+
 <h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
   Speech-to-text and keyboard input captions for OBS.<br>
