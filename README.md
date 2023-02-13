@@ -1,24 +1,21 @@
 ## SimpleSTT has now been deprecated in favor of [Curses](https://github.com/mmpneo/curses)
-Difference:
-- **General** - Improved performance, simplified obs setup
+### Curses features and differences from SimpleSTT:
+- **Performance** - Better text rendering performance, reduced memory usage
+- **Files** - all assets (fonts, images, sounds) are stored locally, external hosting is no longer required
 - **STT** - More stt/tts services
-- **VRChat** - support for KillFrenzy's avatar text and
-- **Discord** - STT to discord channel with channel hooks
-- **Twitch** - 7TV emotes, Chat integration
+- **VRChat** - support for KillFrenzy's avatar text and default vrc's chatbox
+- **Discord** - send STT to discord channel
+- **Twitch** - 7TV emotes, Chat integration (STT->Chat, Chat->TTS)
 - **UI** - Improved user interface that works well in both desktop and VR.
+- **Support** - better support, discord release notifications, pre-made templates to get started
+### What's missing from the Curses app:
+- You cannot share captions with other people over the network (might add in the future)
 
 <h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
   Speech-to-text and keyboard input captions for OBS.<br>
-  <a href="https://github.com/mmpneo/simple-obs-stt/wiki/Quick-Start">Quick start</a> | <a href="#examples">See examples</a> | <a href="https://discord.gg/SMKjA2yGf7">Discord</a><br>
+  <a href="https://github.com/mmpneo/simple-obs-stt/wiki/Quick-Start">Quick start</a> | <a href="#examples">See examples</a> | <a href="https://discord.gg/Sw6pw8fGYS">Discord</a><br>
 </p>
-<p align="center">
-  If you find this project useful, please consider donating.
-</p>
-<p align="center">
-<a href="https://www.buymeacoffee.com/mmpneo" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-</p>
-
 
 ## Features
 - <img src="https://cdn.betterttv.net/emote/5d38aaa592fc550c2d5996b8/1x" width="20" height="20"> **Web version**
