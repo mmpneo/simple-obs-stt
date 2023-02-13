@@ -9,7 +9,7 @@
 - **UI** - Improved user interface that works well in both desktop and VR.
 - **Support** - better support, discord release notifications, pre-made templates to get started
 ### What's missing from the Curses app:
-- You cannot share captions with other people over the network (might add in the future)
+- Sharing captions with other people over the network (might add in the future)
 
 <h1 align="center"><img src=".github/images/logo.png" height="200"/></h1>
 <p align="center">
